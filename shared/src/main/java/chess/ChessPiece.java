@@ -10,8 +10,12 @@ import java.util.Collection;
  * signature of the existing methods.
  */
 public class ChessPiece {
+    private ChessGame.TeamColor pieceColor;
+    private ChessPiece.PieceType type;
 
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
+        this.pieceColor=pieceColor;
+        this.type=type;
     }
 
     /**
@@ -49,9 +53,51 @@ public class ChessPiece {
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         ArrayList<ChessMove> MovesCollection = new ArrayList<>();
+        switch(type){
+            case KING:
+                possibleKingMoves(board, myPosition);
+                break;
+            case QUEEN:
+                possibleQueenMoves(board, myPosition);
+                break;
+            case KNIGHT:
+                possibleKnightMoves(board, myPosition);
+                break;
+            case BISHOP:
+                possibleBishopMoves(board, myPosition);
+                break;
+            case ROOK:
+                possibleRookMoves(board, myPosition);
+                break;
+            case PAWN:
+                possiblePawnMoves(board, myPosition);
+                break;
+
+        }
 
         return MovesCollection;
     }
+    public ChessPiece possibleKingMoves(ChessBoard board, ChessPosition myPosition) {
+        return null;
+    }
 
+    public ChessPiece possibleQueenMoves(ChessBoard board, ChessPosition myPosition) {
+        return null;
+    }
 
+    public ChessPiece possibleKnightMoves(ChessBoard board, ChessPosition myPosition) {
+        return null;
+    }
+
+    public ChessPiece possibleBishopMoves(ChessBoard board, ChessPosition myPosition) {
+        return null;
+    }
+
+    public ChessPiece possibleRookMoves(ChessBoard board, ChessPosition myPosition) {
+        return null;
+    }
+
+    public ChessPiece possiblePawnMoves(ChessBoard board, ChessPosition myPosition) {
+        return null;
+    }
 }
