@@ -13,6 +13,8 @@ public class ChessPiece {
     private ChessGame.TeamColor pieceColor;
     private ChessPiece.PieceType type;
 
+
+
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
         this.pieceColor=pieceColor;
         this.type=type;
@@ -34,7 +36,7 @@ public class ChessPiece {
      * @return Which team this chess piece belongs to
      */
     public ChessGame.TeamColor getTeamColor() {
-        throw new RuntimeException("Not implemented");
+        //throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -55,49 +57,78 @@ public class ChessPiece {
         ArrayList<ChessMove> MovesCollection = new ArrayList<>();
         switch(type){
             case KING:
-                possibleKingMoves(board, myPosition);
+                MovesCollection = possibleKingMoves(board, myPosition);
                 break;
             case QUEEN:
-                possibleQueenMoves(board, myPosition);
+                MovesCollection = possibleQueenMoves(board, myPosition);
                 break;
             case KNIGHT:
-                possibleKnightMoves(board, myPosition);
+                MovesCollection = possibleKnightMoves(board, myPosition);
                 break;
             case BISHOP:
-                possibleBishopMoves(board, myPosition);
+                MovesCollection = possibleBishopMoves(board, myPosition);
                 break;
             case ROOK:
-                possibleRookMoves(board, myPosition);
+                MovesCollection = possibleRookMoves(board, myPosition);
                 break;
             case PAWN:
-                possiblePawnMoves(board, myPosition);
+                MovesCollection = possiblePawnMoves(board, myPosition);
                 break;
-
         }
 
         return MovesCollection;
     }
-    public ChessPiece possibleKingMoves(ChessBoard board, ChessPosition myPosition) {
-        return null;
+    public ArrayList<ChessMove> possibleKingMoves(ChessBoard board, ChessPosition myPosition) {
+        ArrayList<ChessMove> MovesCollection = new ArrayList<>();
+//        while(true){
+//
+//
+//            break;
+//        }
+
+
+        return MovesCollection;
     }
 
-    public ChessPiece possibleQueenMoves(ChessBoard board, ChessPosition myPosition) {
-        return null;
+    public ArrayList<ChessMove> possibleQueenMoves(ChessBoard board, ChessPosition myPosition) {
+        ArrayList<ChessMove> MovesCollection = new ArrayList<>();
+        return MovesCollection;
     }
 
-    public ChessPiece possibleKnightMoves(ChessBoard board, ChessPosition myPosition) {
-        return null;
+    public ArrayList<ChessMove> possibleKnightMoves(ChessBoard board, ChessPosition myPosition) {
+        ArrayList<ChessMove> MovesCollection = new ArrayList<>();
+        return MovesCollection;
     }
 
-    public ChessPiece possibleBishopMoves(ChessBoard board, ChessPosition myPosition) {
-        return null;
+    public ArrayList<ChessMove> possibleBishopMoves(ChessBoard board, ChessPosition myPosition) {
+        ArrayList<ChessMove> MovesCollection = new ArrayList<>();
+        int row = myPosition.getRow();
+        int col = myPosition.getColumn();
+
+
+        return MovesCollection;
     }
 
-    public ChessPiece possibleRookMoves(ChessBoard board, ChessPosition myPosition) {
-        return null;
+    public ArrayList<ChessMove> possibleRookMoves(ChessBoard board, ChessPosition myPosition) {
+        ArrayList<ChessMove> MovesCollection = new ArrayList<>();
+        int row = myPosition.getRow();
+        int col = myPosition.getColumn();
+
+        int i = 1;
+        while(row - i > 0){
+            ChessPosition newPos = new ChessPosition(row - i, col);
+            if ((board.getPiece(newPos) != null) && board.getPiece(newPos).getTeamColor() =! pieceColor){
+                // if the piece to the left is not your own   its a possible move
+                MovesCollection.add(new ChessMove(myPosition, newPos, null));
+                // add it to our collection of possible moves.
+            }
+        }
+
+        return MovesCollection;
     }
 
-    public ChessPiece possiblePawnMoves(ChessBoard board, ChessPosition myPosition) {
-        return null;
+    public ArrayList<ChessMove> possiblePawnMoves(ChessBoard board, ChessPosition myPosition) {
+        ArrayList<ChessMove> MovesCollection = new ArrayList<>();
+        return MovesCollection;
     }
 }
