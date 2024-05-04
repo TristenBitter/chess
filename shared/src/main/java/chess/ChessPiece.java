@@ -48,6 +48,10 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        return new ArrayList<>();      /**  I will need to correctly implement this later **/
+        ArrayList<ChessMove> MovesCollection = new ArrayList<>();
+
+        return MovesCollection;
     }
+
+
 }

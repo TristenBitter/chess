@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class ChessPositionTests {
@@ -18,6 +19,18 @@ public class ChessPositionTests {
         original = new ChessPosition(3, 7);
         equal = new ChessPosition(3, 7);
         different = new ChessPosition(7, 3);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ChessPositionTests that)) return false;
+        return Objects.equals(original, that.original) && Objects.equals(equal, that.equal) && Objects.equals(different, that.different);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(original, equal, different);
     }
 
     @Test
