@@ -115,6 +115,7 @@ public class ChessPiece {
         int col = myPosition.getColumn();
 
         int i = 1;
+        // below the rook
         while(row - i > 0){
             ChessPosition newPos = new ChessPosition(row - i, col);
             if ((board.getPiece(newPos) != null) && board.getPiece(newPos).getTeamColor() =! pieceColor){
