@@ -50,11 +50,12 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        ArrayList<ChessMove> MovesCollection = piece.pieceMoves(board, startPosition);
-        if(board.getPiece(startPosition) == null){
-            return null;
-        }
-        return MovesCollection;
+//        ArrayList<ChessMove> MovesCollection = piece.pieceMoves(board, startPosition);
+//        if(board.getPiece(startPosition) == null){
+//            return null;
+//        }
+//        return MovesCollection;
+        throw new RuntimeException("Not implemented");
     }
 
     /**

@@ -352,6 +352,12 @@ public class ChessPiece {
 
     public ArrayList<ChessMove> possiblePawnMoves(ChessBoard board, ChessPosition myPosition) {
         ArrayList<ChessMove> MovesCollection = new ArrayList<>();
+
+        // if it is the first move for that pawn we can move forward 2 spaces
+        // else we can always move forward one space
+
+        // we can only capture diagonally left or right so lets check those spaces
+
         return MovesCollection;
     }
 }
