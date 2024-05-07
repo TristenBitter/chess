@@ -2,6 +2,7 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Represents a single chess piece
@@ -18,6 +19,18 @@ public class ChessPiece {
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
         this.pieceColor=pieceColor;
         this.type=type;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ChessPiece that)) return false;
+        return pieceColor == that.pieceColor && type == that.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pieceColor, type);
     }
 
     /**
@@ -85,6 +98,55 @@ public class ChessPiece {
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
 
+        ChessPosition newPos = new ChessPosition(row + 1, col);
+        if(!(newPos.getRow() < 0 || newPos.getColumn() < 0 || newPos.getRow() > 8 || newPos.getColumn() > 8)){
+            if(moveValidator( board,newPos) == true){
+                MovesCollection.add(new ChessMove(myPosition, newPos, null));
+            }
+        }
+        newPos = new ChessPosition(row, col + 1);
+        if(!(newPos.getRow() < 0 || newPos.getColumn() < 0 || newPos.getRow() > 8 || newPos.getColumn() > 8)){
+            if(moveValidator( board,newPos) == true){
+                MovesCollection.add(new ChessMove(myPosition, newPos, null));
+            }
+        }
+        newPos = new ChessPosition(row + 1, col + 1);
+        if(!(newPos.getRow() < 0 || newPos.getColumn() < 0 || newPos.getRow() > 8 || newPos.getColumn() > 8)){
+            if(moveValidator( board,newPos) == true){
+                MovesCollection.add(new ChessMove(myPosition, newPos, null));
+            }
+        }
+        newPos = new ChessPosition(row, col - 1);
+        if(!(newPos.getRow() < 0 || newPos.getColumn() < 0 || newPos.getRow() > 8 || newPos.getColumn() > 8)){
+            if(moveValidator( board,newPos) == true){
+                MovesCollection.add(new ChessMove(myPosition, newPos, null));
+            }
+        }
+        newPos = new ChessPosition(row - 1, col - 1);
+        if(!(newPos.getRow() < 0 || newPos.getColumn() < 0 || newPos.getRow() > 8 || newPos.getColumn() > 8)){
+            if(moveValidator( board,newPos) == true){
+                MovesCollection.add(new ChessMove(myPosition, newPos, null));
+            }
+        }
+        newPos = new ChessPosition(row -1, col);
+        if(!(newPos.getRow() < 0 || newPos.getColumn() < 0 || newPos.getRow() > 8 || newPos.getColumn() > 8)){
+            if(moveValidator( board,newPos) == true){
+                MovesCollection.add(new ChessMove(myPosition, newPos, null));
+            }
+        }
+        newPos = new ChessPosition(row - 1, col + 1);
+        if(!(newPos.getRow() < 0 || newPos.getColumn() < 0 || newPos.getRow() > 8 || newPos.getColumn() > 8)){
+            if(moveValidator( board,newPos) == true){
+                MovesCollection.add(new ChessMove(myPosition, newPos, null));
+            }
+        }
+        newPos = new ChessPosition(row + 1, col - 1);
+        if(!(newPos.getRow() < 0 || newPos.getColumn() < 0 || newPos.getRow() > 8 || newPos.getColumn() > 8)){
+            if(moveValidator( board,newPos) == true){
+                MovesCollection.add(new ChessMove(myPosition, newPos, null));
+            }
+        }
+
         return MovesCollection;
     }
 
@@ -101,50 +163,50 @@ public class ChessPiece {
 
         if(((row - 2) > 0) && ((col + 1) < 9)) {
             newPosition = new ChessPosition(row - 2, col + 1);
-            if(knightMoveValidator( board,newPosition) == true){
+            if(moveValidator( board,newPosition) == true){
                 MovesCollection.add(new ChessMove(myPosition, newPosition, null));
             }
         }
         if(((row - 2) > 0) && ((col - 1) > 0)) {
             newPosition = new ChessPosition(row - 2, col - 1);
-            if(knightMoveValidator( board,newPosition) == true){
+            if(moveValidator( board,newPosition) == true){
                 MovesCollection.add(new ChessMove(myPosition, newPosition, null));
             }
         }
         if(((row + 2) < 9) && ((col + 1) < 9)) {
             newPosition = new ChessPosition(row + 2, col + 1);
-            if(knightMoveValidator( board,newPosition) == true){
+            if(moveValidator( board,newPosition) == true){
                 MovesCollection.add(new ChessMove(myPosition, newPosition, null));
             }
         }
         if(((row + 2) < 9) && ((col - 1) > 0)) {
             newPosition = new ChessPosition(row + 2, col - 1);
-            if(knightMoveValidator( board,newPosition) == true){
+            if(moveValidator( board,newPosition) == true){
                 MovesCollection.add(new ChessMove(myPosition, newPosition, null));
             }
         }
         //********************************************************************************
         if(((row - 1) > 0) && ((col + 2) < 9)) {
             newPosition = new ChessPosition(row - 1, col + 2);
-            if(knightMoveValidator( board,newPosition) == true){
+            if(moveValidator( board,newPosition) == true){
                 MovesCollection.add(new ChessMove(myPosition, newPosition, null));
             }
         }
         if(((row - 1) > 0) && ((col - 2) > 0)) {
             newPosition = new ChessPosition(row - 1, col - 2);
-            if(knightMoveValidator( board,newPosition) == true){
+            if(moveValidator( board,newPosition) == true){
                 MovesCollection.add(new ChessMove(myPosition, newPosition, null));
             }
         }
         if(((row + 1) < 9) && ((col + 2) < 9)) {
             newPosition = new ChessPosition(row + 1, col + 2);
-            if(knightMoveValidator( board,newPosition) == true){
+            if(moveValidator( board,newPosition) == true){
                 MovesCollection.add(new ChessMove(myPosition, newPosition, null));
             }
         }
         if(((row + 1) < 9) && ((col - 2) > 0)) {
             newPosition = new ChessPosition(row + 1, col - 2);
-            if(knightMoveValidator( board,newPosition) == true){
+            if(moveValidator( board,newPosition) == true){
                 MovesCollection.add(new ChessMove(myPosition, newPosition, null));
             }
         }
@@ -153,7 +215,7 @@ public class ChessPiece {
         return MovesCollection;
     }
 
-    public boolean knightMoveValidator(ChessBoard board, ChessPosition newPosition){
+    public boolean moveValidator(ChessBoard board, ChessPosition newPosition){
 
         if ((board.getPiece(newPosition) == null)) {
             return true;
@@ -209,8 +271,14 @@ public class ChessPiece {
         }
 
         i = 1;
-        while((row - i) > 0 && ((col + i) < 9) && ((row + i) < 9) && ((col - i) > 0 )){
+        while(true){
             ChessPosition upLeftPos = new ChessPosition(row - i, col + i);
+            if(upLeftPos.getRow() <= 0 || upLeftPos.getColumn() <= 0){
+                break;
+            }
+            if(upLeftPos.getRow() > 8 || upLeftPos.getColumn() > 8){
+                break;
+            }
             if((board.getPiece(upLeftPos) == null )){
                 MovesCollection.add(new ChessMove(myPosition, upLeftPos, null));
                 System.out.println("5added to movesCollection === " + upLeftPos);
@@ -227,8 +295,16 @@ public class ChessPiece {
         }
 
         i = 1;
-        while((row - i) > 0 && ((col + i) < 9) && ((row + i) < 9) && ((col - i) > 0 )){
+//        while((row - i) > 0 && ((col + i) < 9) && ((row + i) < 9) && ((col - i) > 0 )){
+//            ChessPosition upRightPos = new ChessPosition(row + i, col + i);
+        while(true){
             ChessPosition upRightPos = new ChessPosition(row + i, col + i);
+            if(upRightPos.getRow() <= 0 || upRightPos.getColumn() <= 0){
+                break;
+            }
+            if(upRightPos.getRow() > 8 || upRightPos.getColumn() > 8){
+                break;
+            }
             if((board.getPiece(upRightPos) == null )){
                 MovesCollection.add(new ChessMove(myPosition, upRightPos, null));
                 System.out.println("7added to movesCollection === " + upRightPos);
@@ -351,14 +427,25 @@ public class ChessPiece {
     }
 
     public ArrayList<ChessMove> possiblePawnMoves(ChessBoard board, ChessPosition myPosition) {
-        ArrayList<ChessMove> MovesCollection = new ArrayList<>();
+        ArrayList<ChessMove> MoveCollection = new ArrayList<>();
+//        int row = myPosition.getRow();
+//        int col = myPosition.getColumn();
+//
+//        ChessPosition newPos = new ChessPosition(row + 1, col);
+//        if(!(newPos.getRow() < 0 || newPos.getColumn() < 0 || newPos.getRow() > 8 || newPos.getColumn() > 8)){
+//            if(moveValidator( board,newPos) == true){
+//                MoveCollection.add(new ChessMove(myPosition, newPos, null));
+//            }
+//        }
+//        // if it is in row 2 for that pawn we can move forward 2 spaces
+//        if(myPosition.getRow() == 2 && board.getPiece(myPosition).getTeamColor() == pieceColor){
 
-        // if it is the first move for that pawn we can move forward 2 spaces
+//        }
         // else we can always move forward one space
 
         // we can only capture diagonally left or right so lets check those spaces
 
-        return MovesCollection;
+        return MoveCollection;
     }
 }
 

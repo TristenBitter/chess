@@ -21,6 +21,11 @@ public class ChessPosition {
     }
 
     @Override
+    public String toString() {
+        return "CP{" + row + "," + col + '}';
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(getRow(), col);
     }
