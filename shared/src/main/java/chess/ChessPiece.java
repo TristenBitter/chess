@@ -36,14 +36,16 @@ public class ChessPiece {
      * @return Which team this chess piece belongs to
      */
     public ChessGame.TeamColor getTeamColor() {
-        //throw new RuntimeException("Not implemented");
+
+        return pieceColor;
     }
 
     /**
      * @return which type of chess piece this piece is
      */
     public PieceType getPieceType() {
-        throw new RuntimeException("Not implemented");
+
+        return type;
     }
 
     /**
@@ -116,13 +118,30 @@ public class ChessPiece {
 
         int i = 1;
         // below the rook
-        while(row - i > 0){
+        while(row - i > 0){   // make this while true
+
+            if((row - i) < 0){
+                break;
+            }
+            if((col - i) < 0){
+                break;
+            }
             ChessPosition newPos = new ChessPosition(row - i, col);
-            if ((board.getPiece(newPos) != null) && board.getPiece(newPos).getTeamColor() =! pieceColor){
-                // if the piece to the left is not your own   its a possible move
+            //if the space is empty its good to go.
+            if((board.getPiece(newPos) == null )){
+                MovesCollection.add(new ChessMove(myPosition, newPos, null));
+            }
+            if ((board.getPiece(newPos)) != null && board.getPiece(newPos).getTeamColor() != pieceColor){
+                // if the piece to the left is not your own its a possible move
                 MovesCollection.add(new ChessMove(myPosition, newPos, null));
                 // add it to our collection of possible moves.
+                break;
             }
+            if ((board.getPiece(newPos)) != null && board.getPiece(newPos).getTeamColor() == pieceColor){
+                // our team mate's piece is blocking this way
+                break;
+            }
+            i++;
         }
 
         return MovesCollection;
@@ -133,3 +152,10 @@ public class ChessPiece {
         return MovesCollection;
     }
 }
+
+//      if((row - i) < 0){
+//        break;
+//        }
+//        if((col - i) < 0){
+//        break;
+//        }
