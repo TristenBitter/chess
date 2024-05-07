@@ -118,31 +118,86 @@ public class ChessPiece {
 
         int i = 1;
         // below the rook
-        while(row - i > 0){   // make this while true
+        while((row - i) > 0){
 
-            if((row - i) < 0){
-                break;
-            }
-            if((col - i) < 0){
-                break;
-            }
-            ChessPosition newPos = new ChessPosition(row - i, col);
+//            if((row - i) < 0){
+//                break;
+//            }
+//            if((col - i) < 0){
+//                break;
+//            }
+//            if((row + i) > 8){
+//                break;
+//            }
+//            if((col + i) > 8){
+//                break;
+//            }
+
+            ChessPosition downPos = new ChessPosition(row - i, col);
             //if the space is empty its good to go.
-            if((board.getPiece(newPos) == null )){
-                MovesCollection.add(new ChessMove(myPosition, newPos, null));
+            if((board.getPiece(downPos) == null )){
+                MovesCollection.add(new ChessMove(myPosition, downPos, null));
             }
-            if ((board.getPiece(newPos)) != null && board.getPiece(newPos).getTeamColor() != pieceColor){
+            if ((board.getPiece(downPos)) != null && board.getPiece(downPos).getTeamColor() != pieceColor){
                 // if the piece to the left is not your own its a possible move
-                MovesCollection.add(new ChessMove(myPosition, newPos, null));
+                MovesCollection.add(new ChessMove(myPosition, downPos, null));
                 // add it to our collection of possible moves.
                 break;
             }
-            if ((board.getPiece(newPos)) != null && board.getPiece(newPos).getTeamColor() == pieceColor){
+            if ((board.getPiece(downPos)) != null && board.getPiece(downPos).getTeamColor() == pieceColor){
                 // our team mate's piece is blocking this way
                 break;
             }
             i++;
         }
+        // above the Rook
+        while((row + i) < 9){
+            ChessPosition upPos = new ChessPosition(row + i, col);
+            if((board.getPiece(upPos) == null )){
+                MovesCollection.add(new ChessMove(myPosition, upPos, null));
+            }
+            if ((board.getPiece(upPos)) != null && board.getPiece(upPos).getTeamColor() != pieceColor){
+                MovesCollection.add(new ChessMove(myPosition, upPos, null));
+                break;
+            }
+            if ((board.getPiece(upPos)) != null && board.getPiece(upPos).getTeamColor() == pieceColor){
+                break;
+            }
+            i++;
+        }
+
+        // left of the Rook
+        while((col - i) > 0 ){
+            ChessPosition leftPos = new ChessPosition(row, col - i);
+            if((board.getPiece(leftPos) == null )){
+                MovesCollection.add(new ChessMove(myPosition, leftPos, null));
+            }
+            if ((board.getPiece(leftPos)) != null && board.getPiece(leftPos).getTeamColor() != pieceColor){
+                MovesCollection.add(new ChessMove(myPosition, leftPos, null));
+                break;
+            }
+            if ((board.getPiece(leftPos)) != null && board.getPiece(leftPos).getTeamColor() == pieceColor){
+                break;
+            }
+            i++;
+        }
+
+        // right of the Rook
+        while((col + i) < 9){
+            ChessPosition rightPos = new ChessPosition(row, col + i);
+            if((board.getPiece(rightPos) == null )){
+                MovesCollection.add(new ChessMove(myPosition, rightPos, null));
+            }
+            if ((board.getPiece(rightPos)) != null && board.getPiece(rightPos).getTeamColor() != pieceColor){
+                MovesCollection.add(new ChessMove(myPosition, rightPos, null));
+                break;
+            }
+            if ((board.getPiece(rightPos)) != null && board.getPiece(rightPos).getTeamColor() == pieceColor){
+                break;
+            }
+            i++;
+        }
+
 
         return MovesCollection;
     }
