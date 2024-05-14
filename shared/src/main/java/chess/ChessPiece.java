@@ -100,13 +100,13 @@ public class ChessPiece {
 
         ChessPosition newPos = new ChessPosition(row + 1, col);
 
-       // moveCollector(board, myPosition, newPos);
+        MovesCollection.addAll(moveCollector(board, myPosition, newPos));
 
-        if(!(isOutOfBounds(newPos))){
-            if(moveValidator( board,newPos)){
-                MovesCollection.add(new ChessMove(myPosition, newPos, null));
-            }
-        }
+//        if(!(isOutOfBounds(newPos))){
+//            if(moveValidator( board,newPos)){
+//                MovesCollection.add(new ChessMove(myPosition, newPos, null));
+//            }
+//        }
         newPos = new ChessPosition(row, col + 1);
         if(!(newPos.getRow() <= 0 || newPos.getColumn() <= 0 || newPos.getRow() > 8 || newPos.getColumn() > 8)){
             if(moveValidator( board,newPos)){
@@ -153,9 +153,17 @@ public class ChessPiece {
         return MovesCollection;
     }
 
-//    public ArrayList<ChessMove> moveCollector(ChessBoard board, ChessPosition myPosition,ChessPosition newPos){
-//
-//    }
+    public ArrayList<ChessMove> moveCollector(ChessBoard board, ChessPosition myPosition,ChessPosition newPos){
+        ArrayList<ChessMove> MovesCollection = new ArrayList<>();
+
+        if(!(isOutOfBounds(newPos))){
+            if(moveValidator( board,newPos)){
+                MovesCollection.add(new ChessMove(myPosition, newPos, null));
+            }
+        }
+
+        return MovesCollection;
+    }
 
     public boolean isOutOfBounds(ChessPosition newPos){
         if(newPos.getRow() <= 0 || newPos.getColumn() <= 0 || newPos.getRow() > 8 || newPos.getColumn() > 8){
