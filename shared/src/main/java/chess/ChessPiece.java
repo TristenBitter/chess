@@ -417,7 +417,6 @@ public class ChessPiece {
             i++;
         }
 
-
         return MovesCollection;
     }
 
@@ -444,6 +443,7 @@ public class ChessPiece {
             }
         }
         // Black Initial Move
+        //******************************************************************************
         newPos = new ChessPosition(row - 1, col);
         if(!(newPos.getRow() <= 0 || newPos.getColumn() <= 0 || newPos.getRow() > 8 || newPos.getColumn() > 8)) {
             if (board.getPiece(newPos) == null && board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.BLACK) {
