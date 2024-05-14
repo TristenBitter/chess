@@ -99,7 +99,10 @@ public class ChessPiece {
         int col = myPosition.getColumn();
 
         ChessPosition newPos = new ChessPosition(row + 1, col);
-        if(!(newPos.getRow() <= 0 || newPos.getColumn() <= 0 || newPos.getRow() > 8 || newPos.getColumn() > 8)){
+
+       // moveCollector(board, myPosition, newPos);
+
+        if(!(isOutOfBounds(newPos))){
             if(moveValidator( board,newPos)){
                 MovesCollection.add(new ChessMove(myPosition, newPos, null));
             }
@@ -148,6 +151,17 @@ public class ChessPiece {
         }
 
         return MovesCollection;
+    }
+
+//    public ArrayList<ChessMove> moveCollector(ChessBoard board, ChessPosition myPosition,ChessPosition newPos){
+//
+//    }
+
+    public boolean isOutOfBounds(ChessPosition newPos){
+        if(newPos.getRow() <= 0 || newPos.getColumn() <= 0 || newPos.getRow() > 8 || newPos.getColumn() > 8){
+            return true;
+        }
+        return false;
     }
 
     public ArrayList<ChessMove> possibleQueenMoves(ChessBoard board, ChessPosition myPosition) {
