@@ -310,8 +310,7 @@ public class ChessPiece {
         }
 
         i = 1;
-//        while((row - i) > 0 && ((col + i) < 9) && ((row + i) < 9) && ((col - i) > 0 )){
-//            ChessPosition upRightPos = new ChessPosition(row + i, col + i);
+
         while(true){
             ChessPosition upRightPos = new ChessPosition(row + i, col + i);
             if(upRightPos.getRow() <= 0 || upRightPos.getColumn() <= 0){
