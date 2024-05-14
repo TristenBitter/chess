@@ -231,7 +231,7 @@ public class ChessPiece {
         int col = myPosition.getColumn();
 
         int i = 1;
-//(row - i) > 0 && ((col + i) < 9) && ((row + i) < 9) && ((col - i) > 0 )
+
         while(true){
             ChessPosition downLeftPos = new ChessPosition(row - i, col - i);
             if(downLeftPos.getRow() <= 0 || downLeftPos.getColumn() <= 0){
