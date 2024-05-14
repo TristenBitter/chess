@@ -341,19 +341,6 @@ public class ChessPiece {
         // below the rook
         while((row - i) > 0){
 
-//            if((row - i) < 0){
-//                break;
-//            }
-//            if((col - i) < 0){
-//                break;
-//            }
-//            if((row + i) > 8){
-//                break;
-//            }
-//            if((col + i) > 8){
-//                break;
-//            }
-
             ChessPosition downPos = new ChessPosition(row - i, col);
             //if the space is empty its good to go.
             if((board.getPiece(downPos) == null )){
