@@ -99,61 +99,33 @@ public class ChessPiece {
         int col = myPosition.getColumn();
 
         ChessPosition newPos = new ChessPosition(row + 1, col);
+        MovesCollection.addAll(kingMoveCollector(board, myPosition, newPos));
 
-        MovesCollection.addAll(moveCollector(board, myPosition, newPos));
-
-//        if(!(isOutOfBounds(newPos))){
-//            if(moveValidator( board,newPos)){
-//                MovesCollection.add(new ChessMove(myPosition, newPos, null));
-//            }
-//        }
         newPos = new ChessPosition(row, col + 1);
-        if(!(newPos.getRow() <= 0 || newPos.getColumn() <= 0 || newPos.getRow() > 8 || newPos.getColumn() > 8)){
-            if(moveValidator( board,newPos)){
-                MovesCollection.add(new ChessMove(myPosition, newPos, null));
-            }
-        }
-        newPos = new ChessPosition(row + 1, col + 1);
-        if(!(newPos.getRow() <= 0 || newPos.getColumn() <= 0 || newPos.getRow() > 8 || newPos.getColumn() > 8)){
-            if(moveValidator( board,newPos)){
-                MovesCollection.add(new ChessMove(myPosition, newPos, null));
-            }
-        }
-        newPos = new ChessPosition(row, col - 1);
-        if(!(newPos.getRow() <= 0 || newPos.getColumn() <= 0 || newPos.getRow() > 8 || newPos.getColumn() > 8)){
-            if(moveValidator( board,newPos)){
-                MovesCollection.add(new ChessMove(myPosition, newPos, null));
-            }
-        }
-        newPos = new ChessPosition(row - 1, col - 1);
-        if(!(newPos.getRow() <= 0 || newPos.getColumn() <= 0 || newPos.getRow() > 8 || newPos.getColumn() > 8)){
-            if(moveValidator( board,newPos)){
-                MovesCollection.add(new ChessMove(myPosition, newPos, null));
-            }
-        }
-        newPos = new ChessPosition(row -1, col);
-        if(!(newPos.getRow() <= 0 || newPos.getColumn() <= 0 || newPos.getRow() > 8 || newPos.getColumn() > 8)){
-            if(moveValidator( board,newPos)){
-                MovesCollection.add(new ChessMove(myPosition, newPos, null));
-            }
-        }
-        newPos = new ChessPosition(row - 1, col + 1);
-        if(!(newPos.getRow() <= 0 || newPos.getColumn() <= 0 || newPos.getRow() > 8 || newPos.getColumn() > 8)){
-            if(moveValidator( board,newPos)){
-                MovesCollection.add(new ChessMove(myPosition, newPos, null));
-            }
-        }
-        newPos = new ChessPosition(row + 1, col - 1);
-        if(!(newPos.getRow() <= 0 || newPos.getColumn() <= 0 || newPos.getRow() > 8 || newPos.getColumn() > 8)){
-            if(moveValidator( board,newPos)){
-                MovesCollection.add(new ChessMove(myPosition, newPos, null));
-            }
-        }
+        MovesCollection.addAll(kingMoveCollector(board, myPosition, newPos));
 
+        newPos = new ChessPosition(row + 1, col + 1);
+        MovesCollection.addAll(kingMoveCollector(board, myPosition, newPos));
+
+        newPos = new ChessPosition(row, col - 1);
+        MovesCollection.addAll(kingMoveCollector(board, myPosition, newPos));
+
+        newPos = new ChessPosition(row - 1, col - 1);
+        MovesCollection.addAll(kingMoveCollector(board, myPosition, newPos));
+
+        newPos = new ChessPosition(row -1, col);
+        MovesCollection.addAll(kingMoveCollector(board, myPosition, newPos));
+
+        newPos = new ChessPosition(row - 1, col + 1);
+        MovesCollection.addAll(kingMoveCollector(board, myPosition, newPos));
+
+        newPos = new ChessPosition(row + 1, col - 1);
+        MovesCollection.addAll(kingMoveCollector(board, myPosition, newPos));
+        
         return MovesCollection;
     }
 
-    public ArrayList<ChessMove> moveCollector(ChessBoard board, ChessPosition myPosition,ChessPosition newPos){
+    public ArrayList<ChessMove> kingMoveCollector(ChessBoard board, ChessPosition myPosition,ChessPosition newPos){
         ArrayList<ChessMove> MovesCollection = new ArrayList<>();
 
         if(!(isOutOfBounds(newPos))){
