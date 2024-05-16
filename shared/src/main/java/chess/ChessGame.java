@@ -72,6 +72,8 @@ public class ChessGame {
 //            return null;
 //        }
 //        return MovesCollection;
+
+
         throw new RuntimeException("Not implemented");
     }
 
@@ -131,6 +133,7 @@ public class ChessGame {
      * @return the chessboard
      */
     public ChessBoard getBoard() {
+        setBoard(board);
         throw new RuntimeException("Not implemented");
     }
 }
