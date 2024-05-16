@@ -11,11 +11,13 @@ import java.util.Collection;
  */
 public class ChessGame {
 
-    private ChessBoard board;
+    private ChessBoard board = new ChessBoard();
     private ChessPiece piece;
 
     // used to tell whose turn it is
-    private boolean isWhiteTurn = true;
+    //private boolean isWhiteTurn = true;
+
+    private TeamColor isWhiteTurn = TeamColor.WHITE;
     public ChessGame() {
 
 
@@ -25,14 +27,18 @@ public class ChessGame {
      * @return Which team's turn it is
      */
     public TeamColor getTeamTurn() {
-        TeamColor team;
-        if(isWhiteTurn) {
-            team = TeamColor.WHITE;
-        }
-        else{
-            team = TeamColor.BLACK;
-        }
-        return team;
+        return isWhiteTurn;
+//        if(isWhiteTurn){
+//            TeamColor team = TeamColor.WHITE;
+//        }
+//        TeamColor team;
+//        if(isWhiteTurn) {
+//            team = TeamColor.WHITE;
+//        }
+//        else{
+//            team = TeamColor.BLACK;
+//        }
+//        return team;
     }
 
     /**
@@ -41,14 +47,15 @@ public class ChessGame {
      * @param team the team whose turn it is
      */
     public void setTeamTurn(TeamColor team) {
+        this.isWhiteTurn = team;
         //throw new RuntimeException("Not implemented");
         //team = getTeamTurn();
-        if(team != null && team == TeamColor.WHITE){
-            isWhiteTurn = false;
-        }
-        else{
-            isWhiteTurn = true;
-        }
+//        if(team != null && team == TeamColor.WHITE){
+//            isWhiteTurn = false;
+//        }
+//        else{
+//            isWhiteTurn = true;
+//        }
     }
 
     /**
@@ -107,6 +114,7 @@ public class ChessGame {
      */
     public boolean isInCheckmate(TeamColor teamColor) {
         //if it is in Check and there are no valid moves to save the king
+
         // by moving the king
         // by capturing the troublesome piece
         // or by blocking
@@ -133,7 +141,8 @@ public class ChessGame {
      * @param board the new board to use
      */
     public void setBoard(ChessBoard board) {
-        throw new RuntimeException("Not implemented");
+        this.board=board;
+
     }
 
     /**
@@ -142,7 +151,8 @@ public class ChessGame {
      * @return the chessboard
      */
     public ChessBoard getBoard() {
-        setBoard(board);
-        throw new RuntimeException("Not implemented");
+        return board;
     }
 }
+
+

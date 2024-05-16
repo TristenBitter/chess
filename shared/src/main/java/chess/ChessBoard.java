@@ -15,6 +15,9 @@ public class ChessBoard {
         
     }
 
+    public ChessBoard(ChessBoard copyBoard){
+
+    }
     @Override
     public String toString() {
         return "ChessBoard{" + "squares=" + Arrays.toString(squares) + '}';
