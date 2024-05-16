@@ -94,6 +94,8 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
+        // if a future move in the valid moves ends with the space of the king being taken
+        // then its in check
         throw new RuntimeException("Not implemented");
     }
 
@@ -104,6 +106,13 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
+        //if it is in Check and there are no valid moves to save the king
+        // by moving the king
+        // by capturing the troublesome piece
+        // or by blocking
+
+        // will have to reuse isInCheck to see if after each possible move if it is still in check
+
         throw new RuntimeException("Not implemented");
     }
 
