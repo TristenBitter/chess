@@ -14,7 +14,7 @@ public class ChessGame {
     private ChessBoard board;
     private ChessPiece piece;
 
-    // used to tell
+    // used to tell whose turn it is
     private boolean isWhiteTurn = true;
     public ChessGame() {
 
