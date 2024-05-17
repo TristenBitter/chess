@@ -80,14 +80,16 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-//        ArrayList<ChessMove> MovesCollection = piece.pieceMoves(board, startPosition);
-//        if(board.getPiece(startPosition) == null){
-//            return null;
-//        }
-//        return MovesCollection;
+        ArrayList<ChessMove> validMoves = new ArrayList<>();
+        validMoves = board.getPiece(startPosition).pieceMoves(board, startPosition);
 
+        // check to see if there is a move that put the king in to check.
+        // check to see if the king is being moved into check
 
-        throw new RuntimeException("Not implemented");
+        //if you are in check you must get yourself out of check
+        // make a copy and call makeMoves to test out a possible solution to get you out of check.
+
+       return validMoves;
     }
 
     /**
@@ -117,8 +119,7 @@ public class ChessGame {
         // if a future move in the valid moves ends with the space of the king being taken
         // then its in check
         ChessPosition kingPos = findKing(teamColor);
-        ArrayList<ChessMove> possibleMoves = new ArrayList<>();
-        possibleMoves = possibleMovesCollector(teamColor);
+        ArrayList<ChessMove> possibleMoves = possibleMovesCollector(teamColor);
 
         //if kingPos is in possible moves then return true, else false
         if(possibleMoves.contains(kingPos)){
