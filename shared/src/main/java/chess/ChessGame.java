@@ -29,7 +29,7 @@ public class ChessGame {
 
 
 
-    /***********************************************************************************************
+    /**
      * @return Which team's turn it is
      */
 
@@ -38,17 +38,6 @@ public class ChessGame {
      ***********************************************************************************************/
     public TeamColor getTeamTurn() {
         return isWhiteTurn;
-//        if(isWhiteTurn){
-//            TeamColor team = TeamColor.WHITE;
-//        }
-//        TeamColor team;
-//        if(isWhiteTurn) {
-//            team = TeamColor.WHITE;
-//        }
-//        else{
-//            team = TeamColor.BLACK;
-//        }
-//        return team;
     }
 
     /**
@@ -62,14 +51,6 @@ public class ChessGame {
      ***********************************************************************************************/
     public void setTeamTurn(TeamColor team) {
         this.isWhiteTurn = team;
-        //throw new RuntimeException("Not implemented");
-        //team = getTeamTurn();
-//        if(team != null && team == TeamColor.WHITE){
-//            isWhiteTurn = false;
-//        }
-//        else{
-//            isWhiteTurn = true;
-//        }
     }
 
     /**
@@ -208,7 +189,18 @@ public class ChessGame {
      ***********************************************************************************************/
     public boolean isInCheckmate(TeamColor teamColor) {
         //if it is in Check and there are no valid moves to save the king
+        ArrayList<ChessMove> possibleMoves;
+        if(teamColor == TeamColor.WHITE) {
+            possibleMoves=possibleMovesCollector(TeamColor.BLACK);
+        }
+        else{
+            possibleMoves=possibleMovesCollector(TeamColor.WHITE);
+        }
 
+        if(isInCheck(teamColor)){
+            // and if there are no valid moves to get it out of check
+            // && validMoves(findKing(teamColor))
+        }
         // if there is a validMove for the kings team to make then its not in check mate.
 
         // by moving the king
@@ -217,7 +209,8 @@ public class ChessGame {
 
         // will have to reuse isInCheck to see if after each possible move if it is still in check
 
-        throw new RuntimeException("Not implemented");
+        //throw new RuntimeException("Not implemented");
+        return false;
     }
 
     /**
