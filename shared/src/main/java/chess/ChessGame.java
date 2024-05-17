@@ -76,8 +76,10 @@ public class ChessGame {
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         ArrayList<ChessMove> validMoves = new ArrayList<>();
         validMoves = board.getPiece(startPosition).pieceMoves(board, startPosition);
-
         //check if piece is not null
+        if(board.getPiece(startPosition) == null){
+            return null;
+        }
 
         // make a copy of the board
 
@@ -94,6 +96,33 @@ public class ChessGame {
         // make a copy and call makeMoves to test out a possible solution to get you out of check.
 
        return validMoves;
+    }
+
+
+    /***********************************************************************************************
+     *                                       TRY MOVE
+     ***********************************************************************************************/
+    public boolean tryMove(TeamColor teamColor, ChessMove move){
+        //ArrayList<ChessMove> allTheirPossibleMoves = possibleMovesCollector(teamColor);
+            // make a copy of the board
+            ChessBoard copy=new ChessBoard(board);
+            //make the move on the copy of the Board
+            copy.addPiece( move.getEndPosition(),copy.getPiece(move.getStartPosition()));
+            // remove the piece from the old spot by setting it equal to null
+            ChessPiece oldSpot = copy.getPiece(move.getStartPosition());
+            oldSpot = null;
+            // trash the board copy if needed... clean up
+
+
+            //check if it is no longer in check....if so then return true...else
+            if(!isInCheck(teamColor)){
+                //we did not put our selves in check... let's add it to valid moves
+                return true;
+            }
+        // that is not a valid move
+        return false;
+
+
     }
 
     /**
@@ -194,7 +223,7 @@ public class ChessGame {
     }
 
     /***********************************************************************************************
-     *                                         TRY MOVE
+     *                             TRY MOVE TO GET OUT OF CHECK
      ***********************************************************************************************/
     public boolean tryMoveToGetOutOfCheck(TeamColor teamColor){
         // is there any move that can get me out of check
@@ -220,6 +249,9 @@ public class ChessGame {
             // remove the piece from the old spot by setting it equal to null
             ChessPiece oldSpot = copyOfBoard.getPiece(move.getStartPosition());
             oldSpot = null;
+            // trash the board copy if needed... clean up
+
+
             //check if it is no longer in check....if so then return true...else
             if(!isInCheck(teamColor)){
                 //we are no longer in check... woo hoo!
@@ -249,18 +281,8 @@ public class ChessGame {
                 // That's Check Mate... Game Over!
                 return true;
             }
-            // and if there are no valid moves to get it out of check
-            // && validMoves(findKing(teamColor))
         }
         // if there is a validMove for the kings team to make then it's not in check mate.
-
-        // by moving the king
-        // by capturing the troublesome piece
-        // or by blocking
-
-        // will have to reuse isInCheck to see if after each possible move if it is still in check
-
-        //throw new RuntimeException("Not implemented");
         return false;
     }
 
