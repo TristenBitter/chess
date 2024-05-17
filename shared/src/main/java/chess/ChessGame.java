@@ -74,16 +74,21 @@ public class ChessGame {
      *                                    VALID MOVES
      ***********************************************************************************************/
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
+        ArrayList<ChessMove> plausiblePieceMoves = board.getPiece(startPosition).pieceMoves(board, startPosition);
         ArrayList<ChessMove> validMoves = new ArrayList<>();
-        validMoves = board.getPiece(startPosition).pieceMoves(board, startPosition);
         //check if piece is not null
+
         if(board.getPiece(startPosition) == null){
             return null;
         }
-
-        // make a copy of the board
-
-        // make the move manually --> tryMove
+        Iterator it = plausiblePieceMoves.iterator();
+        while(it.hasNext()){
+            ChessMove move = (ChessMove)it.next();
+            if(tryMove(getTeamTurn(), move)){
+                //if the move doesn't put us in check it is a valid move so add it to the list
+                validMoves.add(move);
+            }
+        }
 
         //** check to see if there is a move that put the king in to check.
         //** check to see if the king is being moved into check
@@ -104,10 +109,11 @@ public class ChessGame {
      ***********************************************************************************************/
     public boolean tryMove(TeamColor teamColor, ChessMove move){
         //ArrayList<ChessMove> allTheirPossibleMoves = possibleMovesCollector(teamColor);
-            // make a copy of the board
+            // make a copy
             ChessBoard copy=new ChessBoard(board);
             //make the move on the copy of the Board
             copy.addPiece( move.getEndPosition(),copy.getPiece(move.getStartPosition()));
+
             // remove the piece from the old spot by setting it equal to null
             ChessPiece oldSpot = copy.getPiece(move.getStartPosition());
             oldSpot = null;
