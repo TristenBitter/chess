@@ -3,6 +3,7 @@ package chess;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.function.Predicate;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -14,7 +15,8 @@ public class ChessGame {
 
     private ChessBoard board = new ChessBoard();
 
-    private ChessPiece.PieceType type;
+    private ChessPiece.PieceType type = ChessPiece.PieceType.PAWN;
+    private TeamColor isWhiteTurn =TeamColor.WHITE;
     private ChessPiece piece = new ChessPiece(getTeamTurn(), type);
 
     //ChessMove
@@ -22,9 +24,9 @@ public class ChessGame {
     // used to tell whose turn it is
     //private boolean isWhiteTurn = true;
 
-    private TeamColor isWhiteTurn = TeamColor.WHITE;
-    public ChessGame() {
 
+    public ChessGame() {
+        this.board.resetBoard();
 
     }
 
@@ -88,6 +90,13 @@ public class ChessGame {
                 //if the move doesn't put us in check it is a valid move so add it to the list
                 validMoves.add(move);
             }
+        }
+
+        if(getTeamTurn() == TeamColor.WHITE) {
+            setTeamTurn(TeamColor.BLACK);
+        }
+        else{
+            setTeamTurn(TeamColor.WHITE);
         }
 
         //** check to see if there is a move that put the king in to check.
@@ -193,12 +202,7 @@ public class ChessGame {
         ArrayList<ChessMove> possibleMoves = possibleMovesCollector(teamColor);
 
         //if kingPos is in possible moves then return true, else false
-        if(possibleMoves.contains(kingPos)){
-            return true;
-        }
-        else{
-            return false;
-        }
+            return possibleMoves.stream().anyMatch(chessMove -> chessMove.getEndPosition().equals(kingPos));
     }
 
     /***********************************************************************************************
