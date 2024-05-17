@@ -113,14 +113,20 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
+        //find current position of king and see if the other team has possible end possition on that position
         // if a future move in the valid moves ends with the space of the king being taken
         // then its in check
         ChessPosition kingPos = findKing(teamColor);
         ArrayList<ChessMove> possibleMoves = new ArrayList<>();
         possibleMoves = possibleMovesCollector(teamColor);
 
-        //find current possition of king and see if the other team has possible end possition on that position
-        throw new RuntimeException("Not implemented");
+        //if kingPos is in possible moves then return true, else false
+        if(possibleMoves.contains(kingPos)){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     public ArrayList<ChessMove> possibleMovesCollector(TeamColor teamColor){
@@ -132,7 +138,9 @@ public class ChessGame {
             j = 0;
             while(j < 7){
                 position=new ChessPosition(i, j);
-                allPossibleMoves.addAll(board.getPiece(position).pieceMoves(board, position));
+                if(board.getPiece(position).getTeamColor() != teamColor) {
+                    allPossibleMoves.addAll(board.getPiece(position).pieceMoves(board, position));
+                }
                 j++;
             }
             i++;
