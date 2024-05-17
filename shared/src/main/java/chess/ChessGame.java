@@ -12,7 +12,11 @@ import java.util.Collection;
 public class ChessGame {
 
     private ChessBoard board = new ChessBoard();
-    private ChessPiece piece;
+
+    private ChessPiece.PieceType type;
+    private ChessPiece piece = new ChessPiece(getTeamTurn(), type);
+
+    //ChessMove
 
     // used to tell whose turn it is
     //private boolean isWhiteTurn = true;
@@ -22,6 +26,8 @@ public class ChessGame {
 
 
     }
+
+
 
     /**
      * @return Which team's turn it is
@@ -90,8 +96,14 @@ public class ChessGame {
      * @param move chess move to preform
      * @throws InvalidMoveException if move is invalid
      */
-    public void makeMove(ChessMove move) throws InvalidMoveException {
-        throw new RuntimeException("Move not valid");
+    public void makeMove(ChessMove move){
+        // make a copy of the chess board
+        // do the turn switches when calling set turn
+        ChessBoard copyOfBoard=new ChessBoard(board);
+
+
+            //throws InvalidMoveException {
+        //throw new RuntimeException("Move not valid");
     }
 
     /**
@@ -103,7 +115,50 @@ public class ChessGame {
     public boolean isInCheck(TeamColor teamColor) {
         // if a future move in the valid moves ends with the space of the king being taken
         // then its in check
+        ChessPosition kingPos = findKing(teamColor);
+        ArrayList<ChessMove> possibleMoves = new ArrayList<>();
+        possibleMoves = possibleMovesCollector(teamColor);
+
+        //find current possition of king and see if the other team has possible end possition on that position
         throw new RuntimeException("Not implemented");
+    }
+
+    public ArrayList<ChessMove> possibleMovesCollector(TeamColor teamColor){
+        ArrayList<ChessMove>allPossibleMoves = new ArrayList<>();
+        int i = 0;
+        int j = 0;
+        ChessPosition position = new ChessPosition(i,j);
+        while(i < 7) {
+            j = 0;
+            while(j < 7){
+                position=new ChessPosition(i, j);
+                allPossibleMoves.addAll(board.getPiece(position).pieceMoves(board, position));
+                j++;
+            }
+            i++;
+        }
+
+        //allPossibleMoves = piece.pieceMoves(board, position);
+        return allPossibleMoves;
+    }
+
+    public ChessPosition findKing(TeamColor teamColor){
+        ChessPosition kingPosition = new ChessPosition(0,0);
+        int i = 0;
+        while(i < 7) {
+            int j = 0;
+            while(j < 7){
+                kingPosition=new ChessPosition(i, j);
+                if (board.getPiece(kingPosition).getPieceType() == ChessPiece.PieceType.KING) {
+                    i += 7;
+                    break;
+                }
+                j++;
+            }
+            i++;
+        }
+
+       return kingPosition;
     }
 
     /**
@@ -114,6 +169,8 @@ public class ChessGame {
      */
     public boolean isInCheckmate(TeamColor teamColor) {
         //if it is in Check and there are no valid moves to save the king
+
+        // if there is a validMove for the kings team to make then its not in check mate.
 
         // by moving the king
         // by capturing the troublesome piece
@@ -132,6 +189,8 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
+        // not currently in check
+        // and the number of possible moves is zero.
         throw new RuntimeException("Not implemented");
     }
 

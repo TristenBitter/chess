@@ -11,13 +11,17 @@ import java.util.Arrays;
 public class ChessBoard {
 
     private ChessPiece[][] squares = new ChessPiece[8][8];
+
     public ChessBoard() {
         
     }
 
     public ChessBoard(ChessBoard copyBoard){
-
+        this.squares= Arrays.copyOf(squares, squares.length);
     }
+
+    //copyBoard(){}
+
     @Override
     public String toString() {
         return "ChessBoard{" + "squares=" + Arrays.toString(squares) + '}';

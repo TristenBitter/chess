@@ -13,6 +13,10 @@ public class ChessPosition {
     private final int row;
     private final int col;
 
+//    public ChessPosition() {
+//
+//    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
