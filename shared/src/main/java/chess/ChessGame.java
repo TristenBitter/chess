@@ -75,7 +75,7 @@ public class ChessGame {
      ***********************************************************************************************/
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         ArrayList<ChessMove> plausiblePieceMoves = board.getPiece(startPosition).pieceMoves(board, startPosition);
-        ArrayList<ChessMove> validMoves = new ArrayList<>();
+        Collection<ChessMove> validMoves = new ArrayList<>();
         //check if piece is not null
 
         if(board.getPiece(startPosition) == null){
@@ -146,14 +146,30 @@ public class ChessGame {
         // do the turn switches when calling set turn
         ChessBoard copyOfBoard=new ChessBoard(board);
 
-        //check if the move is valid
-        //if it is then do this
-        this.board= copyOfBoard;
+        ChessPosition endPos = move.getEndPosition();
+        ChessPosition startPos = move.getStartPosition();
+        ChessPiece.PieceType pieceType = board.getPiece(startPos).getPieceType();
+        if(move.getPromotionPiece() != null){
+            pieceType = move.getPromotionPiece();
+        }
 
+        Collection<ChessMove> validMoves = new ArrayList<>();
+        //check if the move is valid
+        validMoves = validMoves(startPos);
+        Iterator itr = validMoves.iterator();
+        while(itr.hasNext()){
+            ChessMove moveTry = (ChessMove)itr.next();
+            if(moveTry == move){
+                this.board= copyOfBoard;
+                break;
+            }
+        }
+        // if isValid ... does not put us in check && if it is found in one of the possible moves of that piece
+        //set the board to the new board with this.board= copyOfBoard;
         //otherwise throw this
 
-            //throws InvalidMoveException {
-        //throw new RuntimeException("Move not valid");
+        //throws InvalidMoveException
+        throw new RuntimeException("Move not valid");
     }
 
     /**
