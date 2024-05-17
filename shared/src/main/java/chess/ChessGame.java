@@ -2,6 +2,7 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -76,10 +77,20 @@ public class ChessGame {
         ArrayList<ChessMove> validMoves = new ArrayList<>();
         validMoves = board.getPiece(startPosition).pieceMoves(board, startPosition);
 
-        // check to see if there is a move that put the king in to check.
-        // check to see if the king is being moved into check
+        //check if piece is not null
 
-        //if you are in check you must get yourself out of check
+        // make a copy of the board
+
+        // make the move manually --> tryMove
+
+        //** check to see if there is a move that put the king in to check.
+        //** check to see if the king is being moved into check
+        // try allPossibleMoves from your own team
+        // if king is in not in check after (makeMove()) is called then add it to valid moves
+
+        //** if you are in check you must get yourself out of check
+        //if in check, check to see if you're still in check after makeMove if not add it to valid moves
+
         // make a copy and call makeMoves to test out a possible solution to get you out of check.
 
        return validMoves;
@@ -100,6 +111,11 @@ public class ChessGame {
         // do the turn switches when calling set turn
         ChessBoard copyOfBoard=new ChessBoard(board);
 
+        //check if the move is valid
+        //if it is then do this
+        this.board= copyOfBoard;
+
+        //otherwise throw this
 
             //throws InvalidMoveException {
         //throw new RuntimeException("Move not valid");
@@ -177,6 +193,43 @@ public class ChessGame {
        return kingPosition;
     }
 
+    /***********************************************************************************************
+     *                                         TRY MOVE
+     ***********************************************************************************************/
+    public boolean tryMoveToGetOutOfCheck(TeamColor teamColor){
+        // is there any move that can get me out of check
+        // make a copy of the board
+        //ChessBoard copyOfBoard=new ChessBoard(board);
+        // let's try all of our possible Moves to see there is one to get me out of check
+        ArrayList<ChessMove>listOfPossibleMoves;
+        if(teamColor == TeamColor.WHITE) {
+            listOfPossibleMoves=possibleMovesCollector(TeamColor.BLACK);
+        }
+        else{
+            listOfPossibleMoves=possibleMovesCollector(TeamColor.WHITE);
+        }
+        //possibleMovesCollector(teamColor);
+        //allPossibleMoves.forEach(chessMove -> if(tryMove(chessMove)));
+        Iterator itr = listOfPossibleMoves.iterator();
+        while(itr.hasNext()){
+            // make a copy of the board
+            ChessBoard copyOfBoard=new ChessBoard(board);
+            //make the move on the copy
+            ChessMove move =(ChessMove) itr.next();
+            copyOfBoard.addPiece( move.getEndPosition(),copyOfBoard.getPiece(move.getStartPosition()));
+            // remove the piece from the old spot by setting it equal to null
+            ChessPiece oldSpot = copyOfBoard.getPiece(move.getStartPosition());
+            oldSpot = null;
+            //check if it is no longer in check....if so then return true...else
+            if(!isInCheck(teamColor)){
+                //we are no longer in check... woo hoo!
+                return true;
+            }
+        }
+        // there is no way out of check, that's checkMate... Game Over
+        return false;
+    }
+
     /**
      * Determines if the given team is in checkmate
      *
@@ -189,19 +242,17 @@ public class ChessGame {
      ***********************************************************************************************/
     public boolean isInCheckmate(TeamColor teamColor) {
         //if it is in Check and there are no valid moves to save the king
-        ArrayList<ChessMove> possibleMoves;
-        if(teamColor == TeamColor.WHITE) {
-            possibleMoves=possibleMovesCollector(TeamColor.BLACK);
-        }
-        else{
-            possibleMoves=possibleMovesCollector(TeamColor.WHITE);
-        }
-
+        // change the start position to the new end position and the old start position to null
         if(isInCheck(teamColor)){
+            // is there any move that can get me out of check
+            if(tryMoveToGetOutOfCheck(teamColor) == false){
+                // That's Check Mate... Game Over!
+                return true;
+            }
             // and if there are no valid moves to get it out of check
             // && validMoves(findKing(teamColor))
         }
-        // if there is a validMove for the kings team to make then its not in check mate.
+        // if there is a validMove for the kings team to make then it's not in check mate.
 
         // by moving the king
         // by capturing the troublesome piece
@@ -226,8 +277,20 @@ public class ChessGame {
      ***********************************************************************************************/
     public boolean isInStalemate(TeamColor teamColor) {
         // not currently in check
-        // and the number of possible moves is zero.
-        throw new RuntimeException("Not implemented");
+        if(!isInCheck(teamColor)) {
+            ArrayList<ChessMove> possibleMoves;
+            if(teamColor == TeamColor.WHITE) {
+                possibleMoves=possibleMovesCollector(TeamColor.BLACK);
+            }
+            else{
+                possibleMoves=possibleMovesCollector(TeamColor.WHITE);
+            }
+            // and the number of possible moves is zero.
+            if(possibleMoves.isEmpty()){
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
