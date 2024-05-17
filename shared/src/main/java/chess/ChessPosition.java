@@ -34,6 +34,9 @@ public class ChessPosition {
         return Objects.hash(getRow(), col);
     }
 
+    /***********************************************************************************************
+     *                               CHESS POSITION
+     ***********************************************************************************************/
     public ChessPosition(int row, int col) {
         this.row=row;
         this.col=col;
@@ -43,6 +46,10 @@ public class ChessPosition {
      * @return which row this position is in
      * 1 codes for the bottom row
      */
+
+    /***********************************************************************************************
+     *                               GET ROW
+     ***********************************************************************************************/
     public int getRow() {
         //throw new RuntimeException("Not implemented");
         return row;
@@ -52,6 +59,10 @@ public class ChessPosition {
      * @return which column this position is in
      * 1 codes for the left row
      */
+
+    /***********************************************************************************************
+     *                               GET COLUMN
+     ***********************************************************************************************/
     public int getColumn() {
         //throw new RuntimeException("Not implemented");
         return col;

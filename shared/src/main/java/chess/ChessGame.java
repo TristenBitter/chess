@@ -29,9 +29,13 @@ public class ChessGame {
 
 
 
-    /**
+    /***********************************************************************************************
      * @return Which team's turn it is
      */
+
+    /***********************************************************************************************
+     *                               GET WHICH TEAM'S TURN IT IS
+     ***********************************************************************************************/
     public TeamColor getTeamTurn() {
         return isWhiteTurn;
 //        if(isWhiteTurn){
@@ -52,6 +56,10 @@ public class ChessGame {
      *
      * @param team the team whose turn it is
      */
+
+    /***********************************************************************************************
+     *                               SET THE TEAM'S TURN
+     ***********************************************************************************************/
     public void setTeamTurn(TeamColor team) {
         this.isWhiteTurn = team;
         //throw new RuntimeException("Not implemented");
@@ -79,6 +87,10 @@ public class ChessGame {
      * @return Set of valid moves for requested piece, or null if no piece at
      * startPosition
      */
+
+    /***********************************************************************************************
+     *                                    VALID MOVES
+     ***********************************************************************************************/
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         ArrayList<ChessMove> validMoves = new ArrayList<>();
         validMoves = board.getPiece(startPosition).pieceMoves(board, startPosition);
@@ -98,6 +110,10 @@ public class ChessGame {
      * @param move chess move to preform
      * @throws InvalidMoveException if move is invalid
      */
+
+    /***********************************************************************************************
+     *                                       MAKE MOVE
+     ***********************************************************************************************/
     public void makeMove(ChessMove move){
         // make a copy of the chess board
         // do the turn switches when calling set turn
@@ -114,6 +130,10 @@ public class ChessGame {
      * @param teamColor which team to check for check
      * @return True if the specified team is in check
      */
+
+    /***********************************************************************************************
+     *                              THE OLD IS IN CHECK CHECK
+     ***********************************************************************************************/
     public boolean isInCheck(TeamColor teamColor) {
         //find current position of king and see if the other team has possible end possition on that position
         // if a future move in the valid moves ends with the space of the king being taken
@@ -130,6 +150,9 @@ public class ChessGame {
         }
     }
 
+    /***********************************************************************************************
+     *                               POSSIBLE MOVES COLLECTOR
+     ***********************************************************************************************/
     public ArrayList<ChessMove> possibleMovesCollector(TeamColor teamColor){
         ArrayList<ChessMove>allPossibleMoves = new ArrayList<>();
         int i = 0;
@@ -151,6 +174,9 @@ public class ChessGame {
         return allPossibleMoves;
     }
 
+    /***********************************************************************************************
+     *                               WHERE'D THAT KING GO?
+     ***********************************************************************************************/
     public ChessPosition findKing(TeamColor teamColor){
         ChessPosition kingPosition = new ChessPosition(0,0);
         int i = 0;
@@ -176,6 +202,10 @@ public class ChessGame {
      * @param teamColor which team to check for checkmate
      * @return True if the specified team is in checkmate
      */
+
+    /***********************************************************************************************
+     *                                     ARE WE DONE YET
+     ***********************************************************************************************/
     public boolean isInCheckmate(TeamColor teamColor) {
         //if it is in Check and there are no valid moves to save the king
 
@@ -197,6 +227,10 @@ public class ChessGame {
      * @param teamColor which team to check for stalemate
      * @return True if the specified team is in stalemate, otherwise false
      */
+
+    /***********************************************************************************************
+     *                               I'M NOT SURE HOW I GOT HERE
+     ***********************************************************************************************/
     public boolean isInStalemate(TeamColor teamColor) {
         // not currently in check
         // and the number of possible moves is zero.
@@ -208,6 +242,11 @@ public class ChessGame {
      *
      * @param board the new board to use
      */
+
+
+    /***********************************************************************************************
+     *                                       SET BOARD
+     ***********************************************************************************************/
     public void setBoard(ChessBoard board) {
         this.board=board;
 
@@ -218,6 +257,10 @@ public class ChessGame {
      *
      * @return the chessboard
      */
+
+    /***********************************************************************************************
+     *                                       GET BOARD
+     ***********************************************************************************************/
     public ChessBoard getBoard() {
         return board;
     }

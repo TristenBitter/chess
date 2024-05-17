@@ -45,6 +45,10 @@ public class ChessBoard {
      * @param position where to add the piece to
      * @param piece    the piece to add
      */
+
+    /***********************************************************************************************
+     *                                       ADD PIECE
+     ***********************************************************************************************/
     public void addPiece(ChessPosition position, ChessPiece piece) {
         //throw new RuntimeException("Not implemented");
         squares[position.getRow() -1 ][position.getColumn() -1] = piece;
@@ -57,6 +61,10 @@ public class ChessBoard {
      * @return Either the piece at the position, or null if no piece is at that
      * position
      */
+
+    /***********************************************************************************************
+     *                                      GET PIECE
+     ***********************************************************************************************/
     public ChessPiece getPiece(ChessPosition position) {
         return squares[position.getRow() - 1][position.getColumn() -1 ];
         //throw new RuntimeException("Not implemented");
@@ -67,6 +75,10 @@ public class ChessBoard {
      * Sets the board to the default starting board
      * (How the game of chess normally starts)
      */
+
+    /***********************************************************************************************
+     *                                       NEW GAME
+     ***********************************************************************************************/
     public void resetBoard() {
         // WHITE TEAM
         squares[0][0] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK);

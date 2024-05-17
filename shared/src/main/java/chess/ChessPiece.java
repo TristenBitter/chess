@@ -68,6 +68,10 @@ public class ChessPiece {
      *
      * @return Collection of valid moves
      */
+
+    /***********************************************************************************************
+     *                               PIECE MOVES
+     ***********************************************************************************************/
     public ArrayList<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         ArrayList<ChessMove> MovesCollection = new ArrayList<>();
         switch(type){
@@ -93,6 +97,9 @@ public class ChessPiece {
 
         return MovesCollection;
     }
+    /***********************************************************************************************
+     *                               POSSIBLE KING MOVES
+     ***********************************************************************************************/
     public ArrayList<ChessMove> possibleKingMoves(ChessBoard board, ChessPosition myPosition) {
         ArrayList<ChessMove> MovesCollection = new ArrayList<>();
         int row = myPosition.getRow();
@@ -125,6 +132,9 @@ public class ChessPiece {
         return MovesCollection;
     }
 
+    /***********************************************************************************************
+     *                               KING MOVES HELPER
+     ***********************************************************************************************/
     public ArrayList<ChessMove> kingMoveCollector(ChessBoard board, ChessPosition myPosition,ChessPosition newPos){
         ArrayList<ChessMove> MovesCollection = new ArrayList<>();
 
@@ -137,6 +147,9 @@ public class ChessPiece {
         return MovesCollection;
     }
 
+    /***********************************************************************************************
+     *                               OUT OF BOUNDS CHECKER
+     ***********************************************************************************************/
     public boolean isOutOfBounds(ChessPosition newPos){
         if(newPos.getRow() <= 0 || newPos.getColumn() <= 0 || newPos.getRow() > 8 || newPos.getColumn() > 8){
             return true;
@@ -144,6 +157,9 @@ public class ChessPiece {
         return false;
     }
 
+    /***********************************************************************************************
+     *                               POSSIBLE QUEEN MOVES
+     ***********************************************************************************************/
     public ArrayList<ChessMove> possibleQueenMoves(ChessBoard board, ChessPosition myPosition) {
         ArrayList<ChessMove> MovesCollection = new ArrayList<>();
         MovesCollection = possibleBishopMoves(board, myPosition);
@@ -151,6 +167,9 @@ public class ChessPiece {
         return MovesCollection;
     }
 
+    /***********************************************************************************************
+     *                               POSSIBLE KNIGHT MOVES
+     ***********************************************************************************************/
     public ArrayList<ChessMove> possibleKnightMoves(ChessBoard board, ChessPosition myPosition) {
         ArrayList<ChessMove> MovesCollection = new ArrayList<>();
         int row = myPosition.getRow();
@@ -211,6 +230,9 @@ public class ChessPiece {
         return MovesCollection;
     }
 
+    /***********************************************************************************************
+     *                               MOVE VALIDATOR HELPER METHOD
+     ***********************************************************************************************/
     public boolean moveValidator(ChessBoard board, ChessPosition newPosition){
 
         if ((board.getPiece(newPosition) == null)) {
@@ -222,9 +244,9 @@ public class ChessPiece {
 
         return false;
     }
-//********************************************************************************************************************//
-//                                                  BISHOP
-//********************************************************************************************************************//
+    /***********************************************************************************************
+     *                               POSSIBLE BISHOP MOVES
+     ***********************************************************************************************/
     public ArrayList<ChessMove> possibleBishopMoves(ChessBoard board, ChessPosition myPosition) {
         ArrayList<ChessMove> MovesCollection = new ArrayList<>();
         int row = myPosition.getRow();
@@ -329,9 +351,9 @@ public class ChessPiece {
         }
         return MovesCollection;
     }
-//********************************************************************************************************************//
-//                                                 ROOK
-//********************************************************************************************************************//
+    /***********************************************************************************************
+     *                               POSSIBLE ROOK MOVES
+     ***********************************************************************************************/
     public ArrayList<ChessMove> possibleRookMoves(ChessBoard board, ChessPosition myPosition) {
         ArrayList<ChessMove> MovesCollection = new ArrayList<>();
         int row = myPosition.getRow();
@@ -420,6 +442,10 @@ public class ChessPiece {
         return MovesCollection;
     }
 
+
+    /***********************************************************************************************
+     *                               POSSIBLE PAWN MOVES
+     ***********************************************************************************************/
     public ArrayList<ChessMove> possiblePawnMoves(ChessBoard board, ChessPosition myPosition) {
         ArrayList<ChessMove> MoveCollection = new ArrayList<>();
         int row = myPosition.getRow();

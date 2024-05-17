@@ -14,6 +14,9 @@ public class ChessMove {
 
     private ChessPiece.PieceType promotionPiece;
 
+    /***********************************************************************************************
+     *                     WE LIKE TO MOVE IT MOVE IT... YOU LIKE TO...MOVE IT!
+     ***********************************************************************************************/
     public ChessMove(ChessPosition startPosition, ChessPosition endPosition,
                      ChessPiece.PieceType promotionPiece) {
         this.startPosition=startPosition;
@@ -41,6 +44,10 @@ public class ChessMove {
     /**
      * @return ChessPosition of starting location
      */
+
+    /***********************************************************************************************
+     *                               GET START POSITION
+     ***********************************************************************************************/
     public ChessPosition getStartPosition() {
         return startPosition;
         //throw new RuntimeException("Not implemented");
@@ -49,6 +56,10 @@ public class ChessMove {
     /**
      * @return ChessPosition of ending location
      */
+
+    /***********************************************************************************************
+     *                               GET END POSITION
+     ***********************************************************************************************/
     public ChessPosition getEndPosition() {
         return endPosition;
         //throw new RuntimeException("Not implemented");
@@ -60,6 +71,10 @@ public class ChessMove {
      *
      * @return Type of piece to promote a pawn to, or null if no promotion
      */
+
+    /***********************************************************************************************
+     *                               RANK ADVANCEMENT         GOOD WORK SOLDIER!
+     ***********************************************************************************************/
     public ChessPiece.PieceType getPromotionPiece() {
         return promotionPiece;
     }
