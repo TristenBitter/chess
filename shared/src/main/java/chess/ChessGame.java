@@ -141,13 +141,16 @@ public class ChessGame {
     /***********************************************************************************************
      *                                       MAKE MOVE
      ***********************************************************************************************/
-    public void makeMove(ChessMove move){
+    public void makeMove(ChessMove move) throws InvalidMoveException {
         // make a copy of the chess board
         // do the turn switches when calling set turn
         ChessBoard copyOfBoard=new ChessBoard(board);
 
         ChessPosition endPos = move.getEndPosition();
         ChessPosition startPos = move.getStartPosition();
+        if(board.getPiece(startPos) == null){
+            throw new InvalidMoveException("Move not valid");
+        }
         ChessPiece.PieceType pieceType = board.getPiece(startPos).getPieceType();
         if(move.getPromotionPiece() != null){
             pieceType = move.getPromotionPiece();
@@ -169,7 +172,7 @@ public class ChessGame {
         //otherwise throw this
 
         //throws InvalidMoveException
-        throw new RuntimeException("Move not valid");
+        throw new InvalidMoveException("Move not valid");
     }
 
     /**
@@ -203,14 +206,14 @@ public class ChessGame {
      ***********************************************************************************************/
     public ArrayList<ChessMove> possibleMovesCollector(TeamColor teamColor){
         ArrayList<ChessMove>allPossibleMoves = new ArrayList<>();
-        int i = 0;
-        int j = 0;
+        int i = 1;
+        int j = 1;
         ChessPosition position = new ChessPosition(i,j);
-        while(i < 7) {
-            j = 0;
-            while(j < 7){
+        while(i < 9) {
+            j = 1;
+            while(j < 9){
                 position=new ChessPosition(i, j);
-                if(board.getPiece(position).getTeamColor() != teamColor) {
+                if(board.getPiece(position) != null && board.getPiece(position).getTeamColor() != teamColor ) {
                     allPossibleMoves.addAll(board.getPiece(position).pieceMoves(board, position));
                 }
                 j++;
@@ -227,13 +230,13 @@ public class ChessGame {
      ***********************************************************************************************/
     public ChessPosition findKing(TeamColor teamColor){
         ChessPosition kingPosition = new ChessPosition(0,0);
-        int i = 0;
-        while(i < 7) {
-            int j = 0;
-            while(j < 7){
+        int i = 1;
+        while(i < 9) {
+            int j = 1;
+            while(j < 9){
                 kingPosition=new ChessPosition(i, j);
-                if (board.getPiece(kingPosition).getPieceType() == ChessPiece.PieceType.KING) {
-                    i += 7;
+                if (board.getPiece(kingPosition) != null && board.getPiece(kingPosition).getPieceType() == ChessPiece.PieceType.KING) {
+                    i += 9;
                     break;
                 }
                 j++;
