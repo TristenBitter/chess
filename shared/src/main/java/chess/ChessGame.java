@@ -184,6 +184,10 @@ public class ChessGame {
         if(board.getPiece(startPos) == null){
             throw new InvalidMoveException("Move not valid");
         }
+        if(board.getPiece(startPos).getTeamColor() != teamTurn){
+            throw new InvalidMoveException("Move not valid");
+        }
+
         // make the move
         copyOfBoard.addPiece(endPos,copyOfBoard.getPiece(startPos));
 
