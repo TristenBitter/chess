@@ -17,7 +17,13 @@ public class ChessBoard {
     }
 
     public ChessBoard(ChessBoard copyBoard){
-        this.squares= Arrays.copyOf(squares, squares.length);
+
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; j < 8; j++){
+                this.squares[i][j] = copyBoard.squares[i][j];
+            }
+        }
+        //this.squares= Arrays.copyOf(copyBoard.squares, copyBoard.squares.length);
     }
 
     //copyBoard(){}
