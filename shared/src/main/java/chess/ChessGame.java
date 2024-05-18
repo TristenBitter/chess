@@ -3,6 +3,7 @@ package chess;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Objects;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -19,6 +20,24 @@ public class ChessGame {
     private ChessPiece piece = new ChessPiece(getTeamTurn(), type);
 
     //ChessMove
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ChessGame chessGame)) return false;
+        return Objects.equals(getBoard(), chessGame.getBoard()) && type == chessGame.type && getTeamTurn() == chessGame.getTeamTurn() && Objects.equals(piece, chessGame.piece);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getBoard(), type, getTeamTurn(), piece);
+    }
+
+    @Override
+    public String toString() {
+        return "ChessGame{" + "board=" + board + ", type=" + type + ", teamTurn=" + teamTurn + '}';
+    }
 
     // used to tell whose turn it is
     //private boolean isWhiteTurn = true;
@@ -165,10 +184,14 @@ public class ChessGame {
         if(board.getPiece(startPos) == null){
             throw new InvalidMoveException("Move not valid");
         }
+        // make the move
+        copyOfBoard.addPiece(endPos,copyOfBoard.getPiece(startPos));
+
+        // remove the piece from the old spot by setting it equal to null
+        copyOfBoard.addPiece(startPos, null);
+
+
         ChessPiece.PieceType pieceType = board.getPiece(startPos).getPieceType();
-        if(move.getPromotionPiece() != null){
-            pieceType = move.getPromotionPiece();
-        }
 
         Collection<ChessMove> validMoves = new ArrayList<>();
         //check if the move is valid
@@ -177,12 +200,21 @@ public class ChessGame {
         boolean moveFound = false;
         while(itr.hasNext()){
             ChessMove moveTry = (ChessMove)itr.next();
-            if(moveTry == move){
+            if(moveTry.equals(move)){
                 this.board= copyOfBoard;
                 moveFound = true;
                 break;
             }
         }
+        if(move.getPromotionPiece() != null){
+            pieceType = move.getPromotionPiece();
+            ChessPiece promotedPiece = new ChessPiece(copyOfBoard.getPiece(endPos).getTeamColor(), pieceType);
+            copyOfBoard.addPiece(endPos, null);
+            copyOfBoard.addPiece(endPos, promotedPiece);
+            moveFound = true;
+            this.board= copyOfBoard;
+        }
+
         // if isValid ... does not put us in check && if it is found in one of the possible moves of that piece
         //set the board to the new board with this.board= copyOfBoard;
         //otherwise throw this
