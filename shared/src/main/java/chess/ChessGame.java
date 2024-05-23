@@ -360,9 +360,7 @@ public class ChessGame {
         //if it is in Check and there are no valid moves to save the king
         // change the start position to the new end position and the old start position to null
         if(isInCheck(teamColor)){
-            //if there is a valid move from that team color that would put me out of check then return false
 
-            // is there any move that can get me out of check
             if(tryMoveToGetOutOfCheck(teamColor) == false){
                 // That's Check Mate... Game Over!
                 return true;
