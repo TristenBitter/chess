@@ -366,7 +366,6 @@ public class ChessGame {
                 return true;
             }
         }
-        // if there is a validMove for the kings team to make then it's not in check mate.
         return false;
     }
 
