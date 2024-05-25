@@ -4,6 +4,7 @@ import dataaccess.memory.MemoryUserDAO;
 import dataaccess.memory.MemoryAuthDAO;
 import dataaccess.memory.MemoryGameDAO;
 import handlers.*;
+import model.RegisterRequest;
 import spark.*;
 
 public class Server {
@@ -18,8 +19,9 @@ public class Server {
         MemoryUserDAO userData = new MemoryUserDAO();
         MemoryAuthDAO authData = new MemoryAuthDAO();
         MemoryGameDAO gameData = new MemoryGameDAO();
+        //RegisterRequest userInfo = new RegisterRequest();
 
-        Spark.post("/user", new Register());
+        Spark.post("/user", new Register(userData));
         Spark.post("/game", new CreateGame());
         Spark.post("/session", new Login());
         Spark.get("/game", new ListGames());
