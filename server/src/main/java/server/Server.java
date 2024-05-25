@@ -1,6 +1,6 @@
 package server;
 
-import dataaccess.memory.MemmoryUserDAO;
+import dataaccess.memory.MemoryUserDAO;
 import dataaccess.memory.MemoryAuthDAO;
 import dataaccess.memory.MemoryGameDAO;
 import handlers.*;
@@ -15,7 +15,7 @@ public class Server {
 
         // Register your endpoints and handle exceptions here.
 
-        MemmoryUserDAO userData = new MemmoryUserDAO();
+        MemoryUserDAO userData = new MemoryUserDAO();
         MemoryAuthDAO authData = new MemoryAuthDAO();
         MemoryGameDAO gameData = new MemoryGameDAO();
 

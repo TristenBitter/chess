@@ -1,16 +1,15 @@
 package handlers;
 
-import dataaccess.memory.MemmoryUserDAO;
+import dataaccess.memory.MemoryUserDAO;
 import dataaccess.memory.MemoryAuthDAO;
 import dataaccess.memory.MemoryGameDAO;
 import spark.Request;
 import spark.Response;
 import spark.Route;
-import spark.Service;
 import Service.ClearService;
 
 public class ClearApp implements Route {
-  public ClearApp(MemmoryUserDAO userData, MemoryAuthDAO authData, MemoryGameDAO gameData){
+  public ClearApp(MemoryUserDAO userData, MemoryAuthDAO authData, MemoryGameDAO gameData){
     ClearService clearDB = new ClearService(userData, authData, gameData);
     clearDB.ClearDB(userData, authData, gameData);
 
