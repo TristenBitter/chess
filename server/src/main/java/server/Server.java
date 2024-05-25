@@ -32,8 +32,6 @@ public class Server {
 
     //gson is a json java interpreter
 
-
-
 }
 
 
