@@ -1,7 +1,6 @@
 package server;
 
-import handlers.ClearApp;
-import handlers.Register;
+import handlers.*;
 import spark.*;
 
 public class Server {
@@ -14,11 +13,11 @@ public class Server {
         // Register your endpoints and handle exceptions here.
 
         Spark.post("/user", new Register());
-//        Spark.post("/game", this::createGame);
-//        Spark.post("/session", this::login);
-//        Spark.get("/game", this::listGames);
-//        Spark.put("/game", this::joinGame);
-//        Spark.delete("/session", this::logout);
+        Spark.post("/game", new CreateGame());
+        Spark.post("/session", new Login());
+        Spark.get("/game", new ListGames());
+        Spark.put("/game", new JoinGame());
+        Spark.delete("/session", new Logout());
         Spark.delete("/db", new ClearApp());
 
         Spark.awaitInitialization();
@@ -30,45 +29,6 @@ public class Server {
         Spark.awaitStop();
     }
 
-    //new methods to call handlers
-
-//    private Object clearApplication(Request req, Response res) {
-//
-//        return 0;
-//    }
-//    private Object register(Request req, Response res) {
-//
-//        return 0;
-//    }
-//
-//    private Object createGame(Request req, Response res) {
-//
-//        return 0;
-//    }
-//
-//    private Object login(Request req, Response res) {
-//
-//        return 0;
-//    }
-//
-//    private Object logout(Request req, Response res) {
-//
-//        return 0;
-//    }
-//
-//    private Object listGames(Request req, Response res) {
-//        res.type("application/json");
-//        //return new Gson().toJson(Map.of("name", names));
-//        return 0;
-//    }
-//
-//    private Object joinGame(Request req, Response res) {
-//
-//        return 0;
-//    }
-
-
-    //handlers
 
     //gson is a json java interpreter
 
