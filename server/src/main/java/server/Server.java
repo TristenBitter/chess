@@ -1,6 +1,7 @@
 package server;
 
 import handlers.ClearApp;
+import handlers.Register;
 import spark.*;
 
 public class Server {
@@ -12,12 +13,12 @@ public class Server {
 
         // Register your endpoints and handle exceptions here.
 
-        Spark.post("/user", this::register);
-        Spark.post("/game", this::createGame);
-        Spark.post("/session", this::login);
-        Spark.get("/game", this::listGames);
-        Spark.put("/game", this::joinGame);
-        Spark.delete("/session", this::logout);
+        Spark.post("/user", new Register());
+//        Spark.post("/game", this::createGame);
+//        Spark.post("/session", this::login);
+//        Spark.get("/game", this::listGames);
+//        Spark.put("/game", this::joinGame);
+//        Spark.delete("/session", this::logout);
         Spark.delete("/db", new ClearApp());
 
         Spark.awaitInitialization();
