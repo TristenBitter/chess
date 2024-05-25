@@ -1,4 +1,10 @@
 package dataaccess.memory;
 
-public class MemmoryUserDAO {
+import dataaccess.UserDAO;
+
+public class MemmoryUserDAO implements UserDAO {
+  @Override
+  public void clear() {
+
+  }
 }
