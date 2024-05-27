@@ -4,6 +4,7 @@ import Service.RegisterService;
 import dataaccess.memory.MemoryAuthDAO;
 import dataaccess.memory.MemoryGameDAO;
 import dataaccess.memory.MemoryUserDAO;
+import model.ErrorMessage;
 import model.RegisterRequest;
 import model.UserData;
 import spark.Request;
@@ -24,14 +25,13 @@ public class Register implements Route {
 
     // make an error object with a field called message of type string
     // "Error Bad Request
-
-    // create new record
-
-    //response.status(400);
-
+    if(registerUser == null){
+      ErrorMessage error = new Gson().fromJson("bad request", ErrorMessage.class);
+      response.status(400);
+      return new Gson().toJson(error);
+    }
+    response.status(200);
     //if it is good return this
     return new Gson().toJson(req);
-    //else return an error object
-
   }
 }

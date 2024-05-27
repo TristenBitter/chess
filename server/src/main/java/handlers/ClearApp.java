@@ -17,6 +17,7 @@ public class ClearApp implements Route {
 
   @Override
   public Object handle(Request request, Response response) throws Exception {
+
 //    ClearService clearDB = new ClearService(userData, authData, gameData);
 //    clearDB.ClearDB(userData, authData, gameData);
 
