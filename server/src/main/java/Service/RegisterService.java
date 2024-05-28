@@ -10,10 +10,10 @@ import model.UserData;
 import java.util.ArrayList;
 
 public class RegisterService {
-  private MemoryAuthDAO authObject = new MemoryAuthDAO();
-  private MemoryUserDAO userObject = new MemoryUserDAO();
+  private static MemoryAuthDAO authObject = new MemoryAuthDAO();
+  private static MemoryUserDAO userObject = new MemoryUserDAO();
   public RegisterService(RegisterRequest userData){
-    registerUser(userData);
+//   AuthData result = registerUser(userData);
 
   }
 
@@ -33,8 +33,10 @@ public class RegisterService {
   }
 
   public boolean hasUsernameBeenTaken(RegisterRequest userData){
-    ArrayList<UserData> newUser = new ArrayList<>();
-    newUser.addAll(userObject.getAll());
+    ArrayList<String> newUser = new ArrayList<>();
+
+    //newUser.addAll(userObject.getAll());
+    newUser = userObject.getUsername();
     if(newUser.contains(userData.username())){
       return false;
     }

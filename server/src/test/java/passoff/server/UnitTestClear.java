@@ -25,7 +25,7 @@ public class UnitTestClear {
     UserDAO.insertUserData(new UserData("tee", "t", "gameID" ));
     AuthDAO.makeAuthToken("tee");
     GameDAO.createGame(gameInfo);
-    new ClearService(UserDAO, AuthDAO, GameDAO);
+    new ClearService();
     assertEquals(0, UserDAO.getAll().size());
     assertEquals(0, AuthDAO.getAll().size());
     assertEquals(0, GameDAO.getAll().size());

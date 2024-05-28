@@ -10,7 +10,7 @@ import spark.Route;
 import Service.ClearService;
 
 public class ClearApp implements Route {
-  public ClearApp(MemoryUserDAO userData, MemoryAuthDAO authData, MemoryGameDAO gameData){
+  public ClearApp(){
 //    ClearService clearDB = new ClearService(userData, authData, gameData);
 //    clearDB.ClearDB(userData, authData, gameData);
 
@@ -18,8 +18,9 @@ public class ClearApp implements Route {
 
   @Override
   public Object handle(Request request, Response response) throws Exception {
-      ClearService req = new Gson().fromJson(request.body(), ClearService.class);
-
-    return null;
+      //ClearService req = new Gson().fromJson(request.body(), ClearService.class);
+    ClearService clearDB = new ClearService();
+    clearDB.ClearDB();
+    return "{}";
   }
 }

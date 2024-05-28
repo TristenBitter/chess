@@ -6,7 +6,7 @@ import model.AuthData;
 import java.util.ArrayList;
 
 public class MemoryAuthDAO implements AuthDAO {
-  private ArrayList<AuthData> authData;
+  private static ArrayList<AuthData> authData;
   private long Token = Tokenizer();
 
   public MemoryAuthDAO(){this.authData = new ArrayList<AuthData>();}
