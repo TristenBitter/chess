@@ -16,7 +16,6 @@ public class LogoutService {
     //Delete the Token from the MemoryAuthDAO DB
     authDAO.deleteAuthData(authToken);
 
-
     return true;
   }
 
