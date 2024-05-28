@@ -17,6 +17,7 @@ public class UnitTestLogin {
   @Test
   public void LoginSuccess(){
     RegisterService req = new RegisterService(userData);
+    req.registerUser(userData);
     LoginService login = new LoginService(loginCredentials);
     assertNotEquals(null, login);
   }

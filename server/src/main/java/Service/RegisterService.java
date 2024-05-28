@@ -27,8 +27,9 @@ public class RegisterService {
     userObject.insertUserData(newUserData);
 
     //CreateAuthToken to add the username and pair it with the AuthToken
-    AuthData newUserToken = new AuthData(authObject.makeAuthToken(userData.username()).authToken(), userData.username() );
+   // AuthData newUserToken = new AuthData(authObject.makeAuthToken(userData.username()).authToken(), userData.username() );
 
+    AuthData newUserToken = authObject.makeAuthToken(userData.username());
     return newUserToken;
   }
 

@@ -12,6 +12,7 @@ public class UnitTestRegister {
 
     MemoryUserDAO UserDAO = new MemoryUserDAO();
     RegisterService req = new RegisterService(userData);
+    //req.registerUser(userData);
 
     //assertEquals(1,UserDAO.getAll().size());
     assertEquals(userData.username().length(), req.registerUser(userData).username().length());

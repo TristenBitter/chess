@@ -5,7 +5,7 @@ import model.AuthData;
 import model.LogoutRequest;
 
 public class LogoutService {
-  private MemoryAuthDAO authDAO = new MemoryAuthDAO();
+  private static MemoryAuthDAO authDAO = new MemoryAuthDAO();
   public LogoutService(LogoutRequest authToken){
 
   }
