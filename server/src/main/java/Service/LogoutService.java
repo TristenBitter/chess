@@ -1,19 +1,36 @@
 package Service;
 
+import dataaccess.memory.MemoryAuthDAO;
 import model.AuthData;
 import model.LogoutRequest;
 
 public class LogoutService {
+  private MemoryAuthDAO authDAO = new MemoryAuthDAO();
   public LogoutService(LogoutRequest authToken){
 
   }
-  public AuthData logoutUser(LogoutRequest authToken){
+  public boolean logoutUser(LogoutRequest authToken){
     //ValidateAuthToken()
+    if(!validateAuthToken(authToken)) return false;
 
     //Delete the Token from the MemoryAuthDAO DB
+    authDAO.deleteAuthData(authToken);
 
-    // return "{}"
-    return null;
+
+    return true;
   }
 
+  public boolean validateAuthToken(LogoutRequest authData){
+    String authToken =authData.authToken();
+
+    for (String token: authDAO.getAuthTokens()
+         ) { if(token.equals(authToken)) return true;
+
+    }
+    return false;
+  }
+
+  public void deleteAuthToken(LogoutRequest authData){
+
+  }
 }

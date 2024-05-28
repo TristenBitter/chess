@@ -2,6 +2,8 @@ package dataaccess.memory;
 
 import dataaccess.AuthDAO;
 import model.AuthData;
+import model.LogoutRequest;
+import model.UserData;
 
 import java.util.ArrayList;
 
@@ -18,6 +20,26 @@ public class MemoryAuthDAO implements AuthDAO {
     this.authData.add(authToken);
 
     return authToken;
+  }
+
+  public ArrayList<String> getAuthTokens(){
+    ArrayList<String> listOfTokens = new ArrayList<>();
+    for (AuthData data: authData
+
+    ) { listOfTokens.add(data.authToken());
+    }
+    return listOfTokens;
+  }
+
+  public void deleteAuthData(LogoutRequest authToken){
+    String token = authToken.authToken();
+    for (AuthData data: authData
+
+    ) { if(token.equals(data.authToken())){
+          authData.remove(data);
+          break;
+        }
+    }
   }
 
   @Override
