@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import model.AuthData;
 import model.ErrorMessage;
 import model.LoginRequest;
-import model.RegisterRequest;
 import spark.Request;
 import spark.Response;
 import spark.Route;

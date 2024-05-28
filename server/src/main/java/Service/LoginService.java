@@ -10,7 +10,7 @@ public class LoginService {
   private static MemoryUserDAO userObject = new MemoryUserDAO();
 
   public LoginService(LoginRequest loginCredentials){
-    loginUser(loginCredentials);
+    //loginUser(loginCredentials);
   }
   public AuthData loginUser(LoginRequest loginData){
     //AuthenticateUser
