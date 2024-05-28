@@ -8,6 +8,10 @@ import model.LoginRequest;
 public class LoginService {
   private static MemoryAuthDAO authObject = new MemoryAuthDAO();
   private static MemoryUserDAO userObject = new MemoryUserDAO();
+
+  public LoginService(LoginRequest loginCredentials){
+    loginUser(loginCredentials);
+  }
   public AuthData loginUser(LoginRequest loginData){
     //AuthenticateUser
     if(!authenticateUser(loginData)){

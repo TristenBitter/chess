@@ -2,7 +2,6 @@ package passoff.server;
 
 import Service.ClearService;
 import chess.ChessGame;
-import dataaccess.GameDAO;
 import dataaccess.memory.MemoryUserDAO;
 import dataaccess.memory.MemoryAuthDAO;
 import dataaccess.memory.MemoryGameDAO;

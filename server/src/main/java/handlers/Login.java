@@ -14,7 +14,7 @@ public class Login implements Route {
   @Override
   public Object handle(Request request, Response response) throws Exception {
     LoginRequest login = new Gson().fromJson(request.body(), LoginRequest.class);
-    LoginService loginService = new LoginService();
+    LoginService loginService = new LoginService(login);
     AuthData result = loginService.loginUser(login);
 
     if(result == null){
