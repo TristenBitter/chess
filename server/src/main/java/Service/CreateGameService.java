@@ -3,7 +3,7 @@ package Service;
 import model.CreateGameRequest;
 
 public class CreateGameService {
-  public CreateGameRequest createGame(String nameOfGame){
+  public int createGame(String nameOfGame, String AuthToken){
       // ValidateToken
 
 
@@ -12,7 +12,7 @@ public class CreateGameService {
 
       // return the new game
 
-    return null;
+    return 0;
   }
 
   public CreateGameRequest createNewGame(String nameOfGame){
