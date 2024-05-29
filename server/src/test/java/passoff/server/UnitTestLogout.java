@@ -22,8 +22,6 @@ public class UnitTestLogout {
   public void LogoutSuccess(){
     RegisterService req = new RegisterService(userData);
     AuthData authInfo = req.registerUser(userData);
-    //LoginService login = new LoginService(loginCredentials);
-    //login.loginUser(loginCredentials);
     LogoutRequest logoutAuthTok = new LogoutRequest(authInfo.authToken());
     LogoutService logout = new LogoutService(logoutAuthTok);
     boolean result = logout.logoutUser(logoutAuthTok);
