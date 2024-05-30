@@ -423,31 +423,26 @@ public class ChessPiece {
                 promotePawnCheck(moveCollection, myPosition, newPos, 2);
             }
         }
+
         newPos = new ChessPosition(row +1, col + 1);
-        if(inBounds(newPos)) {
-            if (board.getPiece(newPos) != null && board.getPiece(newPos).getTeamColor() != ChessGame.TeamColor.WHITE && board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.WHITE) {
-                promotePawnCheck(moveCollection, myPosition, newPos, 7);
+        for(int i = 0; i < 2; i++){
+            if(inBounds(newPos)) {
+                if (board.getPiece(newPos) != null && board.getPiece(newPos).getTeamColor() != ChessGame.TeamColor.WHITE && board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.WHITE) {
+                    promotePawnCheck(moveCollection, myPosition, newPos, 7);
+                }
             }
+            newPos = new ChessPosition(row +1, col - 1);
         }
-        newPos = new ChessPosition(row +1, col - 1);
-        if(inBounds(newPos)) {
-            if (board.getPiece(newPos) != null && board.getPiece(newPos).getTeamColor() != ChessGame.TeamColor.WHITE && board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.WHITE) {
-                promotePawnCheck(moveCollection, myPosition, newPos, 7);
-            }
-        }
-        // and black ones capture down diagonally
         newPos = new ChessPosition(row -1, col + 1);
-        if(inBounds(newPos)) {
-            if (board.getPiece(newPos) != null && board.getPiece(newPos).getTeamColor() != ChessGame.TeamColor.BLACK && board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.BLACK) {
-                promotePawnCheck(moveCollection, myPosition, newPos, 2);
+        for(int i = 0; i < 2; i++){
+            if(inBounds(newPos)){
+                if (board.getPiece(newPos) != null && board.getPiece(newPos).getTeamColor() != ChessGame.TeamColor.BLACK && board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.BLACK) {
+                    promotePawnCheck(moveCollection, myPosition, newPos, 2);
+                }
             }
+            newPos = new ChessPosition(row -1, col - 1);
         }
-        newPos = new ChessPosition(row -1, col - 1);
-        if(inBounds(newPos)) {
-            if (board.getPiece(newPos) != null && board.getPiece(newPos).getTeamColor() != ChessGame.TeamColor.BLACK && board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.BLACK) {
-                promotePawnCheck(moveCollection, myPosition, newPos, 2);
-            }
-        }
+
         if(myPosition.getRow() == 2 && board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.WHITE) {
             newPos=new ChessPosition(row + 1, col);
             // and if there is no other piece in the way
