@@ -17,7 +17,7 @@ public class Login implements Route {
     AuthData result = loginService.loginUser(login);
 
     if(result == null){
-      ErrorMessage error = new ErrorMessage("Username or Password is Incorrect");
+      ErrorMessage error = new ErrorMessage("unauthorized");
       response.status(401);
       return new Gson().toJson(error);
     }

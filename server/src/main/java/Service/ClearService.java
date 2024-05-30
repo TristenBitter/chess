@@ -8,11 +8,10 @@ public class ClearService {
   public ClearService(){
     ClearDB();
   }
-
+  private static MemoryUserDAO userData = new MemoryUserDAO();
+  private static MemoryAuthDAO authData = new MemoryAuthDAO();
+  private static MemoryGameDAO gameData = new MemoryGameDAO();
   public void ClearDB(){
-    MemoryUserDAO userData = new MemoryUserDAO();
-    MemoryAuthDAO authData = new MemoryAuthDAO();
-    MemoryGameDAO gameData = new MemoryGameDAO();
     // make 3 objects
     MemoryUserDAO UserObject = userData;
     MemoryAuthDAO AuthObject = authData;

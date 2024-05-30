@@ -1,4 +1,9 @@
 package model;
 
-public record ErrorMessage(String errorMessage) {
+public class ErrorMessage {
+  String message;
+
+  public ErrorMessage(String errorMessage) {
+    this.message= "Error: " + errorMessage;
+  }
 }

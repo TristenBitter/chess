@@ -10,13 +10,12 @@ import java.util.UUID;
 
 public class MemoryAuthDAO implements AuthDAO {
   private static final ArrayList<AuthData> authData = new ArrayList<>();
-  private String Token = Tokenizer();
 
   public MemoryAuthDAO(){}
 
   public ArrayList<AuthData> getAll(){return authData;}
   public AuthData makeAuthToken(String username){
-    AuthData authToken = new AuthData(Token,username);
+    AuthData authToken = new AuthData(tokenizer(),username);
 
     this.authData.add(authToken);
 
@@ -74,10 +73,10 @@ public class MemoryAuthDAO implements AuthDAO {
     }
   }
 
-  public String Tokenizer(){
+  public String tokenizer(){
 //    long Token = System.currentTimeMillis() % 1000;
-    String Token =UUID.randomUUID().toString();
-    return Token;
+    String token =UUID.randomUUID().toString();
+    return token;
   }
   @Override
   public void clear() {

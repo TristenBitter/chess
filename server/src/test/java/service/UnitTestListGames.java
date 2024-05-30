@@ -4,6 +4,7 @@ import Service.CreateGameService;
 import Service.ListGamesService;
 import Service.RegisterService;
 import com.google.gson.Gson;
+import dataaccess.DataAccessException;
 import model.*;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +17,7 @@ public class UnitTestListGames {
   private final RegisterRequest userData = new RegisterRequest("TristenBitter", "Tee123", "tristenkbitter@gmail.com");
 
   @Test
-  public void ListGamesSuccess(){
+  public void ListGamesSuccess() throws DataAccessException {
     RegisterService req = new RegisterService(userData);
     AuthData authInfo = req.registerUser(userData);
 
@@ -26,6 +27,7 @@ public class UnitTestListGames {
     ListGamesService listGamesService = new ListGamesService();
     ArrayList<ListGamesRequest> result = listGamesService.listGames(authInfo.authToken());
 
+    //assertThrowsExactly(DataAccessException.class, () -> listGamesService.listGames(authInfo.authToken()), "Error: unauthorized");
     assertNotEquals(null, new Gson().toJson(result));
   }
 
@@ -39,9 +41,10 @@ public class UnitTestListGames {
     createGameService.createGame("newGame", authInfo.authToken());
 
     ListGamesService listGamesService = new ListGamesService();
-    ArrayList<ListGamesRequest> result = listGamesService.listGames("hehehe");
+    //ArrayList<ListGamesRequest> result = listGamesService.listGames("hehehe");
 
-    assertEquals(null, result);
+    //assertEquals(null, result);
+    assertThrowsExactly(DataAccessException.class, () -> listGamesService.listGames("hehehe"), "Error: unauthorized");
 
   }
 }

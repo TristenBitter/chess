@@ -29,7 +29,9 @@ public class MemoryGameDAO implements GameDAO {
     ArrayList<ListGamesRequest> listOfGames = new ArrayList<>();
     ArrayList<GameData> allData = getAll();
 
-    if(allData.isEmpty())return null;
+//    if(allData.isEmpty()){
+//      return null;
+//    }
 
     for (GameData data: allData
          ) {int id =data.GameID();
@@ -114,6 +116,9 @@ public class MemoryGameDAO implements GameDAO {
     // getGame
     GameData game = getGame(requestedGame.gameID());
 
+    if(requestedGame.playerColor() == null){
+      return 400;
+    }
     //check Users/Colors
     if(game.whiteUsername() == null){
       if(requestedGame.playerColor().equals("WHITE")){

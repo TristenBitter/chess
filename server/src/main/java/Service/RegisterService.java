@@ -22,6 +22,11 @@ public class RegisterService {
     if(!hasUsernameBeenTaken(userData)){
       return null;
     }
+
+    if(userData.password() == null){
+
+      return null;
+    }
     // add the user to our DB
     UserData newUserData = new UserData(userData.username(), userData.password(), userData.email());
     userObject.insertUserData(newUserData);
