@@ -22,6 +22,9 @@ public class LogoutTest {
 
   @Test
   public void logoutFailure(){
+    ClearService clearDB = new ClearService();
+    clearDB.clearDB();
+
     RegisterService req = new RegisterService(userData);
     AuthData authInfo = req.registerUser(userData);
     LogoutRequest logoutAuthTok = new LogoutRequest(wrongUserCredentials.authToken());
