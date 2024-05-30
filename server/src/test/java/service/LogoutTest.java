@@ -11,12 +11,16 @@ public class LogoutTest {
   private final AuthData wrongUserCredentials = new AuthData("kyle", "hello");
   @Test
   public void logoutSuccess(){
+    ClearService clearDB = new ClearService();
+    clearDB.clearDB();
+
     RegisterService req = new RegisterService(userData);
     AuthData authInfo = req.registerUser(userData);
+    assertNotNull(authInfo);
     LogoutRequest logoutAuthTok = new LogoutRequest(authInfo.authToken());
     LogoutService logout = new LogoutService(logoutAuthTok);
     boolean result = logout.logoutUser(logoutAuthTok);
-    assertEquals(true, result);
+    assertTrue(result);
 
   }
 
