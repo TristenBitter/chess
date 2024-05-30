@@ -216,11 +216,9 @@ public class ChessPiece {
             }
             if((board.getPiece(downLeftPos) == null )){
                 movesCollection.add(new ChessMove(myPosition, downLeftPos, null));
-                System.out.println("bishop check === " + downLeftPos);
             }
             if ((board.getPiece(downLeftPos)) != null && board.getPiece(downLeftPos).getTeamColor() != pieceColor){
                 movesCollection.add(new ChessMove(myPosition, downLeftPos, null));
-                System.out.println("2added to movesCollection === " + downLeftPos);
                 break;
             }
             if ((board.getPiece(downLeftPos)) != null && board.getPiece(downLeftPos).getTeamColor() == pieceColor){
@@ -239,11 +237,9 @@ public class ChessPiece {
             }
             if((board.getPiece(downRightPos) == null )){
                 movesCollection.add(new ChessMove(myPosition, downRightPos, null));
-                System.out.println("3added to movesCollection === " + downRightPos);
             }
             if ((board.getPiece(downRightPos)) != null && board.getPiece(downRightPos).getTeamColor() != pieceColor){
                 movesCollection.add(new ChessMove(myPosition, downRightPos, null));
-                System.out.println("4added to movesCollection === " + downRightPos);
                 break;
             }
             if ((board.getPiece(downRightPos)) != null && board.getPiece(downRightPos).getTeamColor() == pieceColor){
@@ -262,11 +258,9 @@ public class ChessPiece {
             }
             if((board.getPiece(upLeftPos) == null )){
                 movesCollection.add(new ChessMove(myPosition, upLeftPos, null));
-                System.out.println("5added to movesCollection === " + upLeftPos);
             }
             if ((board.getPiece(upLeftPos)) != null && board.getPiece(upLeftPos).getTeamColor() != pieceColor){
                 movesCollection.add(new ChessMove(myPosition, upLeftPos, null));
-                System.out.println("6added to movesCollection === " + upLeftPos);
                 break;
             }
             if ((board.getPiece(upLeftPos)) != null && board.getPiece(upLeftPos).getTeamColor() == pieceColor){
@@ -285,11 +279,9 @@ public class ChessPiece {
             }
             if((board.getPiece(upRightPos) == null )){
                 movesCollection.add(new ChessMove(myPosition, upRightPos, null));
-                System.out.println("7added to movesCollection === " + upRightPos);
             }
             if ((board.getPiece(upRightPos)) != null && board.getPiece(upRightPos).getTeamColor() != pieceColor){
                 movesCollection.add(new ChessMove(myPosition, upRightPos, null));
-                System.out.println("8added to movesCollection === " + upRightPos);
                 break;
             }
             if ((board.getPiece(upRightPos)) != null && board.getPiece(upRightPos).getTeamColor() == pieceColor){
@@ -313,12 +305,10 @@ public class ChessPiece {
             //if the space is empty its good to go.
             if((board.getPiece(downPos) == null )){
                 movesCollection.add(new ChessMove(myPosition, downPos, null));
-                System.out.println("1added to movesCollection === " + downPos);
             }
             if ((board.getPiece(downPos)) != null && board.getPiece(downPos).getTeamColor() != pieceColor){
                 // if the piece to the left is not your own its a possible move
                 movesCollection.add(new ChessMove(myPosition, downPos, null));
-                System.out.println("2added to movesCollection === " + downPos);
                 // add it to our collection of possible moves.
                 break;
             }
@@ -333,11 +323,9 @@ public class ChessPiece {
             ChessPosition upPos = new ChessPosition(row + i, col);
             if((board.getPiece(upPos) == null )){
                 movesCollection.add(new ChessMove(myPosition, upPos, null));
-                System.out.println("3added to movesCollection === " + upPos);
             }
             if ((board.getPiece(upPos)) != null && board.getPiece(upPos).getTeamColor() != pieceColor){
                 movesCollection.add(new ChessMove(myPosition, upPos, null));
-                System.out.println("4added to movesCollection === " + upPos);
                 break;
             }
             if ((board.getPiece(upPos)) != null && board.getPiece(upPos).getTeamColor() == pieceColor){
@@ -352,11 +340,9 @@ public class ChessPiece {
             ChessPosition leftPos = new ChessPosition(row, col - i);
             if((board.getPiece(leftPos) == null )){
                 movesCollection.add(new ChessMove(myPosition, leftPos, null));
-                System.out.println("5added to movesCollection === " + leftPos);
             }
             if ((board.getPiece(leftPos)) != null && board.getPiece(leftPos).getTeamColor() != pieceColor){
                 movesCollection.add(new ChessMove(myPosition, leftPos, null));
-                System.out.println("6added to movesCollection === " + leftPos);
                 break;
             }
             if ((board.getPiece(leftPos)) != null && board.getPiece(leftPos).getTeamColor() == pieceColor){
@@ -371,11 +357,9 @@ public class ChessPiece {
             ChessPosition rightPos = new ChessPosition(row, col + i);
             if((board.getPiece(rightPos) == null )){
                 movesCollection.add(new ChessMove(myPosition, rightPos, null));
-                System.out.println("7added to movesCollection === " + rightPos);
             }
             if ((board.getPiece(rightPos)) != null && board.getPiece(rightPos).getTeamColor() != pieceColor){
                 movesCollection.add(new ChessMove(myPosition, rightPos, null));
-                System.out.println("8added to movesCollection === " + rightPos);
                 break;
             }
             if ((board.getPiece(rightPos)) != null && board.getPiece(rightPos).getTeamColor() == pieceColor){
