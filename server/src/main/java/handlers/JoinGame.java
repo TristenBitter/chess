@@ -12,7 +12,7 @@ import spark.Route;
 public class JoinGame implements Route {
   @Override
   public Object handle(Request request, Response response) throws Exception {
-    String joinGameAuthToken = request.headers("JoinGame");
+    String joinGameAuthToken = request.headers("Authorization");
     JoinGameRequest joinGameRequest = new Gson().fromJson(request.body(), JoinGameRequest.class);
     JoinGameService joinGameService = new JoinGameService();
     int result = joinGameService.joinGame(joinGameRequest, joinGameAuthToken);
@@ -34,10 +34,7 @@ public class JoinGame implements Route {
     }
 
     response.status(200);
-
-    //TODO: I might have to change result to be a CreatGameRequest type instead of an int.
-
-    return new Gson().toJson(result);
+    return "{}";
 
   }
 }

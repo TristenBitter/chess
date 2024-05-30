@@ -16,7 +16,7 @@ public class ListGames implements Route {
 
   @Override
   public Object handle(Request request, Response response) throws Exception {
-    String listGamesAuthTok = request.headers("ListGames");
+    String listGamesAuthTok = request.headers("Authorization");
     ListGamesService listGamesService = new ListGamesService();
     ArrayList<ListGamesRequest> result = listGamesService.listGames(listGamesAuthTok);
 

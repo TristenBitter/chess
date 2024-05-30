@@ -7,9 +7,8 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class MemoryUserDAO implements UserDAO {
-  private static ArrayList<UserData> userData;
+  private static final ArrayList<UserData> userData = new ArrayList<>();
   public MemoryUserDAO(){
-    this.userData = new ArrayList<UserData>();
   }
 
   public void insertUserData(UserData userInfo){

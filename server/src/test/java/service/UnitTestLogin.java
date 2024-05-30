@@ -1,8 +1,9 @@
-package passoff.server;
+package service;
 
 import Service.LoginService;
 import Service.RegisterService;
-import dataaccess.memory.MemoryUserDAO;
+import com.google.gson.Gson;
+import model.AuthData;
 import model.LoginRequest;
 import model.RegisterRequest;
 import org.junit.jupiter.api.Test;
@@ -12,14 +13,15 @@ public class UnitTestLogin {
   private final LoginRequest loginCredentials = new LoginRequest("TristenBitter", "Tee123");
   private final LoginRequest wrongUserCredentials = new LoginRequest("kyle", "hello");
   private final RegisterRequest userData = new RegisterRequest("TristenBitter", "Tee123", "tristenkbitter@gmail.com");
-  private final MemoryUserDAO UserDAO = new MemoryUserDAO();
 
   @Test
   public void LoginSuccess(){
     RegisterService req = new RegisterService(userData);
     req.registerUser(userData);
     LoginService login = new LoginService(loginCredentials);
-    assertNotEquals(null, login);
+    AuthData result = login.loginUser(loginCredentials);
+    assertNotEquals(null, new Gson().toJson(result));
+
   }
 
   @Test

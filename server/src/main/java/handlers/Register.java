@@ -25,7 +25,11 @@ public class Register implements Route {
     RegisterService registerUser = new RegisterService(req);
     AuthData result = registerUser.registerUser(req);
     // make an error object with a field called message of type string
+
+    //if req is empty or null return error 400
     // "Error Bad Request
+
+
     if(result == null){
       ErrorMessage error = new Gson().fromJson("Username Already Exists", ErrorMessage.class);
       response.status(403);

@@ -52,6 +52,17 @@ public class MemoryAuthDAO implements AuthDAO {
     return null;
   }
 
+  public String getUsername(String authToken){
+    for (AuthData data: authData
+         ) {if(authToken.equals(data.authToken())){
+                String username = data.username();
+                return username;
+    }
+    }
+
+    return null;
+  }
+
   public void deleteAuthData(LogoutRequest authToken){
     String token = authToken.authToken();
     for (AuthData data: authData

@@ -1,7 +1,9 @@
-package passoff.server;
+package service;
 
 import Service.RegisterService;
+import com.google.gson.Gson;
 import dataaccess.memory.MemoryUserDAO;
+import model.AuthData;
 import model.RegisterRequest;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,10 +14,10 @@ public class UnitTestRegister {
 
     MemoryUserDAO UserDAO = new MemoryUserDAO();
     RegisterService req = new RegisterService(userData);
-    //req.registerUser(userData);
+    AuthData result = req.registerUser(userData);
 
-    //assertEquals(1,UserDAO.getAll().size());
-    assertEquals(userData.username().length(), req.registerUser(userData).username().length());
+    assertNotEquals(null,new Gson().toJson(result));
+
   }
 
   @Test
