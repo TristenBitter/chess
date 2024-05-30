@@ -1,8 +1,7 @@
-package Service;
+package service;
 
 import dataaccess.memory.MemoryAuthDAO;
 import dataaccess.memory.MemoryGameDAO;
-import model.GameData;
 import model.JoinGameRequest;
 
 public class JoinGameService {

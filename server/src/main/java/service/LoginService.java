@@ -1,4 +1,4 @@
-package Service;
+package service;
 
 import dataaccess.memory.MemoryAuthDAO;
 import dataaccess.memory.MemoryUserDAO;
@@ -32,24 +32,24 @@ public class LoginService {
     boolean usernameMatch = false;
     boolean passwordMatch = false;
 
-    int StringNumUser = 0;
+    int stringNumUser = 0;
     for (String name: userObject.getUsername()
      ) { if(name.equals(username)){
             usernameMatch = true;
             break;
             }
-       StringNumUser++;
+       stringNumUser++;
     }
-    int StringNumPassword = 0;
+    int stringNumPassword = 0;
     for (String word: userObject.getPassword()
     ) { if(word.equals(password)){
             passwordMatch = true;
             break;
             }
-        StringNumPassword++;
+        stringNumPassword++;
     }
 
-    if((StringNumPassword == StringNumUser) && passwordMatch && usernameMatch){
+    if((stringNumPassword == stringNumUser) && passwordMatch && usernameMatch){
       return true;
     }
 

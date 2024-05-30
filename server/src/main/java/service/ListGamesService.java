@@ -1,4 +1,4 @@
-package Service;
+package service;
 
 import dataaccess.DataAccessException;
 import dataaccess.memory.MemoryAuthDAO;
@@ -13,19 +13,10 @@ public class ListGamesService {
   private static MemoryGameDAO gameDAO = new MemoryGameDAO();
 
   public ArrayList<ListGamesRequest> listGames(String authToken)throws DataAccessException{
-      //ValidateToken
     if(!authDAO.validateAuthToken(authToken)){
       throw new DataAccessException("Error: unauthorized");
-      //return null;
     }
 
-      //Retrieve Games (including the board)
-
     return gameDAO.getListOfGames();
-  }
-
-  public ArrayList<ListGamesRequest> RetrieveGames(){
-
-    return null;
   }
 }

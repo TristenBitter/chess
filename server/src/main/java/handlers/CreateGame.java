@@ -1,11 +1,10 @@
 package handlers;
 
-import Service.CreateGameService;
+import service.CreateGameService;
 import com.google.gson.Gson;
 import model.CreateGameRequest;
 import model.ErrorMessage;
 import model.GameNameRequest;
-import model.LoginRequest;
 import spark.Request;
 import spark.Response;
 import spark.Route;

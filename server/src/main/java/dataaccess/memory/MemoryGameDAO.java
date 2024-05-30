@@ -12,26 +12,22 @@ import java.util.Random;
 
 public class MemoryGameDAO implements GameDAO {
 
-  private static final ArrayList<GameData> gameData = new ArrayList<>();
+  private static final ArrayList<GameData> GAME_DATA= new ArrayList<>();
 
   private ChessGame game = new ChessGame();
 
   public MemoryGameDAO(){}
 
-  public ArrayList<GameData> getAll(){return gameData;}
+  public ArrayList<GameData> getAll(){return GAME_DATA;}
 
   public void createGame(GameData gameInfo){
-    this.gameData.add(gameInfo);
+    this.GAME_DATA.add(gameInfo);
   }
 
 
   public ArrayList<ListGamesRequest> getListOfGames(){
     ArrayList<ListGamesRequest> listOfGames = new ArrayList<>();
     ArrayList<GameData> allData = getAll();
-
-//    if(allData.isEmpty()){
-//      return null;
-//    }
 
     for (GameData data: allData
          ) {int id =data.GameID();
@@ -49,7 +45,7 @@ public class MemoryGameDAO implements GameDAO {
     int newID = generateRandomID();
     GameData newGame = new GameData(newID, null, null, gameName, game);
 
-    this.gameData.add(newGame);
+    this.GAME_DATA.add(newGame);
 
     CreateGameRequest newGameID = new CreateGameRequest(newID);
 
@@ -89,7 +85,7 @@ public class MemoryGameDAO implements GameDAO {
   public int findGameToJoin(int gameID){
     int index = 0;
 
-    ArrayList<GameData> allGames = gameData;
+    ArrayList<GameData> allGames =GAME_DATA;
     for (GameData data:allGames
     ) {if(gameID == data.GameID()){
       return index;
@@ -104,12 +100,12 @@ public class MemoryGameDAO implements GameDAO {
     if(color.equals("WHITE")){
       GameData updatedGame = new GameData(game.GameID(),username, game.blackUsername(), game.gameName(), game.game());
       int index = findGameToJoin(game.GameID());
-      gameData.set(index, updatedGame);
+      GAME_DATA.set(index, updatedGame);
     }
     else{
       GameData updatedGame = new GameData(game.GameID(), game.whiteUsername(), username, game.gameName(), game.game());
       int index = findGameToJoin(game.GameID());
-      gameData.set(index, updatedGame);
+      GAME_DATA.set(index, updatedGame);
     }
   }
   public int joinGame(JoinGameRequest requestedGame, String username){
@@ -152,6 +148,6 @@ public class MemoryGameDAO implements GameDAO {
 
   @Override
   public void clear() {
-    gameData.clear();
+    GAME_DATA.clear();
   }
 }

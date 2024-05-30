@@ -1,8 +1,5 @@
 package service;
 
-import Service.CreateGameService;
-import Service.ListGamesService;
-import Service.RegisterService;
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import model.*;
@@ -17,7 +14,7 @@ public class UnitTestListGames {
   private final RegisterRequest userData = new RegisterRequest("TristenBitter", "Tee123", "tristenkbitter@gmail.com");
 
   @Test
-  public void ListGamesSuccess() throws DataAccessException {
+  public void listGamesSuccess() throws DataAccessException {
     RegisterService req = new RegisterService(userData);
     AuthData authInfo = req.registerUser(userData);
 
@@ -32,7 +29,7 @@ public class UnitTestListGames {
   }
 
   @Test
-  public void ListGamesFailure(){
+  public void listGamesFailure(){
 
     RegisterService req = new RegisterService(newUserData);
     AuthData authInfo = req.registerUser(newUserData);

@@ -1,7 +1,5 @@
 package service;
 
-import Service.LoginService;
-import Service.RegisterService;
 import com.google.gson.Gson;
 import model.AuthData;
 import model.LoginRequest;
@@ -15,7 +13,7 @@ public class UnitTestLogin {
   private final RegisterRequest userData = new RegisterRequest("TristenBitter", "Tee123", "tristenkbitter@gmail.com");
 
   @Test
-  public void LoginSuccess(){
+  public void loginSuccess(){
     RegisterService req = new RegisterService(userData);
     req.registerUser(userData);
     LoginService login = new LoginService(loginCredentials);
@@ -25,7 +23,7 @@ public class UnitTestLogin {
   }
 
   @Test
-  public void LoginFailure(){
+  public void loginFailure(){
    LoginService login = new LoginService(wrongUserCredentials);
 
     assertEquals(null, login.loginUser(wrongUserCredentials));

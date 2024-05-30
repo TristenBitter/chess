@@ -1,8 +1,5 @@
 package service;
 
-import Service.CreateGameService;
-import Service.JoinGameService;
-import Service.RegisterService;
 import com.google.gson.Gson;
 import model.*;
 import org.junit.jupiter.api.Test;
@@ -12,7 +9,9 @@ public class UnitTestJoinGame {
   private final RegisterRequest userData = new RegisterRequest("TristenBitter", "Tee123", "tristenkbitter@gmail.com");
   private final RegisterRequest newUserData = new RegisterRequest("coolDude", "dude123", "cooldude@gmail.com");
   @Test
-  public void JoinGameSuccess(){
+  public void joinGameSuccess(){
+    ClearService clearDB = new ClearService();
+    clearDB.clearDB();
     RegisterService req = new RegisterService(userData);
     AuthData authInfo = req.registerUser(userData);
 
@@ -28,7 +27,7 @@ public class UnitTestJoinGame {
   }
 
   @Test
-  public void JoinGameFailure(){
+  public void joinGameFailure(){
     RegisterService req = new RegisterService(newUserData);
     AuthData authInfo = req.registerUser(newUserData);
 

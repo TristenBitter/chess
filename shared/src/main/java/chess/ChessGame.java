@@ -19,9 +19,6 @@ public class ChessGame {
     private TeamColor teamTurn;
     private ChessPiece piece = new ChessPiece(getTeamTurn(), type);
 
-    //ChessMove
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -39,17 +36,11 @@ public class ChessGame {
         return "ChessGame{" + "board=" + board + ", type=" + type + ", teamTurn=" + teamTurn + '}';
     }
 
-    // used to tell whose turn it is
-    //private boolean isWhiteTurn = true;
-
-
     public ChessGame() {
         this.board.resetBoard();
         setTeamTurn(TeamColor.WHITE);
 
     }
-
-
 
     /**
      * @return Which team's turn it is
@@ -112,22 +103,6 @@ public class ChessGame {
         }
         TeamColor otherColor = getOpponentsTeamColor(board.getPiece(startPosition).getTeamColor());
         setTeamTurn(otherColor);
-//        if(getTeamTurn() == TeamColor.WHITE) {
-//            setTeamTurn(TeamColor.BLACK);
-//        }
-//        else{
-//            setTeamTurn(TeamColor.WHITE);
-//        }
-
-        //** check to see if there is a move that put the king in to check.
-        //** check to see if the king is being moved into check
-        // try allPossibleMoves from your own team
-        // if king is in not in check after (makeMove()) is called then add it to valid moves
-
-        //** if you are in check you must get yourself out of check
-        //if in check, check to see if you're still in check after makeMove if not add it to valid moves
-
-        // make a copy and call makeMoves to test out a possible solution to get you out of check.
 
        return validMoves;
     }

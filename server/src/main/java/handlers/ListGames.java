@@ -1,12 +1,10 @@
 package handlers;
 
-import Service.ListGamesService;
-import Service.LogoutService;
+import service.ListGamesService;
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import model.ErrorMessage;
 import model.ListGamesRequest;
-import model.LogoutRequest;
 import model.ReturnGamesRequest;
 import spark.Request;
 import spark.Response;
@@ -23,18 +21,11 @@ public class ListGames implements Route {
       ListGamesService listGamesService=new ListGamesService();
       ArrayList<ListGamesRequest> result=listGamesService.listGames(listGamesAuthTok);
 
-//      if (result == null) {
-//        //ErrorMessage error = new Gson().fromJson("Error: unauthorized", ErrorMessage.class);
-//        ErrorMessage error=new ErrorMessage("Error: unauthorized");
-//        response.status(401);
-//        return new Gson().toJson(error);
-//      }
-
-
       ReturnGamesRequest answer=new ReturnGamesRequest(result);
 
       response.status(200);
       return new Gson().toJson(answer);
+
     } catch (DataAccessException e) {
       ErrorMessage error=new ErrorMessage("Error: unauthorized");
       response.status(401);

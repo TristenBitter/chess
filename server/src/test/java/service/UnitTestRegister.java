@@ -1,6 +1,5 @@
 package service;
 
-import Service.RegisterService;
 import com.google.gson.Gson;
 import dataaccess.memory.MemoryUserDAO;
 import model.AuthData;
@@ -9,10 +8,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 public class UnitTestRegister {
   private final RegisterRequest userData = new RegisterRequest("TristenBitter", "Tee123", "tristenkbitter@gmail.com");
+  private final RegisterRequest newUserData = new RegisterRequest("coolDude", "dude123", "cooldude@gmail.com");
   @Test
-  public void RegisterSuccess(){
+  public void registerSuccess(){
 
-    MemoryUserDAO UserDAO = new MemoryUserDAO();
     RegisterService req = new RegisterService(userData);
     AuthData result = req.registerUser(userData);
 
@@ -21,11 +20,13 @@ public class UnitTestRegister {
   }
 
   @Test
-  public void RegisterErrorCheck(){
+  public void registerErrorCheck(){
+    ClearService clearDB = new ClearService();
+    clearDB.clearDB();
     //Username already exists
     RegisterService req1 = new RegisterService(userData);
-    RegisterService req2 = new RegisterService(userData);
+    RegisterService req2 = new RegisterService(newUserData);
 
-    assertNotEquals(req1.registerUser(userData), req2.registerUser(userData));
+    assertNotEquals(req1.registerUser(userData), req2.registerUser(newUserData));
   }
 }

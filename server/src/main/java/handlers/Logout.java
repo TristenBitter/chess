@@ -1,9 +1,8 @@
 package handlers;
 
 
-import Service.LogoutService;
+import service.LogoutService;
 import com.google.gson.Gson;
-import model.AuthData;
 import model.ErrorMessage;
 import model.LogoutRequest;
 import spark.Request;

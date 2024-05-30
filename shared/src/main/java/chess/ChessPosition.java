@@ -15,10 +15,6 @@ public class ChessPosition implements Collection<ChessPosition> {
     private final int row;
     private final int col;
 
-//    public ChessPosition() {
-//
-//    }
-
     @Override
     public int size() {
         return 0;

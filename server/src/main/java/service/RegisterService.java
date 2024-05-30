@@ -1,7 +1,6 @@
-package Service;
+package service;
 
 import dataaccess.memory.MemoryAuthDAO;
-import dataaccess.memory.MemoryGameDAO;
 import dataaccess.memory.MemoryUserDAO;
 import model.AuthData;
 import model.RegisterRequest;

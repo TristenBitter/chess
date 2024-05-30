@@ -3,28 +3,27 @@ package dataaccess.memory;
 import dataaccess.AuthDAO;
 import model.AuthData;
 import model.LogoutRequest;
-import model.UserData;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
 public class MemoryAuthDAO implements AuthDAO {
-  private static final ArrayList<AuthData> authData = new ArrayList<>();
+  private static final ArrayList<AuthData> AUTH_DATA= new ArrayList<>();
 
   public MemoryAuthDAO(){}
 
-  public ArrayList<AuthData> getAll(){return authData;}
+  public ArrayList<AuthData> getAll(){return AUTH_DATA;}
   public AuthData makeAuthToken(String username){
     AuthData authToken = new AuthData(tokenizer(),username);
 
-    this.authData.add(authToken);
+    this.AUTH_DATA.add(authToken);
 
     return authToken;
   }
 
   public ArrayList<String> getAuthTokens(){
     ArrayList<String> listOfTokens = new ArrayList<>();
-    for (AuthData data: authData
+    for (AuthData data: AUTH_DATA
 
     ) { listOfTokens.add(data.authToken());
     }
@@ -42,7 +41,7 @@ public class MemoryAuthDAO implements AuthDAO {
   }
 
   public LogoutRequest getAuthTok(String username){
-    for (AuthData data: authData
+    for (AuthData data: AUTH_DATA
          ) { if(username.equals(data.username())){
               LogoutRequest token = new LogoutRequest(data.authToken());
               return token;
@@ -52,7 +51,7 @@ public class MemoryAuthDAO implements AuthDAO {
   }
 
   public String getUsername(String authToken){
-    for (AuthData data: authData
+    for (AuthData data: AUTH_DATA
          ) {if(authToken.equals(data.authToken())){
                 String username = data.username();
                 return username;
@@ -64,10 +63,10 @@ public class MemoryAuthDAO implements AuthDAO {
 
   public void deleteAuthData(LogoutRequest authToken){
     String token = authToken.authToken();
-    for (AuthData data: authData
+    for (AuthData data: AUTH_DATA
 
     ) { if(token.equals(data.authToken())){
-          authData.remove(data);
+          AUTH_DATA.remove(data);
           break;
         }
     }
@@ -80,6 +79,6 @@ public class MemoryAuthDAO implements AuthDAO {
   }
   @Override
   public void clear() {
-    authData.clear();
+    AUTH_DATA.clear();
   }
 }

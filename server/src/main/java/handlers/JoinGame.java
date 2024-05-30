@@ -1,7 +1,6 @@
 package handlers;
 
-import Service.CreateGameService;
-import Service.JoinGameService;
+import service.JoinGameService;
 import com.google.gson.Gson;
 import model.ErrorMessage;
 import model.JoinGameRequest;

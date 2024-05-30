@@ -1,6 +1,6 @@
 package handlers;
 
-import Service.LoginService;
+import service.LoginService;
 import com.google.gson.Gson;
 import model.AuthData;
 import model.ErrorMessage;

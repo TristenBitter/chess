@@ -1,10 +1,7 @@
 package server;
 
-import dataaccess.memory.MemoryUserDAO;
-import dataaccess.memory.MemoryAuthDAO;
-import dataaccess.memory.MemoryGameDAO;
+
 import handlers.*;
-import model.RegisterRequest;
 import spark.*;
 
 public class Server {
@@ -13,13 +10,6 @@ public class Server {
         Spark.port(desiredPort);
 
         Spark.staticFiles.location("web");
-
-        // Register your endpoints and handle exceptions here.
-
-//        MemoryUserDAO userData = new MemoryUserDAO();
-//        MemoryAuthDAO authData = new MemoryAuthDAO();
-//        MemoryGameDAO gameData = new MemoryGameDAO();
-        //RegisterRequest userInfo = new RegisterRequest();
 
         Spark.post("/user", new Register());
         Spark.post("/game", new CreateGame());
@@ -37,10 +27,6 @@ public class Server {
         Spark.stop();
         Spark.awaitStop();
     }
-
-
-
-    //gson is a json java interpreter
 
 }
 

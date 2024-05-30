@@ -1,13 +1,10 @@
 package handlers;
 
-import Service.RegisterService;
-import dataaccess.memory.MemoryAuthDAO;
-import dataaccess.memory.MemoryGameDAO;
+import service.RegisterService;
 import dataaccess.memory.MemoryUserDAO;
 import model.AuthData;
 import model.ErrorMessage;
 import model.RegisterRequest;
-import model.UserData;
 import spark.Request;
 import spark.Response;
 import spark.Route;

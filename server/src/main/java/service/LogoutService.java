@@ -1,7 +1,6 @@
-package Service;
+package service;
 
 import dataaccess.memory.MemoryAuthDAO;
-import model.AuthData;
 import model.LogoutRequest;
 
 public class LogoutService {

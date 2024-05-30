@@ -1,6 +1,5 @@
 package service;
 
-import Service.ClearService;
 import chess.ChessGame;
 import dataaccess.memory.MemoryUserDAO;
 import dataaccess.memory.MemoryAuthDAO;
@@ -11,9 +10,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UnitTestClear {
-  private final MemoryUserDAO UserDAO = new MemoryUserDAO();
-  private final MemoryAuthDAO AuthDAO = new MemoryAuthDAO();
-  private final MemoryGameDAO GameDAO = new MemoryGameDAO();
+  private final MemoryUserDAO userDAO= new MemoryUserDAO();
+  private final MemoryAuthDAO authDAO= new MemoryAuthDAO();
+  private final MemoryGameDAO gameDAO= new MemoryGameDAO();
 
   private final chess.ChessGame game = new ChessGame();
 
@@ -21,13 +20,13 @@ public class UnitTestClear {
 
   @Test
   public void didItClearAllTheData(){
-    UserDAO.insertUserData(new UserData("tee", "t", "gameID" ));
-    AuthDAO.makeAuthToken("tee");
-    GameDAO.createGame(gameInfo);
+    userDAO.insertUserData(new UserData("tee", "t", "gameID" ));
+    authDAO.makeAuthToken("tee");
+    gameDAO.createGame(gameInfo);
     new ClearService();
-    assertEquals(0, UserDAO.getAll().size());
-    assertEquals(0, AuthDAO.getAll().size());
-    assertEquals(0, GameDAO.getAll().size());
+    assertEquals(0, userDAO.getAll().size());
+    assertEquals(0, authDAO.getAll().size());
+    assertEquals(0, gameDAO.getAll().size());
   }
 
 
