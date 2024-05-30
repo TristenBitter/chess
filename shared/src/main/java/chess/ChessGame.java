@@ -215,23 +215,16 @@ public class ChessGame {
      *                              THE OLD IS IN CHECK CHECK
      ***********************************************************************************************/
     public boolean isInCheck(TeamColor teamColor) {
-        //find current position of king and see if the other team has possible end position on that position
-        // if a future move in the valid moves ends with the space of the king being taken
-        // then its in check
-        ChessPosition kingPos = findKing(teamColor, board);
-        ArrayList<ChessMove> possibleMoves = possibleMovesCollector(teamColor,board);
+        boolean answer = isInCheckSpecial(teamColor, board);
 
-        //if kingPos is in possible moves then return true, else false
-            return possibleMoves.stream().anyMatch(chessMove -> chessMove.getEndPosition().equals(kingPos));
+        return answer;
     }
-
-    public boolean isInCheckSpecial(TeamColor teamColor, ChessBoard board) {
+    public boolean isInCheckSpecial(TeamColor color, ChessBoard newBoard) {
         //find current position of king and see if the other team has possible end position on that position
         // if a future move in the valid moves ends with the space of the king being taken
         // then its in check
-        ChessPosition kingPos = findKing(teamColor, board);
-        ArrayList<ChessMove> possibleMoves = possibleMovesCollector(teamColor,board);
-
+        ChessPosition kingPos = findKing(color, newBoard);
+        ArrayList<ChessMove> possibleMoves = possibleMovesCollector(color,newBoard);
         //if kingPos is in possible moves then return true, else false
         return possibleMoves.stream().anyMatch(chessMove -> chessMove.getEndPosition().equals(kingPos));
     }

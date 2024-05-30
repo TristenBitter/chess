@@ -28,7 +28,4 @@ public class LogoutService {
     return false;
   }
 
-  public void deleteAuthToken(LogoutRequest authData){
-
-  }
 }

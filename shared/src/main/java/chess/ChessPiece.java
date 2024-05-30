@@ -1,41 +1,23 @@
 package chess;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Objects;
-
-/**
- * Represents a single chess piece
- * <p>
- * Note: You can add to this class, but you may not alter
- * signature of the existing methods.
- */
 public class ChessPiece {
     private ChessGame.TeamColor pieceColor;
     private ChessPiece.PieceType type;
-
-
-
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
         this.pieceColor=pieceColor;
         this.type=type;
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof ChessPiece that)) return false;
         return pieceColor == that.pieceColor && type == that.type;
     }
-
     @Override
     public int hashCode() {
         return Objects.hash(pieceColor, type);
     }
-
-    /**
-     * The various different chess piece options
-     */
     public enum PieceType {
         KING,
         QUEEN,
@@ -44,31 +26,13 @@ public class ChessPiece {
         ROOK,
         PAWN
     }
-
-    /**
-     * @return Which team this chess piece belongs to
-     */
     public ChessGame.TeamColor getTeamColor() {
-
         return pieceColor;
     }
 
-    /**
-     * @return which type of chess piece this piece is
-     */
     public PieceType getPieceType() {
-
         return type;
     }
-
-    /**
-     * Calculates all the positions a chess piece can move to
-     * Do not take into account moves that are illegal due to leaving the king in
-     * danger
-     *
-     * @return Collection of valid moves
-     */
-
     /***********************************************************************************************
      *                               PIECE MOVES
      ***********************************************************************************************/
@@ -131,7 +95,6 @@ public class ChessPiece {
         
         return movesCollection;
     }
-
     /***********************************************************************************************
      *                               KING MOVES HELPER
      ***********************************************************************************************/
@@ -146,7 +109,6 @@ public class ChessPiece {
 
         return movesCollection;
     }
-
     /***********************************************************************************************
      *                               OUT OF BOUNDS CHECKER
      ***********************************************************************************************/
@@ -156,7 +118,6 @@ public class ChessPiece {
         }
         return false;
     }
-
     /***********************************************************************************************
      *                               POSSIBLE QUEEN MOVES
      ***********************************************************************************************/
@@ -166,7 +127,6 @@ public class ChessPiece {
         movesCollection.addAll(possibleRookMoves(board,myPosition));
         return movesCollection;
     }
-
     /***********************************************************************************************
      *                               POSSIBLE KNIGHT MOVES
      ***********************************************************************************************/
@@ -224,23 +184,18 @@ public class ChessPiece {
                 movesCollection.add(new ChessMove(myPosition, newPosition, null));
             }
         }
-
-
         return movesCollection;
     }
-
     /***********************************************************************************************
      *                               MOVE VALIDATOR HELPER METHOD
      ***********************************************************************************************/
     public boolean moveValidator(ChessBoard board, ChessPosition newPosition){
-
         if ((board.getPiece(newPosition) == null)) {
             return true;
         }
         if ((board.getPiece(newPosition)) != null && board.getPiece(newPosition).getTeamColor() != pieceColor) {
             return true;
         }
-
         return false;
     }
     /***********************************************************************************************
@@ -351,9 +306,7 @@ public class ChessPiece {
         ArrayList<ChessMove> movesCollection = new ArrayList<>();
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
-
         int i = 1;
-        // below the rook
         while((row - i) > 0){
 
             ChessPosition downPos = new ChessPosition(row - i, col);
@@ -370,13 +323,12 @@ public class ChessPiece {
                 break;
             }
             if ((board.getPiece(downPos)) != null && board.getPiece(downPos).getTeamColor() == pieceColor){
-                // our team mate's piece is blocking this way
                 break;
             }
             i++;
         }
+
         i = 1;
-        // above the Rook
         while((row + i) < 9){
             ChessPosition upPos = new ChessPosition(row + i, col);
             if((board.getPiece(upPos) == null )){
@@ -431,10 +383,8 @@ public class ChessPiece {
             }
             i++;
         }
-
         return movesCollection;
     }
-
     /***********************************************************************************************
      *                               POSSIBLE PAWN MOVES
      ***********************************************************************************************/
@@ -479,7 +429,6 @@ public class ChessPiece {
             }
         }
         // and black ones capture down diagonally
-        //******************************************************************************
         newPos = new ChessPosition(row -1, col + 1);
         if(!(newPos.getRow() <= 0 || newPos.getColumn() <= 0 || newPos.getRow() > 8 || newPos.getColumn() > 8)) {
             if (board.getPiece(newPos) != null && board.getPiece(newPos).getTeamColor() != ChessGame.TeamColor.BLACK && board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.BLACK) {

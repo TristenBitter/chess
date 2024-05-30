@@ -30,7 +30,7 @@ public class MemoryGameDAO implements GameDAO {
     ArrayList<GameData> allData = getAll();
 
     for (GameData data: allData
-         ) {int id =data.GameID();
+         ) {int id =data.gameID();
             String wP =data.whiteUsername();
             String bP =data.blackUsername();
             String name =data.gameName();
@@ -63,7 +63,7 @@ public class MemoryGameDAO implements GameDAO {
   public boolean doesGameExist(int gameID){
     ArrayList<GameData> allData = getAll();
     for (GameData data:allData
-         ) {if(gameID == data.GameID()){
+         ) {if(gameID == data.gameID()){
            return true;
     }
     }
@@ -74,7 +74,7 @@ public class MemoryGameDAO implements GameDAO {
   public GameData getGame(int gameID){
     ArrayList<GameData> allData = getAll();
     for (GameData data:allData
-    ) {if(gameID == data.GameID()){
+    ) {if(gameID == data.gameID()){
       return data;
     }
     }
@@ -87,7 +87,7 @@ public class MemoryGameDAO implements GameDAO {
 
     ArrayList<GameData> allGames =GAME_DATA;
     for (GameData data:allGames
-    ) {if(gameID == data.GameID()){
+    ) {if(gameID == data.gameID()){
       return index;
     }
     index++;
@@ -98,13 +98,13 @@ public class MemoryGameDAO implements GameDAO {
 
   public void addPlayerAsColor(String color,String username, GameData game ){
     if(color.equals("WHITE")){
-      GameData updatedGame = new GameData(game.GameID(),username, game.blackUsername(), game.gameName(), game.game());
-      int index = findGameToJoin(game.GameID());
+      GameData updatedGame = new GameData(game.gameID(),username, game.blackUsername(), game.gameName(), game.game());
+      int index = findGameToJoin(game.gameID());
       GAME_DATA.set(index, updatedGame);
     }
     else{
-      GameData updatedGame = new GameData(game.GameID(), game.whiteUsername(), username, game.gameName(), game.game());
-      int index = findGameToJoin(game.GameID());
+      GameData updatedGame = new GameData(game.gameID(), game.whiteUsername(), username, game.gameName(), game.game());
+      int index = findGameToJoin(game.gameID());
       GAME_DATA.set(index, updatedGame);
     }
   }
