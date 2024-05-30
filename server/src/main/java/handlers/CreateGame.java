@@ -13,6 +13,13 @@ public class CreateGame implements Route {
   @Override
   public Object handle(Request request, Response response) throws Exception {
     String newGamesAuthToken = request.headers("Authorization");
+
+    if(newGamesAuthToken == null || newGamesAuthToken.isEmpty()){
+      ErrorMessage error = new ErrorMessage("Unauthorized");
+      response.status(401);
+      return new Gson().toJson(error);
+    }
+
     String newGame;
     try {
       newGame= new Gson().fromJson(request.body(), String.class);

@@ -31,7 +31,7 @@ public class Register implements Route {
 
 
     if(result == null){
-      ErrorMessage error = new Gson().fromJson("Username Already Exists", ErrorMessage.class);
+      ErrorMessage error = new ErrorMessage("Error: already exists");
       response.status(403);
       return new Gson().toJson(error);
     }
