@@ -5,7 +5,7 @@ import model.LogoutRequest;
 import model.RegisterRequest;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-public class UnitTestLogout {
+public class LogoutTest {
   private final RegisterRequest userData = new RegisterRequest("TristenBitter", "Tee123", "tristenkbitter@gmail.com");
   //private final RegisterRequest wrongUserCredentials = new RegisterRequest("kyle", "hello", "kyle@gmail.com");
   private final AuthData wrongUserCredentials = new AuthData("kyle", "hello");

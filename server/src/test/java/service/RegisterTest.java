@@ -1,12 +1,11 @@
 package service;
 
 import com.google.gson.Gson;
-import dataaccess.memory.MemoryUserDAO;
 import model.AuthData;
 import model.RegisterRequest;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-public class UnitTestRegister {
+public class RegisterTest {
   private final RegisterRequest userData = new RegisterRequest("TristenBitter", "Tee123", "tristenkbitter@gmail.com");
   private final RegisterRequest newUserData = new RegisterRequest("coolDude", "dude123", "cooldude@gmail.com");
   @Test

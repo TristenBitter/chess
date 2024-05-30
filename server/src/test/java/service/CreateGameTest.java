@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import model.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-    public class UnitTestCreateGame {
+    public class CreateGameTest {
       private final RegisterRequest newUserData = new RegisterRequest("coolDude", "dude123", "cooldude@gmail.com");
 
       private final RegisterRequest userData = new RegisterRequest("TristenBitter", "Tee123", "tristenkbitter@gmail.com");

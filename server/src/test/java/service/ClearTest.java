@@ -9,7 +9,7 @@ import model.UserData;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class UnitTestClear {
+public class ClearTest {
   private final MemoryUserDAO userDAO= new MemoryUserDAO();
   private final MemoryAuthDAO authDAO= new MemoryAuthDAO();
   private final MemoryGameDAO gameDAO= new MemoryGameDAO();
