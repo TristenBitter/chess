@@ -2,9 +2,7 @@ package server;
 
 
 import com.google.gson.Gson;
-import dataaccess.AlreadyTakenException;
-import dataaccess.DataAccessException;
-import dataaccess.DatabaseManager;
+import dataaccess.*;
 import dataaccess.sql.MySqlAuthDAO;
 import dataaccess.sql.MySqlGameDAO;
 import dataaccess.sql.MySqlUserDAO;
@@ -43,7 +41,18 @@ public class Server {
         Spark.delete("/session", new Logout());
         Spark.delete("/db", new ClearApp());
 
-        Spark.exception(AlreadyTakenException.class, (AlreadyTaken, request, response) -> {response.status(403); response.body(new Gson().toJson(new ErrorMessage("Error: already exists")))};
+//        Spark.exception(AlreadyTakenException.class, (AlreadyTaken, request, response) ->
+//        {response.status(403);
+//            response.body(new Gson().toJson(new ErrorMessage("Error: already exists")))};
+//
+//        Spark.exception(UnauthorizedException.class, (Unauthorized, request, response) ->
+//        {response.status(401);
+//            response.body(new Gson().toJson(new ErrorMessage("Error: unauthorized")))};
+//
+//        Spark.exception(BadRequestException.class, (BadRequest, request, response) ->
+//        {response.status(400);
+//            response.body(new Gson().toJson(new ErrorMessage("Error: bad request")))};
+
 
         Spark.awaitInitialization();
         return Spark.port();
