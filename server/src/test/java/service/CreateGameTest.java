@@ -2,6 +2,10 @@
 package service;
 
 import com.google.gson.Gson;
+import dataaccess.AlreadyTakenException;
+import dataaccess.BadRequestException;
+import dataaccess.DataAccessException;
+import dataaccess.UnauthorizedException;
 import model.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
       private final RegisterRequest userData = new RegisterRequest("TristenBitter", "Tee123", "tristenkbitter@gmail.com");
 
       @Test
-      public void createGameSuccess(){
+      public void createGameSuccess() throws DataAccessException, BadRequestException, AlreadyTakenException, UnauthorizedException {
         ClearService clearDB = new ClearService();
         clearDB.clearDB();
         RegisterService req = new RegisterService(userData);
@@ -24,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
       }
 
       @Test
-      public void createGameFailure(){
+      public void createGameFailure() throws Exception {
         RegisterService req = new RegisterService(newUserData);
         AuthData authInfo = req.registerUser(newUserData);
 

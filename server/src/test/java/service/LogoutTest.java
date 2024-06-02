@@ -1,5 +1,9 @@
 package service;
 
+import dataaccess.AlreadyTakenException;
+import dataaccess.BadRequestException;
+import dataaccess.DataAccessException;
+import dataaccess.UnauthorizedException;
 import model.AuthData;
 import model.LogoutRequest;
 import model.RegisterRequest;
@@ -10,7 +14,7 @@ public class LogoutTest {
   //private final RegisterRequest wrongUserCredentials = new RegisterRequest("kyle", "hello", "kyle@gmail.com");
   private final AuthData wrongUserCredentials = new AuthData("kyle", "hello");
   @Test
-  public void logoutSuccess(){
+  public void logoutSuccess() throws DataAccessException, BadRequestException, AlreadyTakenException, UnauthorizedException {
     ClearService clearDB = new ClearService();
     clearDB.clearDB();
 
@@ -25,7 +29,7 @@ public class LogoutTest {
   }
 
   @Test
-  public void logoutFailure(){
+  public void logoutFailure() throws DataAccessException, BadRequestException, AlreadyTakenException, UnauthorizedException {
     ClearService clearDB = new ClearService();
     clearDB.clearDB();
 

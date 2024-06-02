@@ -1,6 +1,9 @@
 package service;
 
 import com.google.gson.Gson;
+import dataaccess.AlreadyTakenException;
+import dataaccess.BadRequestException;
+import dataaccess.DataAccessException;
 import model.AuthData;
 import model.RegisterRequest;
 import org.junit.jupiter.api.Test;
@@ -9,7 +12,7 @@ public class RegisterTest {
   private final RegisterRequest userData = new RegisterRequest("TristenBitter", "Tee123", "tristenkbitter@gmail.com");
   private final RegisterRequest newUserData = new RegisterRequest("coolDude", "dude123", "cooldude@gmail.com");
   @Test
-  public void registerSuccess(){
+  public void registerSuccess() throws BadRequestException, AlreadyTakenException, DataAccessException {
 
     RegisterService req = new RegisterService(userData);
     AuthData result = req.registerUser(userData);
@@ -19,7 +22,7 @@ public class RegisterTest {
   }
 
   @Test
-  public void registerErrorCheck(){
+  public void registerErrorCheck() throws DataAccessException, BadRequestException, AlreadyTakenException {
     ClearService clearDB = new ClearService();
     clearDB.clearDB();
     //Username already exists

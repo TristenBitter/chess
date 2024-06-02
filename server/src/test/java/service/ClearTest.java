@@ -19,7 +19,7 @@ public class ClearTest {
   private GameData gameInfo = new GameData(1, "white", "black", "game1",game);
 
   @Test
-  public void didItClearAllTheData(){
+  public void didItClearAllTheData() throws Exception{
     userDAO.insertUserData(new UserData("tee", "t", "gameID" ));
     authDAO.makeAuthToken("tee");
     gameDAO.createGame(gameInfo);
