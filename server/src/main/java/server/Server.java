@@ -26,7 +26,7 @@ public class Server {
             mySqlGameDAO.createGameDBTable();
 
         }catch(DataAccessException e){
-
+               // not sure if I can throw anything here because the run func has no throws statement.
         }
 
         Spark.port(desiredPort);
