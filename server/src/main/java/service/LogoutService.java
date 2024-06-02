@@ -1,14 +1,16 @@
 package service;
 
+import dataaccess.AuthDAO;
+import dataaccess.UnauthorizedException;
 import dataaccess.memory.MemoryAuthDAO;
 import model.LogoutRequest;
 
 public class LogoutService {
-  private static MemoryAuthDAO authDAO = new MemoryAuthDAO();
+  private static AuthDAO authDAO = new MemoryAuthDAO();
   public LogoutService(LogoutRequest authToken){
 
   }
-  public boolean logoutUser(LogoutRequest authToken){
+  public boolean logoutUser(LogoutRequest authToken) throws UnauthorizedException {
     //ValidateAuthToken()
     if(!validateAuthToken(authToken)) return false;
 

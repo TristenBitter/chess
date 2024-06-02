@@ -1,14 +1,18 @@
 package service;
 
+import dataaccess.BadRequestException;
+import dataaccess.UnauthorizedException;
 import dataaccess.memory.MemoryAuthDAO;
 import dataaccess.memory.MemoryGameDAO;
+import dataaccess.AuthDAO;
+import dataaccess.GameDAO;
 import model.JoinGameRequest;
 
 public class JoinGameService {
 
-  private static MemoryAuthDAO authDAO = new MemoryAuthDAO();
-  private static MemoryGameDAO gameDAO = new MemoryGameDAO();
-  public int joinGame(JoinGameRequest requestedGame, String authToken){
+  private static AuthDAO authDAO = new MemoryAuthDAO();
+  private static GameDAO gameDAO = new MemoryGameDAO();
+  public int joinGame(JoinGameRequest requestedGame, String authToken) throws UnauthorizedException, BadRequestException {
 
     //Verify AuthToken
     if(!authDAO.validateAuthToken(authToken))return 401;

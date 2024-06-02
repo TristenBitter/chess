@@ -1,5 +1,6 @@
 package service;
 
+import dataaccess.*;
 import dataaccess.memory.MemoryAuthDAO;
 import dataaccess.memory.MemoryUserDAO;
 import model.AuthData;
@@ -9,14 +10,14 @@ import model.UserData;
 import java.util.ArrayList;
 
 public class RegisterService {
-  private static MemoryAuthDAO authObject = new MemoryAuthDAO();
-  private static MemoryUserDAO userObject = new MemoryUserDAO();
+  private static AuthDAO authObject = new MemoryAuthDAO();
+  private static UserDAO userObject = new MemoryUserDAO();
   public RegisterService(RegisterRequest userData){
 //   AuthData result = registerUser(userData);
 
   }
 
-  public AuthData registerUser(RegisterRequest userData){
+  public AuthData registerUser(RegisterRequest userData) throws AlreadyTakenException, BadRequestException,DataAccessException {
     // getUser to check if the username is taken
     if(!hasUsernameBeenTaken(userData)){
       return null;
@@ -37,7 +38,7 @@ public class RegisterService {
     return newUserToken;
   }
 
-  public boolean hasUsernameBeenTaken(RegisterRequest userData){
+  public boolean hasUsernameBeenTaken(RegisterRequest userData) throws DataAccessException {
     ArrayList<String> newUser = new ArrayList<>();
 
     //newUser.addAll(userObject.getAll());

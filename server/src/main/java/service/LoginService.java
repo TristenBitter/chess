@@ -1,18 +1,22 @@
 package service;
 
+import dataaccess.AuthDAO;
+import dataaccess.DataAccessException;
+import dataaccess.UnauthorizedException;
+import dataaccess.UserDAO;
 import dataaccess.memory.MemoryAuthDAO;
 import dataaccess.memory.MemoryUserDAO;
 import model.AuthData;
 import model.LoginRequest;
 
 public class LoginService {
-  private static MemoryAuthDAO authObject = new MemoryAuthDAO();
-  private static MemoryUserDAO userObject = new MemoryUserDAO();
+  private static AuthDAO authObject = new MemoryAuthDAO();
+  private static UserDAO userObject = new MemoryUserDAO();
 
   public LoginService(LoginRequest loginCredentials){
     //loginUser(loginCredentials);
   }
-  public AuthData loginUser(LoginRequest loginData){
+  public AuthData loginUser(LoginRequest loginData) throws UnauthorizedException, DataAccessException {
     //AuthenticateUser
     if(!authenticateUser(loginData)){
       return null;
@@ -24,7 +28,7 @@ public class LoginService {
     return authData;
   }
 
-  public boolean authenticateUser(LoginRequest loginCredentials){
+  public boolean authenticateUser(LoginRequest loginCredentials) throws DataAccessException {
     //check Username and Password
     String username = loginCredentials.username();
     String password = loginCredentials.password();
