@@ -1,12 +1,15 @@
 package server;
 
 
+import com.google.gson.Gson;
+import dataaccess.AlreadyTakenException;
 import dataaccess.DataAccessException;
 import dataaccess.DatabaseManager;
 import dataaccess.sql.MySqlAuthDAO;
 import dataaccess.sql.MySqlGameDAO;
 import dataaccess.sql.MySqlUserDAO;
 import handlers.*;
+import model.ErrorMessage;
 import spark.*;
 
 public class Server {
@@ -40,7 +43,7 @@ public class Server {
         Spark.delete("/session", new Logout());
         Spark.delete("/db", new ClearApp());
 
-        //Spark.exception(alreadytakenException.class, exceptionHandler or lambda (AlreadyTaken, request, response) -> {code to be exectued })
+        Spark.exception(AlreadyTakenException.class, (AlreadyTaken, request, response) -> {response.status(403); response.body(new Gson().toJson(new ErrorMessage("Error: already exists")))};
 
         Spark.awaitInitialization();
         return Spark.port();
