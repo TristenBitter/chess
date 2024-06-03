@@ -10,6 +10,7 @@ import dataaccess.DataAccessException;
 import dataaccess.DatabaseManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class MySqlAuthDAO implements AuthDAO {
 
@@ -49,20 +50,44 @@ public class MySqlAuthDAO implements AuthDAO {
     }
   }
   @Override
-  public AuthData makeAuthToken(String username){
-
+  public AuthData makeAuthToken(String username) throws DataAccessException{
+    // add a new authToken and Username to the DB
+    String token = tokenizer();
+    AuthData authToken = new AuthData(token,username);
+    try (var conn = DatabaseManager.getConnection()) {
+      String dataToInsert = "INSERT INTO authDataTable (authToken, username) VALUES (?, ?);";
+      var preparedStatement = conn.prepareStatement(dataToInsert);
+      preparedStatement.setString(1, username);
+      preparedStatement.setString(2, token);
+      preparedStatement.executeUpdate();
+    }catch (SQLException ex) {
+      throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
+    }
+    return authToken;
+  }
+  @Override
+  public ArrayList<String> getAuthTokens() throws DataAccessException{
     return null;
   }
   @Override
-  public ArrayList<String> getAuthTokens(){
-    return null;
-  }
-  @Override
-  public boolean validateAuthToken(String authToken){
+  public boolean validateAuthToken(String authToken) throws DataAccessException{
     return false;
   }
   @Override
-  public String getUsername(String authToken){
+  public String getUsername(String authToken) throws DataAccessException{
+    String dbAuthToken;
+    String query = "SELECT username FROM userDataTable WHERE authToken =?;";
+
+    try (var conn = DatabaseManager.getConnection()) {
+      var preparedStatement=conn.prepareStatement(query);
+      var result=preparedStatement.executeQuery();
+      if(result.next()){
+        dbAuthToken = result.getString("authToken");
+      }
+      if(authToken.equals(dbAuthToken)) return true;
+    }catch (SQLException ex) {
+      throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
+    }
     return null;
   }
   @Override
@@ -71,7 +96,7 @@ public class MySqlAuthDAO implements AuthDAO {
   }
   @Override
   public String tokenizer(){
-    return null;
+    return UUID.randomUUID().toString();
   }
 
 }

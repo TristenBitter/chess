@@ -11,13 +11,13 @@ public interface AuthDAO {
 
   public String tokenizer();
 
-  public AuthData makeAuthToken(String username);
+  public AuthData makeAuthToken(String username) throws DataAccessException;
 
-  public ArrayList<String> getAuthTokens();
+  public ArrayList<String> getAuthTokens() throws DataAccessException;
 
-  public boolean validateAuthToken(String authToken);
+  public boolean validateAuthToken(String authToken) throws DataAccessException;
 
-  public String getUsername(String authToken);
+  public String getUsername(String authToken) throws DataAccessException;
 
   public void deleteAuthData(LogoutRequest authToken);
 
