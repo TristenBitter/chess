@@ -19,16 +19,15 @@ public class MySqlUserDAO implements UserDAO {
               `username` varchar(256) NOT NULL,
               `password` varchar(256) NOT NULL,
               `email` varchar(256) NOT NULL,
-              `json` TEXT DEFAULT NULL,
               PRIMARY KEY (`id`),
               INDEX(password),
               INDEX(username),
               INDEX(email)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+            );
             """
   };
 
-  public static void createUserDBTable() throws DataAccessException {
+  public void createUserDBTable() throws DataAccessException {
     try (var conn = DatabaseManager.getConnection()) {
       for (var statement : createStatements) {
         try (var preparedStatement = conn.prepareStatement(statement)) {
@@ -41,19 +40,25 @@ public class MySqlUserDAO implements UserDAO {
 }
 
   @Override
-  public void clear() {
-    String clear = "TRUNCATE TABLE userDataTable";
-
+  public void clear() throws DataAccessException {
+    try (var conn = DatabaseManager.getConnection()) {
+      String clear = "DELETE FROM userDataTable";
+      var preparedStatement = conn.prepareStatement(clear);
+      preparedStatement.executeUpdate();
+    }catch (SQLException ex) {
+      throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
+    }
   }
 
   @Override
   public void insertUserData(UserData userInfo) {
-    String dataToInsert = "INSERT INTO userDataTable (username, password, email) VALUES (?, ?, ?)";
+    //try (var conn = DatabaseManager.getConnection()) {
+    String dataToInsert = "INSERT INTO userDataTable (username, password, email) VALUES (?, ?, ?);";
 
   }
 
   public void storeUserPassword(String username, String password) {
-    String hashedPassword = BCrypt.hashpw(clearTextPassword, BCrypt.gensalt());
+    String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
     // write the hashed password in database along with the user's other information
     writeHashedPasswordToDatabase(username, hashedPassword);

@@ -1,5 +1,7 @@
 package dataaccess;
 
+import dataaccess.sql.MySqlUserDAO;
+
 import java.sql.*;
 import java.util.Properties;
 
@@ -46,6 +48,13 @@ public class DatabaseManager {
         }
     }
 
+    public static void main(String[] args) throws DataAccessException {
+        createDatabase();
+        MySqlUserDAO user = new MySqlUserDAO();
+        user.createUserDBTable();
+    }
+
+
     /**
      * Create a connection to the database and sets the catalog based upon the
      * properties specified in db.properties. Connections to the database should
@@ -68,3 +77,5 @@ public class DatabaseManager {
         }
     }
 }
+
+

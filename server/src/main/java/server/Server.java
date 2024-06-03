@@ -11,7 +11,7 @@ import model.ErrorMessage;
 import spark.*;
 
 public class Server {
-    private static final DatabaseManager databaseManager = new DatabaseManager();
+    //private static final DatabaseManager databaseManager = new DatabaseManager();
     private static final MySqlUserDAO  mySqlUserDAO = new MySqlUserDAO();
     private static final MySqlAuthDAO mySqlAuthDAO = new MySqlAuthDAO();
     private static final MySqlGameDAO mySqlGameDAO = new MySqlGameDAO();
@@ -19,14 +19,15 @@ public class Server {
     public int run(int desiredPort) {
         //call a method to create a database
         try {
-            databaseManager.createDatabase();
+            DatabaseManager.createDatabase();
             //call a method to create the tables for all 3 DAO's
             mySqlUserDAO.createUserDBTable();
             mySqlAuthDAO.createAuthDBTable();
             mySqlGameDAO.createGameDBTable();
 
         }catch(DataAccessException e){
-               // not sure if I can throw anything here because the run func has no throws statement.
+            System.out.println("error creating database and tables");
+            return 0;
         }
 
         Spark.port(desiredPort);
