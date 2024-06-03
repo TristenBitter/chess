@@ -4,6 +4,7 @@ import dataaccess.DataAccessException;
 import dataaccess.DatabaseManager;
 import dataaccess.UserDAO;
 import model.UserData;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -41,12 +42,40 @@ public class MySqlUserDAO implements UserDAO {
 
   @Override
   public void clear() {
+    String clear = "TRUNCATE TABLE userDataTable";
 
   }
 
   @Override
   public void insertUserData(UserData userInfo) {
+    String dataToInsert = "INSERT INTO userDataTable (username, password, email) VALUES (?, ?, ?)";
 
+  }
+
+  public void storeUserPassword(String username, String password) {
+    String hashedPassword = BCrypt.hashpw(clearTextPassword, BCrypt.gensalt());
+
+    // write the hashed password in database along with the user's other information
+    writeHashedPasswordToDatabase(username, hashedPassword);
+  }
+
+  public void writeHashedPasswordToDatabase(String username,String hashedPassword){
+
+  }
+
+  public String readHashedPasswordFromDatabase(String username){
+    // get the hashed password with the username
+
+    String password= "undo BCrypt some how for the hashed password";
+
+    return password;
+  }
+
+  public boolean verifyUser(String username, String providedClearTextPassword) {
+    // read the previously hashed password from the database
+    var hashedPassword = readHashedPasswordFromDatabase(username);
+
+    return BCrypt.checkpw(providedClearTextPassword, hashedPassword);
   }
 
   @Override
