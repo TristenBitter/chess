@@ -8,7 +8,7 @@ import model.ListGamesRequest;
 import java.util.ArrayList;
 
 public interface GameDAO {
-  public void clear();
+  public void clear() throws DataAccessException;
 
   public int joinGame(JoinGameRequest requestedGame, String username);
 

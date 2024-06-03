@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public interface AuthDAO {
   // plan for what the classes will do
-  public void clear();
+  public void clear() throws DataAccessException;
 
   public String tokenizer();
 

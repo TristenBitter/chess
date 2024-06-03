@@ -18,12 +18,11 @@ public class MySqlAuthDAO implements AuthDAO {
             CREATE TABLE IF NOT EXISTS  authDataTable (
               `id` int NOT NULL AUTO_INCREMENT,
               `authToken` varchar(256) NOT NULL,
-              `username` varchar(256) NOT NULL,            
-              `json` TEXT DEFAULT NULL,
+              `username` varchar(256) NOT NULL,
               PRIMARY KEY (`id`),
               INDEX(authToken),
               INDEX(username)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+            );
             """
   };
 
@@ -40,8 +39,14 @@ public class MySqlAuthDAO implements AuthDAO {
 
   }
   @Override
-  public void clear() {
-
+  public void clear() throws DataAccessException {
+    try (var conn = DatabaseManager.getConnection()) {
+      String clear = "DELETE FROM authDataTable";
+      var preparedStatement = conn.prepareStatement(clear);
+      preparedStatement.executeUpdate();
+    }catch (SQLException ex) {
+      throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
+    }
   }
   @Override
   public AuthData makeAuthToken(String username){

@@ -22,12 +22,11 @@ public class MySqlGameDAO implements GameDAO {
               `blackUsername` varchar(256) NOT NULL,
               `gameName` varchar(256) NOT NULL,
               `game` text NOT NULL,
-              `json` TEXT DEFAULT NULL,
               PRIMARY KEY (`id`),
               INDEX(password),
               INDEX(username),
               INDEX(email)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+            );
             """
   };
 
@@ -43,8 +42,14 @@ public class MySqlGameDAO implements GameDAO {
     }
   }
   @Override
-  public void clear() {
-
+  public void clear() throws DataAccessException {
+    try (var conn = DatabaseManager.getConnection()) {
+      String clear = "DELETE FROM gameDataTable";
+      var preparedStatement = conn.prepareStatement(clear);
+      preparedStatement.executeUpdate();
+    }catch (SQLException ex) {
+      throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
+    }
   }
   @Override
   public int joinGame(JoinGameRequest requestedGame, String username){

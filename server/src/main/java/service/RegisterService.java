@@ -41,7 +41,6 @@ public class RegisterService {
   public boolean hasUsernameBeenTaken(RegisterRequest userData) throws DataAccessException {
     ArrayList<String> newUser = new ArrayList<>();
 
-    //newUser.addAll(userObject.getAll());
     newUser = userObject.getUsername();
     if(newUser.contains(userData.username())){
       return false;
