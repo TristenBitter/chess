@@ -16,7 +16,7 @@ public interface GameDAO {
 
   public int findGameToJoin(int gameID);
 
-  public GameData getGame(int gameID);
+  public GameData getGame(int gameID) throws DataAccessException;
 
   public boolean doesGameExist(int gameID);
 
@@ -28,5 +28,5 @@ public interface GameDAO {
 
   public void createGame(GameData gameInfo) throws DataAccessException;
 
-  public ArrayList<GameData> getAll();
+  public ArrayList<GameData> getAll() throws DataAccessException;
 }

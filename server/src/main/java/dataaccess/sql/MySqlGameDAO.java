@@ -77,7 +77,13 @@ public class MySqlGameDAO implements GameDAO {
   }
 
   @Override
-  public GameData getGame(int gameID){
+  public GameData getGame(int gameID) throws DataAccessException{
+    ArrayList<GameData> allData = getAll();
+    for (GameData data:allData
+    ) {if(gameID == data.gameID()){
+        return data;
+      }
+    }
     return null;
   }
 
@@ -120,9 +126,9 @@ public class MySqlGameDAO implements GameDAO {
       var preparedStatement = conn.prepareStatement(dataToInsert);
       preparedStatement.setInt(1, gameInfo.gameID());
       preparedStatement.setString(2, gameInfo.whiteUsername());
-      preparedStatement.setString(2, gameInfo.blackUsername());
-      preparedStatement.setString(2, gameInfo.gameName());
-      preparedStatement.setString(2, game);
+      preparedStatement.setString(3, gameInfo.blackUsername());
+      preparedStatement.setString(4, gameInfo.gameName());
+      preparedStatement.setString(5, game);
       preparedStatement.executeUpdate();
     }catch (SQLException ex) {
       throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
@@ -130,19 +136,30 @@ public class MySqlGameDAO implements GameDAO {
   }
 
   @Override
-  public ArrayList<GameData> getAll(){
+  public ArrayList<GameData> getAll() throws DataAccessException{
+    ArrayList<GameData> allGames = new ArrayList<>();
+
     String query = "SELECT * FROM gameDataTable;";
     try (var conn = DatabaseManager.getConnection()) {
       var preparedStatement=conn.prepareStatement(query);
       var result=preparedStatement.executeQuery();
       while(result.next()){
+        int gameID = result.getInt("gameID");
+        String wP = result.getString("whiteUsername");
+        String bP = result.getString("blackUsername");
+        String name = result.getString("gameName");
+        String chessGame = result.getString("game");
 
+        ChessGame chessGame1 = new Gson().fromJson( chessGame, ChessGame.class);
+        GameData data = new GameData(gameID, wP, bP, name, chessGame1);
+
+        allGames.add(data);
       }
     }catch (SQLException ex) {
       throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
     }
 
-    return null;
+    return allGames;
   }
 
 }
