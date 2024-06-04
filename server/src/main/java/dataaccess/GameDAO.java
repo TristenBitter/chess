@@ -12,19 +12,19 @@ public interface GameDAO {
 
   public int joinGame(JoinGameRequest requestedGame, String username) throws DataAccessException;
 
-  public void addPlayerAsColor(String color,String username, GameData game );
+  public void addPlayerAsColor(String color,String username, GameData game ) throws DataAccessException;
 
-  public int findGameToJoin(int gameID);
+  public int findGameToJoin(int gameID) throws DataAccessException;
 
   public GameData getGame(int gameID) throws DataAccessException;
 
-  public boolean doesGameExist(int gameID);
+  public boolean doesGameExist(int gameID) throws DataAccessException;
 
   public int generateRandomID();
 
   public CreateGameRequest createNewGame(String gameName) throws DataAccessException;
 
-  public ArrayList<ListGamesRequest> getListOfGames();
+  public ArrayList<ListGamesRequest> getListOfGames() throws DataAccessException;
 
   public void createGame(GameData gameInfo) throws DataAccessException;
 

@@ -26,19 +26,20 @@ public class MemoryGameDAO implements GameDAO {
 
 
   public ArrayList<ListGamesRequest> getListOfGames(){
-    ArrayList<ListGamesRequest> listOfGames = new ArrayList<>();
-    ArrayList<GameData> allData = getAll();
-
-    for (GameData data: allData
-         ) {int id =data.gameID();
-            String wP =data.whiteUsername();
-            String bP =data.blackUsername();
-            String name =data.gameName();
-            ListGamesRequest gameReq = new ListGamesRequest(id, wP, bP, name);
-            listOfGames.add(gameReq);
-    }
-
-    return listOfGames;
+//    ArrayList<ListGamesRequest> listOfGames = new ArrayList<>();
+//    ArrayList<GameData> allData = getAll();
+//
+//    for (GameData data: allData
+//         ) {int id =data.gameID();
+//            String wP =data.whiteUsername();
+//            String bP =data.blackUsername();
+//            String name =data.gameName();
+//            ListGamesRequest gameReq = new ListGamesRequest(id, wP, bP, name);
+//            listOfGames.add(gameReq);
+//    }
+//
+//    return listOfGames;
+    return null;
   }
 
   public CreateGameRequest createNewGame(String gameName){
@@ -110,39 +111,40 @@ public class MemoryGameDAO implements GameDAO {
   }
   public int joinGame(JoinGameRequest requestedGame, String username){
     // getGame
-    GameData game = getGame(requestedGame.gameID());
-
-    if(requestedGame.playerColor() == null){
-      return 400;
-    }
-    //check Users/Colors
-    if(game.whiteUsername() == null){
-      if(requestedGame.playerColor().equals("WHITE")){
-      // add the username as the white player
-      addPlayerAsColor("WHITE", username, game);
-      }
-    }
-    else{
-      if(requestedGame.playerColor().equals("WHITE")){
-        //white is already taken return error code 403
-        return 403;
-      }
-    }
-
-    if(game.blackUsername() == null){
-      if(requestedGame.playerColor().equals("BLACK")){
-        // add the username as the white player
-        addPlayerAsColor("BLACK", username, game);
-      }
-    }
-    else{
-      if(requestedGame.playerColor().equals("BLACK")){
-        //black is already taken return error code 403
-        return 403;
-      }
-    }
-
-    return 200;
+    //GameData game = getGame(requestedGame.gameID());
+//
+//    if(requestedGame.playerColor() == null){
+//      return 400;
+//    }
+//    //check Users/Colors
+//    if(game.whiteUsername() == null){
+//      if(requestedGame.playerColor().equals("WHITE")){
+//      // add the username as the white player
+//      addPlayerAsColor("WHITE", username, game);
+//      }
+//    }
+//    else{
+//      if(requestedGame.playerColor().equals("WHITE")){
+//        //white is already taken return error code 403
+//        return 403;
+//      }
+//    }
+//
+//    if(game.blackUsername() == null){
+//      if(requestedGame.playerColor().equals("BLACK")){
+//        // add the username as the white player
+//        addPlayerAsColor("BLACK", username, game);
+//      }
+//    }
+//    else{
+//      if(requestedGame.playerColor().equals("BLACK")){
+//        //black is already taken return error code 403
+//        return 403;
+//      }
+//    }
+//
+//    return 200;
+    return 0;
   }
 
 

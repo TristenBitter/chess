@@ -60,19 +60,71 @@ public class MySqlGameDAO implements GameDAO {
   }
   @Override
   public int joinGame(JoinGameRequest requestedGame, String username) throws DataAccessException{
-    // need to move some functionality to the service class
+    // getGame
+    GameData gameData = getGame(requestedGame.gameID());
 
+    if(requestedGame.playerColor() == null){
+      return 400;
+    }
+    //check Users/Colors
+    if(gameData.whiteUsername() == null){
+      if(requestedGame.playerColor().equals("WHITE")){
+        // add the username as the white player
+        addPlayerAsColor("WHITE", username, gameData);
+      }
+    }
+    else{
+      if(requestedGame.playerColor().equals("WHITE")){
+        //white is already taken return error code 403
+        return 403;
+      }
+    }
 
-    return 0;
+    if(gameData.blackUsername() == null){
+      if(requestedGame.playerColor().equals("BLACK")){
+        // add the username as the white player
+        addPlayerAsColor("BLACK", username, gameData);
+      }
+    }
+    else{
+      if(requestedGame.playerColor().equals("BLACK")){
+        //black is already taken return error code 403
+        return 403;
+      }
+    }
+
+    return 200;
   }
 
   @Override
-  public void addPlayerAsColor(String color,String username, GameData game ){
-    // update the db
+  public void addPlayerAsColor(String color,String username, GameData game ) throws DataAccessException{
+    int gameID = game.gameID();
+    if(color.equals("WHITE")) {
+      try (var conn=DatabaseManager.getConnection()) {
+        String dataToInsert="UPDATE authDataTable SET whiteUsername=? WHERE gameID=?;";
+        var preparedStatement=conn.prepareStatement(dataToInsert);
+        preparedStatement.setString(1, username);
+        preparedStatement.setInt(2, gameID);
+        preparedStatement.executeUpdate();
+      } catch (SQLException ex) {
+        throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
+      }
+    }
+    else{
+      try (var conn=DatabaseManager.getConnection()) {
+        String dataToInsert="UPDATE authDataTable SET blackUsername=? WHERE gameID=?;";
+        var preparedStatement=conn.prepareStatement(dataToInsert);
+        preparedStatement.setString(1, username);
+        preparedStatement.setInt(2, gameID);
+        preparedStatement.executeUpdate();
+      } catch (SQLException ex) {
+        throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
+      }
+    }
   }
 
   @Override
-  public int findGameToJoin(int gameID){
+  public int findGameToJoin(int gameID) throws DataAccessException {
     return 0;
   }
 
@@ -88,7 +140,13 @@ public class MySqlGameDAO implements GameDAO {
   }
 
   @Override
-  public boolean doesGameExist(int gameID){
+  public boolean doesGameExist(int gameID) throws DataAccessException{
+    ArrayList<GameData> allData = getAll();
+    for (GameData data:allData
+    ) {if(gameID == data.gameID()){
+        return true;
+      }
+    }
     return false;
   }
 
@@ -111,8 +169,19 @@ public class MySqlGameDAO implements GameDAO {
   }
 
   @Override
-  public ArrayList<ListGamesRequest> getListOfGames(){
-    return null;
+  public ArrayList<ListGamesRequest> getListOfGames() throws DataAccessException{
+    ArrayList<ListGamesRequest> listOfGames = new ArrayList<>();
+    ArrayList<GameData> allData = getAll();
+
+    for (GameData data: allData
+    ) {int id =data.gameID();
+      String wP =data.whiteUsername();
+      String bP =data.blackUsername();
+      String name =data.gameName();
+      ListGamesRequest gameReq = new ListGamesRequest(id, wP, bP, name);
+      listOfGames.add(gameReq);
+    }
+    return listOfGames;
   }
 
   @Override
