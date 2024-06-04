@@ -18,6 +18,8 @@ public class ListGamesTest {
 
   @Test
   public void listGamesSuccess() throws DataAccessException, BadRequestException, AlreadyTakenException, UnauthorizedException {
+    ClearService clearDB = new ClearService();
+    clearDB.clearDB();
     RegisterService req = new RegisterService(userData);
     AuthData authInfo = req.registerUser(userData);
 
@@ -33,6 +35,8 @@ public class ListGamesTest {
 
   @Test
   public void listGamesFailure() throws BadRequestException, AlreadyTakenException, DataAccessException, UnauthorizedException {
+    ClearService clearDB = new ClearService();
+    clearDB.clearDB();
 
     RegisterService req = new RegisterService(newUserData);
     AuthData authInfo = req.registerUser(newUserData);

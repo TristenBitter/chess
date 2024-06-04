@@ -5,6 +5,7 @@ import model.AuthData;
 import model.ListGamesRequest;
 import model.RegisterRequest;
 import org.junit.jupiter.api.Test;
+import service.ClearService;
 import service.CreateGameService;
 import service.ListGamesService;
 import service.RegisterService;
@@ -20,6 +21,8 @@ public class ListGamesTest {
 
   @Test
   public void listGamesSuccess() throws DataAccessException, BadRequestException, AlreadyTakenException, UnauthorizedException {
+    ClearService clearDB = new ClearService();
+    clearDB.clearDB();
     RegisterService req = new RegisterService(userData);
     AuthData authInfo = req.registerUser(userData);
 
@@ -35,6 +38,8 @@ public class ListGamesTest {
 
   @Test
   public void listGamesFailure() throws BadRequestException, AlreadyTakenException, DataAccessException, UnauthorizedException {
+    ClearService clearDB = new ClearService();
+    clearDB.clearDB();
 
     RegisterService req = new RegisterService(newUserData);
     AuthData authInfo = req.registerUser(newUserData);
