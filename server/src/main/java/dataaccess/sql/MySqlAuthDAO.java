@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class MySqlAuthDAO implements AuthDAO {
+public class MysqlAuthDAO implements AuthDAO {
 
   private static final String[] createStatements = {
           """
