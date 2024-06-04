@@ -1,5 +1,6 @@
 package dataaccess.sql;
 
+import chess.ChessGame;
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import dataaccess.DatabaseManager;
@@ -11,8 +12,10 @@ import model.ListGamesRequest;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MySqlGameDAO implements GameDAO {
+  private ChessGame newChessGame = new ChessGame();
 
   private static final String[] createStatements = {
           """
@@ -56,12 +59,16 @@ public class MySqlGameDAO implements GameDAO {
     }
   }
   @Override
-  public int joinGame(JoinGameRequest requestedGame, String username){
+  public int joinGame(JoinGameRequest requestedGame, String username) throws DataAccessException{
+    // need to move some functionality to the service class
+
+
     return 0;
   }
 
   @Override
   public void addPlayerAsColor(String color,String username, GameData game ){
+    // update the db
   }
 
   @Override
@@ -81,12 +88,20 @@ public class MySqlGameDAO implements GameDAO {
 
   @Override
   public int generateRandomID(){
-    return 0;
+    Random random = new Random();
+    int bounds = 2147483645;
+    int randomNum = random.nextInt(bounds);
+
+    return randomNum;
   }
 
   @Override
-  public CreateGameRequest createNewGame(String gameName){
-    return null;
+  public CreateGameRequest createNewGame(String gameName) throws DataAccessException{
+    int gameID = generateRandomID();
+    GameData newGame = new GameData(gameID, null, null, gameName, newChessGame);
+    createGame(newGame);
+
+    return new CreateGameRequest(gameID);
   }
 
   @Override
@@ -97,7 +112,7 @@ public class MySqlGameDAO implements GameDAO {
   @Override
   public void createGame(GameData gameInfo) throws DataAccessException{
 
-    //
+    // serialize chess game from object to json
     var game = new Gson().toJson(gameInfo.game());
 
     try (var conn = DatabaseManager.getConnection()) {
@@ -116,6 +131,18 @@ public class MySqlGameDAO implements GameDAO {
 
   @Override
   public ArrayList<GameData> getAll(){
+    String query = "SELECT * FROM gameDataTable;";
+    String username = null;
+    try (var conn = DatabaseManager.getConnection()) {
+      var preparedStatement=conn.prepareStatement(query);
+      var result=preparedStatement.executeQuery();
+      if(result.next()){
+        username = result.getString("username");
+      }
+    }catch (SQLException ex) {
+      throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
+    }
+
     return null;
   }
 

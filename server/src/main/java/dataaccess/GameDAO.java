@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public interface GameDAO {
   public void clear() throws DataAccessException;
 
-  public int joinGame(JoinGameRequest requestedGame, String username);
+  public int joinGame(JoinGameRequest requestedGame, String username) throws DataAccessException;
 
   public void addPlayerAsColor(String color,String username, GameData game );
 
@@ -22,7 +22,7 @@ public interface GameDAO {
 
   public int generateRandomID();
 
-  public CreateGameRequest createNewGame(String gameName);
+  public CreateGameRequest createNewGame(String gameName) throws DataAccessException;
 
   public ArrayList<ListGamesRequest> getListOfGames();
 
