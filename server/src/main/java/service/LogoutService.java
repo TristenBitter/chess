@@ -1,8 +1,10 @@
 package service;
 
 import dataaccess.AuthDAO;
+import dataaccess.DataAccessException;
 import dataaccess.UnauthorizedException;
 import dataaccess.memory.MemoryAuthDAO;
+import dataaccess.sql.MySqlAuthDAO;
 import model.LogoutRequest;
 
 public class LogoutService {
@@ -10,7 +12,7 @@ public class LogoutService {
   public LogoutService(LogoutRequest authToken){
 
   }
-  public boolean logoutUser(LogoutRequest authToken) throws UnauthorizedException {
+  public boolean logoutUser(LogoutRequest authToken) throws DataAccessException {
     //ValidateAuthToken()
     if(!validateAuthToken(authToken)) return false;
 
@@ -20,13 +22,16 @@ public class LogoutService {
     return true;
   }
 
-  public boolean validateAuthToken(LogoutRequest authData){
+  public boolean validateAuthToken(LogoutRequest authData) throws DataAccessException {
     String authToken =authData.authToken();
+    MySqlAuthDAO mySqlAuthDAO = new MySqlAuthDAO();
 
-    for (String token: authDAO.getAuthTokens()
-         ) { if(token.equals(authToken)) return true;
+    if(mySqlAuthDAO.validateAuthToken(authToken)) return true;
+//    for (String token: authDAO.getAuthTokens()
+//         ) { if(token.equals(authToken)) return true;
+//
+//    }
 
-    }
     return false;
   }
 

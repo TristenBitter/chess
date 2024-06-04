@@ -66,33 +66,50 @@ public class MySqlAuthDAO implements AuthDAO {
     return authToken;
   }
   @Override
-  public ArrayList<String> getAuthTokens() throws DataAccessException{
-    return null;
-  }
-  @Override
   public boolean validateAuthToken(String authToken) throws DataAccessException{
-    return false;
-  }
-  @Override
-  public String getUsername(String authToken) throws DataAccessException{
-    String dbAuthToken;
-    String query = "SELECT username FROM userDataTable WHERE authToken =?;";
+    String query = "SELECT authToken FROM userDataTable";
 
     try (var conn = DatabaseManager.getConnection()) {
       var preparedStatement=conn.prepareStatement(query);
       var result=preparedStatement.executeQuery();
-      if(result.next()){
-        dbAuthToken = result.getString("authToken");
+      while(result.next()){
+        String token = result.getString("authToken");
+        if(token.equals(authToken)) return true;
       }
-      if(authToken.equals(dbAuthToken)) return true;
     }catch (SQLException ex) {
       throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
     }
-    return null;
+    return false;
   }
   @Override
-  public void deleteAuthData(LogoutRequest authToken){
+  public String getUsername(String authToken) throws DataAccessException{
+    String query = "SELECT username FROM userDataTable WHERE authToken =?;";
+    String username = null;
+    try (var conn = DatabaseManager.getConnection()) {
+      var preparedStatement=conn.prepareStatement(query);
+      var result=preparedStatement.executeQuery();
+      if(result.next()){
+        username = result.getString("username");
+      }
+    }catch (SQLException ex) {
+      throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
+    }
+    return username;
+  }
+  @Override
+  public void deleteAuthData(LogoutRequest authToken) throws DataAccessException{
+    String username;
+    String token = authToken.toString();
 
+    try (var conn = DatabaseManager.getConnection()) {
+      String dataToInsert = "DELETE FROM authDataTable WHERE authToken = ? AND username = ?;";
+      var preparedStatement = conn.prepareStatement(dataToInsert);
+      preparedStatement.setString(1, username);
+      preparedStatement.setString(2, token);
+      preparedStatement.executeUpdate();
+    }catch (SQLException ex) {
+      throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
+    }
   }
   @Override
   public String tokenizer(){

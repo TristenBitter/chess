@@ -19,7 +19,7 @@ public interface AuthDAO {
 
   public String getUsername(String authToken) throws DataAccessException;
 
-  public void deleteAuthData(LogoutRequest authToken);
+  public void deleteAuthData(LogoutRequest authToken) throws DataAccessException;
 
 
 }
