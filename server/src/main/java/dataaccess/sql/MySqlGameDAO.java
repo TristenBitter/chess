@@ -1,5 +1,6 @@
 package dataaccess.sql;
 
+import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import dataaccess.DatabaseManager;
 import dataaccess.GameDAO;
@@ -29,6 +30,9 @@ public class MySqlGameDAO implements GameDAO {
             );
             """
   };
+
+  //TODO: I to Serialize the chess game into Json
+  //
 
   public static void createGameDBTable() throws DataAccessException {
     try (var conn = DatabaseManager.getConnection()) {
@@ -91,7 +95,23 @@ public class MySqlGameDAO implements GameDAO {
   }
 
   @Override
-  public void createGame(GameData gameInfo){
+  public void createGame(GameData gameInfo) throws DataAccessException{
+
+    //
+    var game = new Gson().toJson(gameInfo.game());
+
+    try (var conn = DatabaseManager.getConnection()) {
+      String dataToInsert = "INSERT INTO gameDataTable (gameID, whiteUsername, blackUsername, gameName, game) VALUES (?, ?, ?, ?, ?);";
+      var preparedStatement = conn.prepareStatement(dataToInsert);
+      preparedStatement.setInt(1, gameInfo.gameID());
+      preparedStatement.setString(2, gameInfo.whiteUsername());
+      preparedStatement.setString(2, gameInfo.blackUsername());
+      preparedStatement.setString(2, gameInfo.gameName());
+      preparedStatement.setString(2, game);
+      preparedStatement.executeUpdate();
+    }catch (SQLException ex) {
+      throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
+    }
   }
 
   @Override

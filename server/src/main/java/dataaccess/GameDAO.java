@@ -26,7 +26,7 @@ public interface GameDAO {
 
   public ArrayList<ListGamesRequest> getListOfGames();
 
-  public void createGame(GameData gameInfo);
+  public void createGame(GameData gameInfo) throws DataAccessException;
 
   public ArrayList<GameData> getAll();
 }

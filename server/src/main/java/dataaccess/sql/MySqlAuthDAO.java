@@ -65,6 +65,12 @@ public class MySqlAuthDAO implements AuthDAO {
     }
     return authToken;
   }
+
+  @Override
+  public ArrayList<String> getAuthTokens() throws DataAccessException {
+    return null;
+  }
+
   @Override
   public boolean validateAuthToken(String authToken) throws DataAccessException{
     String query = "SELECT authToken FROM userDataTable";
@@ -98,8 +104,8 @@ public class MySqlAuthDAO implements AuthDAO {
   }
   @Override
   public void deleteAuthData(LogoutRequest authToken) throws DataAccessException{
-    String username;
     String token = authToken.toString();
+    String username = getUsername(token);
 
     try (var conn = DatabaseManager.getConnection()) {
       String dataToInsert = "DELETE FROM authDataTable WHERE authToken = ? AND username = ?;";
