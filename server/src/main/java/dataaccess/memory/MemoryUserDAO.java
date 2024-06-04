@@ -14,7 +14,7 @@ public class MemoryUserDAO implements UserDAO {
     this.USER_DATA.add(userInfo);
   }
 
-  public static ArrayList<UserData> getAll(){
+  public ArrayList<UserData> getAll(){
     return USER_DATA;
   }
   public ArrayList<String> getUsername(){

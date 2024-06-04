@@ -6,7 +6,6 @@ import dataaccess.UserDAO;
 import model.UserData;
 import org.mindrot.jbcrypt.BCrypt;
 
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -122,6 +121,12 @@ public class MySqlUserDAO implements UserDAO {
 
   @Override
   public ArrayList<String> getPassword(){
+    return null;
+  }
+
+
+@Override
+  public ArrayList<UserData> getAll(){
     return null;
   }
 

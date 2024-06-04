@@ -11,6 +11,8 @@ public interface UserDAO {
 
   ArrayList<String> getPassword()throws DataAccessException;
 
+  abstract ArrayList<UserData> getAll();
+
 
 //  static ArrayList<UserData> getAll();
 }

@@ -22,4 +22,5 @@ public interface AuthDAO {
   public void deleteAuthData(LogoutRequest authToken) throws DataAccessException;
 
 
+  abstract ArrayList<AuthData> getAll();
 }

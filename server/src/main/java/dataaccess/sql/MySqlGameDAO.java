@@ -22,8 +22,8 @@ public class MySqlGameDAO implements GameDAO {
             CREATE TABLE IF NOT EXISTS  gameDataTable (
               `id` int NOT NULL AUTO_INCREMENT,
               `gameID` int NOT NULL,
-              `whiteUsername` varchar(256) NOT NULL,
-              `blackUsername` varchar(256) NOT NULL,
+              `whiteUsername` varchar(256),
+              `blackUsername` varchar(256),
               `gameName` varchar(256) NOT NULL,
               `game` text NOT NULL,
               PRIMARY KEY (`id`),
@@ -102,7 +102,7 @@ public class MySqlGameDAO implements GameDAO {
     int gameID = game.gameID();
     if(color.equals("WHITE")) {
       try (var conn=DatabaseManager.getConnection()) {
-        String dataToInsert="UPDATE authDataTable SET whiteUsername=? WHERE gameID=?;";
+        String dataToInsert="UPDATE gameDataTable SET whiteUsername=? WHERE gameID=?;";
         var preparedStatement=conn.prepareStatement(dataToInsert);
         preparedStatement.setString(1, username);
         preparedStatement.setInt(2, gameID);
@@ -113,7 +113,7 @@ public class MySqlGameDAO implements GameDAO {
     }
     else{
       try (var conn=DatabaseManager.getConnection()) {
-        String dataToInsert="UPDATE authDataTable SET blackUsername=? WHERE gameID=?;";
+        String dataToInsert="UPDATE gameDataTable SET blackUsername=? WHERE gameID=?;";
         var preparedStatement=conn.prepareStatement(dataToInsert);
         preparedStatement.setString(1, username);
         preparedStatement.setInt(2, gameID);

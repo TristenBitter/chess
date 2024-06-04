@@ -6,8 +6,6 @@ import dataaccess.DatabaseManager;
 import model.AuthData;
 import model.LogoutRequest;
 
-import dataaccess.DataAccessException;
-import dataaccess.DatabaseManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -18,8 +16,8 @@ public class MySqlAuthDAO implements AuthDAO {
           """
             CREATE TABLE IF NOT EXISTS  authDataTable (
               `id` int NOT NULL AUTO_INCREMENT,
-              `authToken` varchar(256) NOT NULL,
               `username` varchar(256) NOT NULL,
+              `authToken` varchar(256) NOT NULL,
               PRIMARY KEY (`id`),
               INDEX(authToken),
               INDEX(username)
@@ -55,7 +53,7 @@ public class MySqlAuthDAO implements AuthDAO {
     String token = tokenizer();
     AuthData authToken = new AuthData(token,username);
     try (var conn = DatabaseManager.getConnection()) {
-      String dataToInsert = "INSERT INTO authDataTable (authToken, username) VALUES (?, ?);";
+      String dataToInsert = "INSERT INTO authDataTable (username, authToken) VALUES (?, ?);";
       var preparedStatement = conn.prepareStatement(dataToInsert);
       preparedStatement.setString(1, username);
       preparedStatement.setString(2, token);
@@ -79,17 +77,28 @@ public class MySqlAuthDAO implements AuthDAO {
       var preparedStatement=conn.prepareStatement(query);
       preparedStatement.setString(1, authToken);
       var result=preparedStatement.executeQuery();
-      return result.next();
+      if(result.next()){
+        return true;
+      }
+      else{
+        return false;
+      }
+      //return result.next();
     }catch (SQLException ex) {
       throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
     }
+    //return false;
   }
+
+
   @Override
   public String getUsername(String authToken) throws DataAccessException{
-    String query = "SELECT username FROM userDataTable WHERE authToken =?;";
+    String query = "SELECT username FROM authDataTable WHERE authToken =?;";
+    //String token = authToken.authToken();
     String username = null;
     try (var conn = DatabaseManager.getConnection()) {
       var preparedStatement=conn.prepareStatement(query);
+      preparedStatement.setString(1, authToken);
       var result=preparedStatement.executeQuery();
       if(result.next()){
         username = result.getString("username");
@@ -101,14 +110,14 @@ public class MySqlAuthDAO implements AuthDAO {
   }
   @Override
   public void deleteAuthData(LogoutRequest authToken) throws DataAccessException{
-    String token = authToken.toString();
+    String token = authToken.authToken();
     String username = getUsername(token);
 
     try (var conn = DatabaseManager.getConnection()) {
       String dataToInsert = "DELETE FROM authDataTable WHERE authToken = ? AND username = ?;";
       var preparedStatement = conn.prepareStatement(dataToInsert);
-      preparedStatement.setString(1, username);
-      preparedStatement.setString(2, token);
+      preparedStatement.setString(1, token);
+      preparedStatement.setString(2, username);
       preparedStatement.executeUpdate();
     }catch (SQLException ex) {
       throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
@@ -118,5 +127,8 @@ public class MySqlAuthDAO implements AuthDAO {
   public String tokenizer(){
     return UUID.randomUUID().toString();
   }
+
+@Override
+public ArrayList<AuthData> getAll(){return null;}
 
 }
