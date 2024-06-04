@@ -17,7 +17,7 @@ import java.util.Random;
 public class MySqlGameDAO implements GameDAO {
   private ChessGame newChessGame = new ChessGame();
 
-  private static final String[] createStatements = {
+  private static final String[] CREATE_STATEMENTS= {
           """
             CREATE TABLE IF NOT EXISTS  gameDataTable (
               `id` int NOT NULL AUTO_INCREMENT,
@@ -35,12 +35,9 @@ public class MySqlGameDAO implements GameDAO {
             """
   };
 
-  //TODO: I need to Serialize the chess game into Json to change thee game status...
-  //
-
   public static void createGameDBTable() throws DataAccessException {
     try (var conn = DatabaseManager.getConnection()) {
-      for (var statement : createStatements) {
+      for (var statement : CREATE_STATEMENTS) {
         try (var preparedStatement = conn.prepareStatement(statement)) {
           preparedStatement.executeUpdate();
         }

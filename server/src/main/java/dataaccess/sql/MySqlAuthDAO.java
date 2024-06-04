@@ -10,9 +10,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class MysqlAuthDAO implements AuthDAO {
-
-  private static final String[] createStatements = {
+public class MySqlAuthDAO implements AuthDAO {
+  private static
+  final String[] CREATE_STATEMENTS= {
           """
             CREATE TABLE IF NOT EXISTS  authDataTable (
               `id` int NOT NULL AUTO_INCREMENT,
@@ -27,7 +27,7 @@ public class MysqlAuthDAO implements AuthDAO {
 
   public static void createAuthDBTable()throws DataAccessException{
     try (var conn = DatabaseManager.getConnection()) {
-      for (var statement : createStatements) {
+      for (var statement : CREATE_STATEMENTS) {
         try (var preparedStatement = conn.prepareStatement(statement)) {
           preparedStatement.executeUpdate();
         }
