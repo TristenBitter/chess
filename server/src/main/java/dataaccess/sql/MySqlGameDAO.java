@@ -132,12 +132,11 @@ public class MySqlGameDAO implements GameDAO {
   @Override
   public ArrayList<GameData> getAll(){
     String query = "SELECT * FROM gameDataTable;";
-    String username = null;
     try (var conn = DatabaseManager.getConnection()) {
       var preparedStatement=conn.prepareStatement(query);
       var result=preparedStatement.executeQuery();
-      if(result.next()){
-        username = result.getString("username");
+      while(result.next()){
+
       }
     }catch (SQLException ex) {
       throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
