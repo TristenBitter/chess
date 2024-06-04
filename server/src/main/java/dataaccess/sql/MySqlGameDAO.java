@@ -27,14 +27,15 @@ public class MySqlGameDAO implements GameDAO {
               `gameName` varchar(256) NOT NULL,
               `game` text NOT NULL,
               PRIMARY KEY (`id`),
-              INDEX(password),
-              INDEX(username),
-              INDEX(email)
+              INDEX(gameID),
+              INDEX(whiteUsername),
+              INDEX(blackUsername),
+              INDEX(gameName)
             );
             """
   };
 
-  //TODO: I to Serialize the chess game into Json
+  //TODO: I need to Serialize the chess game into Json to change thee game status...
   //
 
   public static void createGameDBTable() throws DataAccessException {
