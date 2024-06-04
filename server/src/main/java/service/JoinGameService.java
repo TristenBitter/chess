@@ -3,12 +3,14 @@ package service;
 import dataaccess.*;
 import dataaccess.memory.MemoryAuthDAO;
 import dataaccess.memory.MemoryGameDAO;
+import dataaccess.sql.MySqlAuthDAO;
+import dataaccess.sql.MySqlGameDAO;
 import model.JoinGameRequest;
 
 public class JoinGameService {
 
-  private static AuthDAO authDAO = new MemoryAuthDAO();
-  private static GameDAO gameDAO = new MemoryGameDAO();
+  private static AuthDAO authDAO = new MySqlAuthDAO();
+  private static GameDAO gameDAO = new MySqlGameDAO();
   public int joinGame(JoinGameRequest requestedGame, String authToken) throws DataAccessException {
 
     //Verify AuthToken

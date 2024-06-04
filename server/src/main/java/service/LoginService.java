@@ -6,13 +6,14 @@ import dataaccess.UnauthorizedException;
 import dataaccess.UserDAO;
 import dataaccess.memory.MemoryAuthDAO;
 import dataaccess.memory.MemoryUserDAO;
+import dataaccess.sql.MySqlAuthDAO;
 import dataaccess.sql.MySqlUserDAO;
 import model.AuthData;
 import model.LoginRequest;
 
 public class LoginService {
-  private static AuthDAO authObject = new MemoryAuthDAO();
-  private static UserDAO userObject = new MemoryUserDAO();
+  private static AuthDAO authObject = new MySqlAuthDAO();
+  private static UserDAO userObject = new MySqlUserDAO();
 
   public LoginService(LoginRequest loginCredentials){
     //loginUser(loginCredentials);

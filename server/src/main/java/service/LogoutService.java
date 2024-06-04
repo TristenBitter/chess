@@ -8,7 +8,7 @@ import dataaccess.sql.MySqlAuthDAO;
 import model.LogoutRequest;
 
 public class LogoutService {
-  private static AuthDAO authDAO = new MemoryAuthDAO();
+  private static AuthDAO authDAO = new MySqlAuthDAO();
   public LogoutService(LogoutRequest authToken){
 
   }

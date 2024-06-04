@@ -3,6 +3,8 @@ package service;
 import dataaccess.*;
 import dataaccess.memory.MemoryAuthDAO;
 import dataaccess.memory.MemoryUserDAO;
+import dataaccess.sql.MySqlAuthDAO;
+import dataaccess.sql.MySqlUserDAO;
 import model.AuthData;
 import model.RegisterRequest;
 import model.UserData;
@@ -10,8 +12,8 @@ import model.UserData;
 import java.util.ArrayList;
 
 public class RegisterService {
-  private static AuthDAO authObject = new MemoryAuthDAO();
-  private static UserDAO userObject = new MemoryUserDAO();
+  private static AuthDAO authObject = new MySqlAuthDAO();
+  private static UserDAO userObject = new MySqlUserDAO();
   public RegisterService(RegisterRequest userData){
 //   AuthData result = registerUser(userData);
 

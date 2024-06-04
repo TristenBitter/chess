@@ -5,14 +5,16 @@ import dataaccess.memory.MemoryAuthDAO;
 import dataaccess.memory.MemoryGameDAO;
 import dataaccess.AuthDAO;
 import dataaccess.GameDAO;
+import dataaccess.sql.MySqlAuthDAO;
+import dataaccess.sql.MySqlGameDAO;
 import model.ListGamesRequest;
 
 import java.util.ArrayList;
 
 public class ListGamesService {
 
-  private static AuthDAO authDAO = new MemoryAuthDAO();
-  private static GameDAO gameDAO = new MemoryGameDAO();
+  private static AuthDAO authDAO = new MySqlAuthDAO();
+  private static GameDAO gameDAO = new MySqlGameDAO();
 
   public ArrayList<ListGamesRequest> listGames(String authToken)throws DataAccessException{
     if(!authDAO.validateAuthToken(authToken)){
