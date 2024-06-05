@@ -27,15 +27,9 @@ public class MySqlUserDAO implements UserDAO {
   };
 
   public void createUserDBTable() throws DataAccessException {
-    try (var conn = DatabaseManager.getConnection()) {
-      for (var statement : CREATE_STATEMENTS) {
-        try (var preparedStatement = conn.prepareStatement(statement)) {
-          preparedStatement.executeUpdate();
-        }
-      }
-    } catch (SQLException ex) {
-      throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
-    }
+    MySqlAuthDAO authDAO = new MySqlAuthDAO();
+    authDAO.createTable(CREATE_STATEMENTS);
+
 }
 
   @Override

@@ -27,10 +27,6 @@ public class LogoutService {
     MySqlAuthDAO mySqlAuthDAO = new MySqlAuthDAO();
 
     if(mySqlAuthDAO.validateAuthToken(authToken)) return true;
-//    for (String token: authDAO.getAuthTokens()
-//         ) { if(token.equals(authToken)) return true;
-//
-//    }
 
     return false;
   }

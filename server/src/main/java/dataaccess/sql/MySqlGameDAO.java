@@ -14,6 +14,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static dataaccess.sql.MySqlAuthDAO.createTable;
+
 public class MySqlGameDAO implements GameDAO {
   private ChessGame newChessGame = new ChessGame();
 
@@ -36,15 +38,8 @@ public class MySqlGameDAO implements GameDAO {
   };
 
   public static void createGameDBTable() throws DataAccessException {
-    try (var conn = DatabaseManager.getConnection()) {
-      for (var statement : CREATE_STATEMENTS) {
-        try (var preparedStatement = conn.prepareStatement(statement)) {
-          preparedStatement.executeUpdate();
-        }
-      }
-    } catch (SQLException ex) {
-      throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
-    }
+    createTable(CREATE_STATEMENTS);
+
   }
   @Override
   public void clear() throws DataAccessException {

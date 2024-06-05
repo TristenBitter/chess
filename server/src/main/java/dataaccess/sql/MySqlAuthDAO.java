@@ -26,6 +26,12 @@ public class MySqlAuthDAO implements AuthDAO {
   };
 
   public static void createAuthDBTable()throws DataAccessException{
+    MySqlAuthDAO authDAO = new MySqlAuthDAO();
+    authDAO.createTable(CREATE_STATEMENTS);
+
+  }
+
+  public static void createTable(String[] CREATE_STATEMENTS) throws DataAccessException{
     try (var conn = DatabaseManager.getConnection()) {
       for (var statement : CREATE_STATEMENTS) {
         try (var preparedStatement = conn.prepareStatement(statement)) {
@@ -35,7 +41,6 @@ public class MySqlAuthDAO implements AuthDAO {
     } catch (SQLException ex) {
       throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
     }
-
   }
   @Override
   public void clear() throws DataAccessException {
