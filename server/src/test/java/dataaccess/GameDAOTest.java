@@ -12,12 +12,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class GameDAOTest {
   private final MySqlUserDAO userDAO= new MySqlUserDAO();
+  private final MySqlAuthDAO authDAO= new MySqlAuthDAO();
+  private final MySqlGameDAO gameDAO= new MySqlGameDAO();
   private final RegisterRequest userData = new RegisterRequest("TristenBitter", "Tee123", "tristenkbitter@gmail.com");
   @Test
   public void gameSuccess() throws Exception{
 
     DatabaseManager.createDatabase();
     userDAO.createUserDBTable();
+    authDAO.createAuthDBTable();
+    gameDAO.createGameDBTable();
 
     ClearService clearDB = new ClearService();
     clearDB.clearDB();
@@ -41,6 +45,9 @@ public class GameDAOTest {
 
     DatabaseManager.createDatabase();
     userDAO.createUserDBTable();
+    authDAO.createAuthDBTable();
+    gameDAO.createGameDBTable();
+
     ClearService clearDB = new ClearService();
     clearDB.clearDB();
 
