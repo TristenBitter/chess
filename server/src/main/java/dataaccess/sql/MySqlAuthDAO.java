@@ -31,9 +31,9 @@ public class MySqlAuthDAO implements AuthDAO {
 
   }
 
-  public static void createTable(String[] CREATE_STATEMENTS) throws DataAccessException{
+  public static void createTable(String[] createStatements) throws DataAccessException{
     try (var conn = DatabaseManager.getConnection()) {
-      for (var statement : CREATE_STATEMENTS) {
+      for (var statement : createStatements) {
         try (var preparedStatement = conn.prepareStatement(statement)) {
           preparedStatement.executeUpdate();
         }
