@@ -1,5 +1,9 @@
 package ui;
 
+import model.AuthData;
+import model.LoginRequest;
+import model.RegisterRequest;
+
 import java.util.Scanner;
 
 public class UserInterface {
@@ -20,7 +24,7 @@ public class UserInterface {
     }
   }
 
-  public static void preLoginHelp(){
+  public static void preLoginHelp() throws Exception {
     System.out.println("I am here to help you... do not fear...");
     System.out.println("try typing one of the commands that are in blue");
     System.out.println("make sure to use all lowercase letters and fill in all the required information");
@@ -28,7 +32,7 @@ public class UserInterface {
     System.out.println("now you try");
     preLoginUI();
   }
-  public static void preLoginUI(){
+  public static void preLoginUI() throws Exception {
     while (true) {
       System.out.printf("Please type in one of these commands%n");
 
@@ -55,7 +59,7 @@ public class UserInterface {
       System.out.printf("[LOGGED_OUT]>>> ");
       Scanner scanner=new Scanner(System.in);
       String line=scanner.nextLine();
-      String[] numbers = line.split(" ");
+      String[] userInput = line.split(" ");
 
       if(line.equals("quit")){
         break;
@@ -65,16 +69,21 @@ public class UserInterface {
         preLoginHelp();
       }
 
-      for (var number : numbers) {
-        if(number.equals("register")){
+        String command = userInput[0];
+
+        if(command.equals("register")){
           //call register to put in the credentials
           // somehow extract the credentials from the string
+          RegisterRequest registerRequest = new RegisterRequest(userInput[1], userInput[2], userInput[3]);
+          facade.register(registerRequest);
           System.out.println("REGISTER SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
           postLoginUI();
           break;
         }
-        else if(number.equals("login")){
+        else if(command.equals("login")){
           //login the user with the credentials
+          LoginRequest loginRequest = new LoginRequest(userInput[1], userInput[2]);
+          facade.login(loginRequest);
           System.out.println("LOGIN SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
           postLoginUI();
           break;
@@ -82,7 +91,6 @@ public class UserInterface {
         else{
           System.out.println("I'm sorry, I did not recognize that command. Please try again or if you need help type help.");
         }
-      }
     }
   }
 
@@ -155,7 +163,7 @@ public class UserInterface {
         } else if (com.equals("join")) {
           //login the user with the credentials
           System.out.println("JOIN SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-          postLoginUI();
+          facade.join();
           break;
         } else {
           System.out.println("I'm sorry I didn't recognize that, please type HELP for help with commands%n[LOGGED_IN]>>> ");

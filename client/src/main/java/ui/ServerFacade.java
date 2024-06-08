@@ -2,6 +2,7 @@ package ui;
 
 import model.AuthData;
 
+import model.LoginRequest;
 import model.RegisterRequest;
 
 import java.util.Scanner;
@@ -13,7 +14,7 @@ public class ServerFacade {
 
       return null;
     }
-    public void login(){
+    public void login(LoginRequest loginRequest){
 
     }
     public void create() {
@@ -27,5 +28,13 @@ public class ServerFacade {
 
   }
 
-  pub
+  public void observe(){
+      // call draw board to print the board
+  }
+
+  public void logout(){
+
+  }
+
+
 }
