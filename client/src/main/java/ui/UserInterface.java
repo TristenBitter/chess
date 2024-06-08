@@ -2,6 +2,7 @@ package ui;
 
 import model.*;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class UserInterface {
@@ -153,35 +154,35 @@ public class UserInterface {
       String com = command[0];
 
         if (com.equals("create")) {
-          //call register to put in the credentials
-          // somehow extract the credentials from the string
           System.out.println("CREATION SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
           GameNameRequest gameNameRequest = new GameNameRequest(command[1]);
 
-          facade.create(gameNameRequest, data.authToken());
+          int gameID = facade.create(gameNameRequest, data.authToken());
 
-          break;
+          System.out.printf("The GameID for your new game named %s is: %d%n", command[1], gameID);
+
         } else if (com.equals("list")) {
-          //login the user with the credentials
           System.out.println("JOIN SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
-          facade.list(data.authToken());
-          break;
+          ArrayList<ListGamesRequest> listOfGames= facade.list(data.authToken());
+          int i = 0;
+          for (ListGamesRequest game: listOfGames)
+               { i++;
+                 System.out.printf("%d. GameName: %s, GameID: %d, WhitePlayer: %s, BlackPlayer: %s", i, game.gameName(), game.gameID(), game.whiteUsername(), game.blackUsername());
+               }
+
         } else if (com.equals("join")) {
-          //login the user with the credentials
-          System.out.println("JOIN SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
           JoinGameRequest joinGameRequest = new JoinGameRequest(command[2], Integer.parseInt(command[1]));
           facade.join(joinGameRequest, data.authToken());
-          break;
-        }else if (com.equals("observe")) {
-          //login the user with the credentials
           System.out.println("JOIN SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+          break;
+
+        }else if (com.equals("observe")) {
           CreateGameRequest id = new CreateGameRequest(Integer.parseInt(command[1]));
           facade.observe(id, data.authToken());
-          break;
+          System.out.println("observe SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
         }else if (com.equals("logout")) {
-          //login the user with the credentials
-          System.out.println("JOIN SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
           facade.logout(new LogoutRequest(data.authToken()));
           break;
         } else {

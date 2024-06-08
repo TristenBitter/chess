@@ -2,25 +2,26 @@ package ui;
 
 import model.*;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import static java.lang.Thread.sleep;
 
 public class ServerFacade {
     public AuthData register(RegisterRequest request) throws Exception{
-
-      return null;
+      AuthData authData = new AuthData("token", request.username());
+      return authData;
     }
     public AuthData login(LoginRequest loginRequest) throws Exception{
-
-      return  null;
+      AuthData authData = new AuthData("token", loginRequest.username());
+      return authData;
     }
     public int create(GameNameRequest gameNameRequest, String authToken) {
 
       return 0;
   }
 
-  public ListGamesRequest list(String authToken){
+  public ArrayList<ListGamesRequest> list(String authToken){
 
 
       return null;
@@ -32,6 +33,7 @@ public class ServerFacade {
 
   public void observe(CreateGameRequest gameID, String authToken){
       // call draw board to print the board
+
   }
 
   public void logout(LogoutRequest logoutRequest){
