@@ -3,6 +3,7 @@ package ui;
 import java.util.Scanner;
 
 public class UserInterface {
+  private static ServerFacade facade = new ServerFacade();
   public static void main(String[] args) throws Exception {
     while (true) {
       System.out.printf("Welcome to my CS240 Chess app! Type help to get started%n[LOGGED_OUT]>>> ");
@@ -95,7 +96,44 @@ public class UserInterface {
   }
   public static void postLoginUI(){
     while (true) {
-      System.out.printf("please type in a command%n[LOGGED_IN]>>> ");
+      System.out.printf("please type in a command from the list provided below%n");
+
+      System.out.print("\u001b[36;100m");
+      System.out.printf("create <NAME> ");
+      System.out.print(EscapeSequences.SET_TEXT_COLOR_WHITE);
+      System.out.printf("--> to create a new game and name it.%n");
+
+      System.out.print("\u001b[36;100m");
+      System.out.printf("list ");
+      System.out.print(EscapeSequences.SET_TEXT_COLOR_WHITE);
+      System.out.printf("--> to list games.%n");
+
+      System.out.print("\u001b[36;100m");
+      System.out.printf("join <ID> ");
+      System.out.print(EscapeSequences.SET_TEXT_COLOR_WHITE);
+      System.out.printf("--> to join a game.%n");
+
+      System.out.print("\u001b[36;100m");
+      System.out.printf("observe <ID> ");
+      System.out.print(EscapeSequences.SET_TEXT_COLOR_WHITE);
+      System.out.printf("--> to see a game.%n");
+
+      System.out.print("\u001b[36;100m");
+      System.out.printf("logout ");
+      System.out.print(EscapeSequences.SET_TEXT_COLOR_WHITE);
+      System.out.printf("--> to logout of this account.%n");
+
+      System.out.print("\u001b[36;100m");
+      System.out.printf("quit ");
+      System.out.print(EscapeSequences.SET_TEXT_COLOR_WHITE);
+      System.out.printf("--> to exit this page.%n");
+
+      System.out.print("\u001b[36;100m");
+      System.out.printf("help ");
+      System.out.print(EscapeSequences.SET_TEXT_COLOR_WHITE);
+      System.out.printf("--> for help with commands.%n%n");
+
+      System.out.println("[LOGGED_IN]>>> ");
       Scanner scanner = new Scanner(System.in);
       String line = scanner.nextLine();
       var command = line.split(" ");
@@ -112,11 +150,11 @@ public class UserInterface {
           //call register to put in the credentials
           // somehow extract the credentials from the string
           System.out.println("CREATION SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-          postLoginUI();
+          facade.create();
           break;
         } else if (com.equals("join")) {
           //login the user with the credentials
-          System.out.println("LOGIN SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+          System.out.println("JOIN SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
           postLoginUI();
           break;
         } else {
