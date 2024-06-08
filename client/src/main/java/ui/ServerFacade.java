@@ -1,9 +1,6 @@
 package ui;
 
-import model.AuthData;
-
-import model.LoginRequest;
-import model.RegisterRequest;
+import model.*;
 
 import java.util.Scanner;
 
@@ -14,25 +11,30 @@ public class ServerFacade {
 
       return null;
     }
-    public void login(LoginRequest loginRequest){
+    public AuthData login(LoginRequest loginRequest) throws Exception{
 
+      return  null;
     }
-    public void create() {
+    public int create(GameNameRequest gameNameRequest, String authToken) {
+
+      return 0;
   }
 
-  public void list(){
+  public ListGamesRequest list(String authToken){
+
+
+      return null;
+  }
+
+  public void join(JoinGameRequest joinGameRequest, String authToken){
 
   }
 
-  public void join(){
-
-  }
-
-  public void observe(){
+  public void observe(CreateGameRequest gameID, String authToken){
       // call draw board to print the board
   }
 
-  public void logout(){
+  public void logout(LogoutRequest logoutRequest){
 
   }
 

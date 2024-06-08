@@ -1,8 +1,6 @@
 package ui;
 
-import model.AuthData;
-import model.LoginRequest;
-import model.RegisterRequest;
+import model.*;
 
 import java.util.Scanner;
 
@@ -75,17 +73,18 @@ public class UserInterface {
           //call register to put in the credentials
           // somehow extract the credentials from the string
           RegisterRequest registerRequest = new RegisterRequest(userInput[1], userInput[2], userInput[3]);
-          facade.register(registerRequest);
+          AuthData data = facade.register(registerRequest);
           System.out.println("REGISTER SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-          postLoginUI();
+
+          postLoginUI(data);
           break;
         }
         else if(command.equals("login")){
           //login the user with the credentials
           LoginRequest loginRequest = new LoginRequest(userInput[1], userInput[2]);
-          facade.login(loginRequest);
+          AuthData data = facade.login(loginRequest);
           System.out.println("LOGIN SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-          postLoginUI();
+          postLoginUI(data);
           break;
         }
         else{
@@ -94,15 +93,15 @@ public class UserInterface {
     }
   }
 
-  public static void postLoginHelp(){
+  public static void postLoginHelp(AuthData data) throws Exception {
     System.out.println("Do not worry...I am here to help you...");
     System.out.println("try typing one of the commands that are in blue");
     System.out.println("make sure to use all lowercase letters for the command and fill in all the required information");
     System.out.println("        Here's an example:%n[LOGGED_IN]>>> create BobbyVsTimmy");
     System.out.println("now you try");
-    postLoginUI();
+    postLoginUI(data);
   }
-  public static void postLoginUI(){
+  public static void postLoginUI(AuthData data) throws Exception{
     while (true) {
       System.out.printf("please type in a command from the list provided below%n");
 
@@ -117,7 +116,7 @@ public class UserInterface {
       System.out.printf("--> to list games.%n");
 
       System.out.print("\u001b[36;100m");
-      System.out.printf("join <ID> ");
+      System.out.printf("join <ID> [WHITE | BLACK] ");
       System.out.print(EscapeSequences.SET_TEXT_COLOR_WHITE);
       System.out.printf("--> to join a game.%n");
 
@@ -148,27 +147,46 @@ public class UserInterface {
 
       if (line.equals("help") || line.equals("Help") || line.equals("HELP")) {
         //Enter preLogin section of UI
-        postLoginHelp();
+        postLoginHelp(data);
         break;
       }
-
-      for (var com : command) {
+      String com = command[0];
 
         if (com.equals("create")) {
           //call register to put in the credentials
           // somehow extract the credentials from the string
           System.out.println("CREATION SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-          facade.create();
+          GameNameRequest gameNameRequest = new GameNameRequest(command[1]);
+
+          facade.create(gameNameRequest, data.authToken());
+
+          break;
+        } else if (com.equals("list")) {
+          //login the user with the credentials
+          System.out.println("JOIN SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+          facade.list(data.authToken());
           break;
         } else if (com.equals("join")) {
           //login the user with the credentials
           System.out.println("JOIN SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-          facade.join();
+          JoinGameRequest joinGameRequest = new JoinGameRequest(command[2], Integer.parseInt(command[1]));
+          facade.join(joinGameRequest, data.authToken());
+          break;
+        }else if (com.equals("observe")) {
+          //login the user with the credentials
+          System.out.println("JOIN SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+          CreateGameRequest id = new CreateGameRequest(Integer.parseInt(command[1]));
+          facade.observe(id, data.authToken());
+          break;
+        }else if (com.equals("logout")) {
+          //login the user with the credentials
+          System.out.println("JOIN SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+          facade.logout(new LogoutRequest(data.authToken()));
           break;
         } else {
           System.out.println("I'm sorry I didn't recognize that, please type HELP for help with commands%n[LOGGED_IN]>>> ");
         }
-      }
     }
   }
 }
