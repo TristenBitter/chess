@@ -102,27 +102,18 @@ public class ServerFacade {
       HttpURLConnection http=(HttpURLConnection) uri.toURL().openConnection();
       http.setRequestMethod("POST");
 
-      /*********************************************************/
-      // Specify that we are going to write out data
       http.setDoOutput(true);
 
-      // Write out a header
       http.addRequestProperty("Authorization", authToken);
 
-
-      // Write out the body
       var body = gameNameRequest;
       try (var outputStream = http.getOutputStream()) {
         var jsonBody = new Gson().toJson(body);
         outputStream.write(jsonBody.getBytes());
       }
 
-      /***************************************************************/
-
-      // Make the request
       http.connect();
 
-      // Output the response body
       try (InputStream respBody=http.getInputStream()) {
         InputStreamReader inputStreamReader=new InputStreamReader(respBody);
 
@@ -132,18 +123,42 @@ public class ServerFacade {
       }
   }
 
-  public ArrayList<ListGamesRequest> list(String authToken){
+  public ArrayList<ListGamesRequest> list(String authToken)throws IOException, URISyntaxException {
+
+    URI uri=new URI(port + "/game");
+    HttpURLConnection http=(HttpURLConnection) uri.toURL().openConnection();
+    http.setRequestMethod("GET");
+
+    // Specify that we are going to write out data
+    http.setDoOutput(true);
+
+    // Write out a header
+    http.addRequestProperty("Authorization", authToken);
+
+    // Make the request
+    http.connect();
+
+    // Output the response body
+    try (InputStream respBody=http.getInputStream()) {
+      InputStreamReader inputStreamReader=new InputStreamReader(respBody);
 
 
-      return null;
+      ArrayList<ListGamesRequest> games = new ArrayList<>();
+      games.add(new Gson().fromJson(inputStreamReader, ListGamesRequest.class));
+      System.out.println(games);
+      return games;
+    }
+
   }
 
-  public void join(JoinGameRequest joinGameRequest, String authToken){
+  public void join(JoinGameRequest joinGameRequest, String authToken) throws IOException, URISyntaxException {
 
   }
 
   public void observe(CreateGameRequest gameID, String authToken){
       // call draw board to print the board
+    ChessBoardDrawer draw = new ChessBoardDrawer();
+    draw.main(null);
 
 
   }
