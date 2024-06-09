@@ -157,9 +157,9 @@ public class UserInterface {
           System.out.println("CREATION SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
           GameNameRequest gameNameRequest = new GameNameRequest(command[1]);
 
-          int gameID = facade.create(gameNameRequest, data.authToken());
+          CreateGameRequest gameID = facade.create(gameNameRequest, data.authToken());
 
-          System.out.printf("The GameID for your new game named %s is: %d%n", command[1], gameID);
+          System.out.printf("The GameID for your new game named %s is: %d%n", command[1], gameID.gameID());
 
         } else if (com.equals("list")) {
           System.out.println("JOIN SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -183,7 +183,7 @@ public class UserInterface {
           System.out.println("observe SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
         }else if (com.equals("logout")) {
-          facade.logout(new LogoutRequest(data.authToken()));
+          facade.logout(new LogoutRequest(data.authToken()), data.authToken());
           break;
         } else {
           System.out.println("I'm sorry I didn't recognize that, please type HELP for help with commands%n[LOGGED_IN]>>> ");

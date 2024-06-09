@@ -18,6 +18,30 @@ public class ChessPiece {
     public int hashCode() {
         return Objects.hash(pieceColor, type);
     }
+
+    @Override
+    public String toString() {
+        if (this.type == PieceType.ROOK){
+            return " R ";
+        }
+        if (this.type == PieceType.KNIGHT){
+            return " N ";
+        }
+        if (this.type == PieceType.BISHOP){
+            return " B ";
+        }
+        if (this.type == PieceType.QUEEN){
+            return " Q ";
+        }
+        if (this.type == PieceType.KING){
+            return " K ";
+        }
+        if (this.type == PieceType.PAWN){
+            return " P ";
+        }
+        return "ChessPiece{" + "pieceColor=" + pieceColor + ", type=" + type + '}';
+    }
+
     public enum PieceType {
         KING,
         QUEEN,
