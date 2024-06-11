@@ -21,7 +21,8 @@ public class ServerFacade {
   private String port = "http://localhost:8080";
 
   public ServerFacade(int port) {
-
+    String host = "http://localhost:";
+      this.port = host + (Integer.toString(port));
   }
 
   public AuthData register(RegisterRequest request) throws IOException, URISyntaxException {
