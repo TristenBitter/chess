@@ -73,20 +73,36 @@ public class UserInterface {
         if(command.equals("register")){
           //call register to put in the credentials
           // somehow extract the credentials from the string
-          RegisterRequest registerRequest = new RegisterRequest(userInput[1], userInput[2], userInput[3]);
-          AuthData data = facade.register(registerRequest);
-          System.out.println("REGISTER SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+          try {
+            RegisterRequest registerRequest=new RegisterRequest(userInput[1], userInput[2], userInput[3]);
+            AuthData data=facade.register(registerRequest);
+            if(data == null){
+              preLoginUI();
+            }
+            System.out.println("REGISTER SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
-          postLoginUI(data);
-          break;
+            postLoginUI(data);
+            break;
+          }catch (Exception e){
+            System.out.println("oops that's not a valid registration, please enter all valid fields");
+            preLoginUI();
+          }
         }
         else if(command.equals("login")){
           //login the user with the credentials
-          LoginRequest loginRequest = new LoginRequest(userInput[1], userInput[2]);
-          AuthData data = facade.login(loginRequest);
-          System.out.println("LOGIN SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-          postLoginUI(data);
-          break;
+          try {
+            LoginRequest loginRequest=new LoginRequest(userInput[1], userInput[2]);
+            AuthData data=facade.login(loginRequest);
+            if(data == null){
+              preLoginUI();
+            }
+            System.out.println("LOGIN SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            postLoginUI(data);
+            break;
+          }catch (Exception e){
+            System.out.println("oops that's not a valid login, please try again");
+            preLoginUI();
+          }
         }
         else{
           System.out.println("I'm sorry, I did not recognize that command. Please try again or if you need help type help.");
@@ -154,37 +170,64 @@ public class UserInterface {
       String com = command[0];
 
         if (com.equals("create")) {
-          System.out.println("CREATION SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-          GameNameRequest gameNameRequest = new GameNameRequest(command[1]);
+          try {
+            GameNameRequest gameNameRequest=new GameNameRequest(command[1]);
 
-          CreateGameRequest gameID = facade.create(gameNameRequest, data.authToken());
-
-          System.out.printf("The GameID for your new game named %s is: %d%n", command[1], gameID.gameID());
+            CreateGameRequest gameID=facade.create(gameNameRequest, data.authToken());
+            if(data == null){
+              preLoginUI();
+            }
+            System.out.println("CREATION SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            System.out.printf("The GameID for your new game named %s is: %d%n", command[1], gameID.gameID());
+          }catch (Exception e){
+            System.out.println("oops, please try again. make sure to enter one name after the game");
+            postLoginUI(data);
+          }
 
         } else if (com.equals("list")) {
-          System.out.println("JOIN SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+          try {
 
-          ArrayList<ListGamesRequest> listOfGames= facade.list(data.authToken());
-          int i = 0;
-          for (ListGamesRequest game: listOfGames)
-               { i++;
-                 System.out.printf("%d. GameName: %s, GameID: %d, WhitePlayer: %s, BlackPlayer: %s", i, game.gameName(), game.gameID(), game.whiteUsername(), game.blackUsername());
-               }
+            ArrayList<ListGamesRequest> listOfGames=facade.list(data.authToken());
 
+            int i=0;
+            for (ListGamesRequest game : listOfGames) {
+              i++;
+              System.out.printf("%d. GameName: %s, GameID: %d, WhitePlayer: %s, BlackPlayer: %s", i, game.gameName(), game.gameID(), game.whiteUsername(), game.blackUsername());
+              System.out.printf("%n");
+            }
+          }catch (Exception e) {
+            System.out.println("oops, please try again");
+            postLoginUI(data);
+          }
         } else if (com.equals("join")) {
-          JoinGameRequest joinGameRequest = new JoinGameRequest(command[2], Integer.parseInt(command[1]));
-          facade.join(joinGameRequest, data.authToken());
-          System.out.println("JOIN SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-          break;
+          try {
+            JoinGameRequest joinGameRequest=new JoinGameRequest(command[2], Integer.parseInt(command[1]));
+            boolean join = facade.join(joinGameRequest, data.authToken());
+            if(join == false){
+              postLoginUI(data);
+            }else {
+              // call our gameMoves UI
+              postLoginUI(data);
+            }
+            break;
+          }catch (Exception e) {
+            System.out.println("oops that's not a valid join request, please try again. make sure to enter all the required fields");
+            postLoginUI(data);
+          }
 
         }else if (com.equals("observe")) {
-          CreateGameRequest id = new CreateGameRequest(Integer.parseInt(command[1]));
-          facade.observe(id, data.authToken());
-          System.out.println("observe SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+          try {
+            CreateGameRequest id=new CreateGameRequest(Integer.parseInt(command[1]));
+            facade.observe(id, data.authToken());
+            System.out.println("observe SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+          }catch (Exception e) {
+            System.out.println("oops that's not a valid request, please try again. Make sure to enter all required fields");
+            postLoginUI(data);
+          }
 
         }else if (com.equals("logout")) {
           facade.logout(new LogoutRequest(data.authToken()), data.authToken());
-          break;
+          preLoginUI();
         } else {
           System.out.println("I'm sorry I didn't recognize that, please type HELP for help with commands%n[LOGGED_IN]>>> ");
         }

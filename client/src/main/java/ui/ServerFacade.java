@@ -1,16 +1,22 @@
 package ui;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import model.*;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -58,7 +64,11 @@ public class ServerFacade {
         AuthData authData=new Gson().fromJson(inputStreamReader, AuthData.class);
         System.out.println(authData);
         return authData;
+      }catch (Exception e){
+        System.out.println("oops that's not a valid registration, please try again");
+        return null;
       }
+
     }
     public AuthData login(LoginRequest loginRequest) throws IOException, URISyntaxException {
 
@@ -92,6 +102,9 @@ public class ServerFacade {
         AuthData authData=new Gson().fromJson(inputStreamReader, AuthData.class);
         System.out.println(authData);
         return authData;
+      }catch (Exception e){
+        System.out.println("oops that's not a valid login, please try again");
+        return null;
       }
 
     }
@@ -119,6 +132,9 @@ public class ServerFacade {
        CreateGameRequest id =new Gson().fromJson(inputStreamReader, CreateGameRequest.class);
         System.out.println(id);
         return id;
+      }catch (Exception e){
+        System.out.println("oops that's not a valid creation request, please try again");
+        return null;
       }
   }
 
@@ -141,16 +157,31 @@ public class ServerFacade {
     try (InputStream respBody=http.getInputStream()) {
       InputStreamReader inputStreamReader=new InputStreamReader(respBody);
 
+      // Read the raw JSON response
+      JsonObject jsonResponse = JsonParser.parseReader(inputStreamReader).getAsJsonObject();
 
-      ArrayList<ListGamesRequest> games = new ArrayList<>();
-      games.add(new Gson().fromJson(inputStreamReader, ListGamesRequest.class));
-      System.out.println(games);
-      return games;
+      if (jsonResponse.has("games")) {
+        ArrayList<ListGamesRequest> games = new Gson().fromJson(jsonResponse.get("games"), new TypeToken<ArrayList<ListGamesRequest>>(){}.getType());
+
+        return games;
+      } else {
+        System.out.println("Unexpected JSON format");
+        return null;
+      }
+
+    } catch (JsonSyntaxException e) {
+      e.printStackTrace();
+      System.out.println("Error: Invalid JSON format");
+      return null;
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.out.println("oops that's not a valid list games request, please try again");
+      return null;
     }
 
   }
 
-  public void join(JoinGameRequest joinGameRequest, String authToken) throws IOException, URISyntaxException {
+  public boolean join(JoinGameRequest joinGameRequest, String authToken) throws IOException, URISyntaxException {
     URI uri=new URI(port + "/game");
     HttpURLConnection http=(HttpURLConnection) uri.toURL().openConnection();
     http.setRequestMethod("PUT");
@@ -175,8 +206,12 @@ public class ServerFacade {
     try (InputStream respBody=http.getInputStream()) {
       InputStreamReader inputStreamReader=new InputStreamReader(respBody);
       System.out.println("JOIN WAS SUCCESSFUL");
+      return true;
+    }catch (Exception e){
+      System.out.println("oops that's not a valid join, please try again");
+      return false;
     }
-    System.out.println("JOIN WAS SUCCESSFUL");
+
 
 
   }
@@ -215,8 +250,8 @@ public class ServerFacade {
     try (InputStream respBody=http.getInputStream()) {
       InputStreamReader inputStreamReader=new InputStreamReader(respBody);
 
-//      AuthData authData=new Gson().fromJson(inputStreamReader, AuthData.class);
-//      System.out.println(authData);
+    }catch (Exception e){
+      System.out.println("oops something went wrong, please try again");
     }
 
   }
