@@ -27,9 +27,11 @@ public class ServerFacadeTests {
         System.out.println("Started test HTTP server on " + port);
         facade = new ServerFacade(port);
 
+    }
+    @BeforeEach
+    public void clearDB() throws DataAccessException{
         ClearService clearDB = new ClearService();
         clearDB.clearDB();
-
     }
 
 
