@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class UserInterface {
-  private static ServerFacade facade = new ServerFacade();
+  private static ServerFacade facade = new ServerFacade(8080);
   public static void main(String[] args) throws Exception {
     while (true) {
       System.out.printf("Welcome to my CS240 Chess app! Type help to get started%n[LOGGED_OUT]>>> ");

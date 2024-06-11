@@ -19,7 +19,12 @@ import static java.lang.Thread.sleep;
 public class ServerFacade {
   private ClientCommunicator clientCommunicator = new ClientCommunicator();
   private String port = "http://localhost:8080";
-    public AuthData register(RegisterRequest request) throws IOException, URISyntaxException {
+
+  public ServerFacade(int port) {
+
+  }
+
+  public AuthData register(RegisterRequest request) throws IOException, URISyntaxException {
 //      String path = "/user";
 //      AuthData data = clientCommunicator.postMethod(port, path, request);
 //      return data;
@@ -173,10 +178,10 @@ public class ServerFacade {
     http.connect();
 
     // Output the response body
-//    try (InputStream respBody=http.getInputStream()) {
-//      InputStreamReader inputStreamReader=new InputStreamReader(respBody);
-//      System.out.println("JOIN WAS SUCCESSFUL");
-//    }
+    try (InputStream respBody=http.getInputStream()) {
+      InputStreamReader inputStreamReader=new InputStreamReader(respBody);
+      System.out.println("JOIN WAS SUCCESSFUL");
+    }
     System.out.println("JOIN WAS SUCCESSFUL");
 
 
