@@ -21,10 +21,10 @@ public class ListGames implements Route {
       ListGamesService listGamesService=new ListGamesService();
       ArrayList<ListGamesRequest> result=listGamesService.listGames(listGamesAuthTok);
 
-      //ReturnGamesRequest answer=new ReturnGamesRequest(result);
+      ReturnGamesRequest answer=new ReturnGamesRequest(result);
 
       response.status(200);
-      return new Gson().toJson(result);
+      return new Gson().toJson(answer);
 
     } catch (DataAccessException e) {
       ErrorMessage error=new ErrorMessage("Error: unauthorized");
