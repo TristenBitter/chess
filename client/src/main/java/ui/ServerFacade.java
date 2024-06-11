@@ -223,7 +223,7 @@ public class ServerFacade {
 
   }
 
-  public void logout(LogoutRequest logoutRequest, String authToken) throws IOException, URISyntaxException{
+  public boolean logout(LogoutRequest logoutRequest, String authToken) throws IOException, URISyntaxException{
 
     URI uri=new URI(port + "/session");
     HttpURLConnection http=(HttpURLConnection) uri.toURL().openConnection();
@@ -249,9 +249,10 @@ public class ServerFacade {
     // Output the response body
     try (InputStream respBody=http.getInputStream()) {
       InputStreamReader inputStreamReader=new InputStreamReader(respBody);
-
+      return true;
     }catch (Exception e){
       System.out.println("oops something went wrong, please try again");
+      return false;
     }
 
   }

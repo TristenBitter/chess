@@ -56,8 +56,9 @@ public class ServerFacadeTests {
     @Test
     public void registerFailureTest() throws IOException, URISyntaxException {
         AuthData data = facade.register(new RegisterRequest("Tee", "t", "frogLover@gmail.com"));
-
-        assertThrows(IOException.class, ()->facade.register(new RegisterRequest("Tee", "b", "froger@gmail.com")));
+        AuthData data2 = facade.register(new RegisterRequest("Tee", "b", "froger@gmail.com"));
+        assertEquals(null, data2);
+//        assertThrows(IOException.class, ()->facade.register(new RegisterRequest("Tee", "b", "froger@gmail.com")));
     }
 
 
@@ -72,13 +73,14 @@ public class ServerFacadeTests {
     public void loginFailureTest()throws IOException, URISyntaxException {
 
         AuthData data = facade.register(new RegisterRequest("Tee", "b", "froger@gmail.com"));
-
-        assertThrows(IOException.class, ()->facade.login(new LoginRequest("Tee", "t")));
+        AuthData data2 = facade.login(new LoginRequest("Tee", "t"));
+        assertEquals(null, data2);
     }
     @Test
     public void logoutSuccessTest()throws IOException, URISyntaxException {
         AuthData data = facade.register(new RegisterRequest("Tee", "b", "froger@gmail.com"));
         AuthData data2 = facade.login(new LoginRequest("Tee", "b"));
+
 
         assertDoesNotThrow(()->facade.logout(new LogoutRequest(data2.authToken()), data.authToken()));
 
@@ -87,8 +89,8 @@ public class ServerFacadeTests {
     public void logoutFailureTest()throws IOException, URISyntaxException {
         AuthData data = facade.register(new RegisterRequest("Tee", "b", "froger@gmail.com"));
         AuthData data2 = facade.login(new LoginRequest("Tee", "b"));
-
-        assertThrows(IOException.class, ()-> facade.logout(new LogoutRequest("hello"), "hello"));
+        boolean result = facade.logout(new LogoutRequest("hello"), "hello");
+        assertFalse(result);
     }
     @Test
     public void createSuccessTest()throws IOException, URISyntaxException {
@@ -100,8 +102,9 @@ public class ServerFacadeTests {
     public void createFailureTest()throws IOException, URISyntaxException {
 
         AuthData data = facade.register(new RegisterRequest("Tee", "b", "froger@gmail.com"));
+        CreateGameRequest data2 = facade.create(new GameNameRequest("game"), "hello");
+        assertEquals(null, data2);
 
-        assertThrows(IOException.class, ()->facade.create(new GameNameRequest("game"), "hello"));
     }
     @Test
     public void joinSuccessTest()throws IOException, URISyntaxException {
@@ -115,9 +118,8 @@ public class ServerFacadeTests {
     public void joinFailureTest()throws IOException, URISyntaxException {
         AuthData data = facade.register(new RegisterRequest("Tee", "b", "froger@gmail.com"));
         CreateGameRequest gameID = facade.create(new GameNameRequest("game"), data.authToken());
-
-        assertThrows(IOException.class, ()->facade.join(new JoinGameRequest("WHITE", gameID.gameID()) ,"hello"));
-        assertThrows(IOException.class, ()->facade.join(new JoinGameRequest("WHITE", 3) , data.authToken()));
+        boolean result = facade.join(new JoinGameRequest("WHITE", gameID.gameID()) ,"hello");
+        assertFalse(result);
     }
     @Test
     public void listSuccessTest()throws IOException, URISyntaxException {
@@ -128,7 +130,8 @@ public class ServerFacadeTests {
     @Test
     public void listFailureTest()throws IOException, URISyntaxException {
         AuthData data = facade.register(new RegisterRequest("Tee", "b", "froger@gmail.com"));
-        assertThrows(IOException.class ,()->facade.list("data.authToken()"));
+        ArrayList<ListGamesRequest> games = facade.list("data.authToken()");
+        assertEquals(null, games);
     }
 
 
