@@ -25,9 +25,6 @@ public class ServerFacade {
   }
 
   public AuthData register(RegisterRequest request) throws IOException, URISyntaxException {
-//      String path = "/user";
-//      AuthData data = clientCommunicator.postMethod(port, path, request);
-//      return data;
 
       // Specify the desired endpoint
       URI uri=new URI(port + "/user");
@@ -63,10 +60,6 @@ public class ServerFacade {
       }
     }
     public AuthData login(LoginRequest loginRequest) throws IOException, URISyntaxException {
-//        RegisterRequest request = new RegisterRequest(loginRequest.username(), loginRequest.password(), "null");
-//        String path = "/session";
-//        AuthData data = clientCommunicator.postMethod(port, path, request);
-//        return data;
 
       URI uri=new URI(port + "/session");
       HttpURLConnection http=(HttpURLConnection) uri.toURL().openConnection();
