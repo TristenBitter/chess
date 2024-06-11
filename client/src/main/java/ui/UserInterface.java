@@ -121,7 +121,6 @@ public class UserInterface {
   public static void postLoginUI(AuthData data) throws Exception{
     while (true) {
       System.out.printf("please type in a command from the list provided below%n");
-
       System.out.print("\u001b[36;100m");
       System.out.printf("create <NAME> ");
       System.out.print(EscapeSequences.SET_TEXT_COLOR_WHITE);
@@ -161,34 +160,26 @@ public class UserInterface {
       Scanner scanner = new Scanner(System.in);
       String line = scanner.nextLine();
       var command = line.split(" ");
-
       if (line.equals("help") || line.equals("Help") || line.equals("HELP")) {
-        //Enter preLogin section of UI
         postLoginHelp(data);
         break;
       }
       String com = command[0];
-
         if (com.equals("create")) {
           try {
             GameNameRequest gameNameRequest=new GameNameRequest(command[1]);
-
             CreateGameRequest gameID=facade.create(gameNameRequest, data.authToken());
             if(data == null){
               preLoginUI();
             }
-            System.out.println("CREATION SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             System.out.printf("The GameID for your new game named %s is: %d%n", command[1], gameID.gameID());
           }catch (Exception e){
             System.out.println("oops, please try again. make sure to enter one name after the game");
             postLoginUI(data);
           }
-
         } else if (com.equals("list")) {
           try {
-
             ArrayList<ListGamesRequest> listOfGames=facade.list(data.authToken());
-
             int i=0;
             for (ListGamesRequest game : listOfGames) {
               i++;
@@ -214,17 +205,9 @@ public class UserInterface {
             System.out.println("oops that's not a valid join request, please try again. make sure to enter all the required fields");
             postLoginUI(data);
           }
-
         }else if (com.equals("observe")) {
-          try {
             CreateGameRequest id=new CreateGameRequest(Integer.parseInt(command[1]));
             facade.observe(id, data.authToken());
-            System.out.println("observe SUCCESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-          }catch (Exception e) {
-            System.out.println("oops that's not a valid request, please try again. Make sure to enter all required fields");
-            postLoginUI(data);
-          }
-
         }else if (com.equals("logout")) {
           facade.logout(new LogoutRequest(data.authToken()), data.authToken());
           preLoginUI();
