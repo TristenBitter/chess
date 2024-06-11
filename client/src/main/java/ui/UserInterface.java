@@ -3,10 +3,13 @@ package ui;
 import model.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class UserInterface {
   private static ServerFacade facade = new ServerFacade(8080);
+  private static  Map<Integer,Integer> gameIDs = new HashMap<>();
   public static void main(String[] args) throws Exception {
     while (true) {
       System.out.printf("Welcome to my CS240 Chess app! Type help to get started%n[LOGGED_OUT]>>> ");
@@ -147,11 +150,6 @@ public class UserInterface {
       System.out.printf("--> to logout of this account.%n");
 
       System.out.print("\u001b[36;100m");
-      System.out.printf("quit ");
-      System.out.print(EscapeSequences.SET_TEXT_COLOR_WHITE);
-      System.out.printf("--> to exit this page.%n");
-
-      System.out.print("\u001b[36;100m");
       System.out.printf("help ");
       System.out.print(EscapeSequences.SET_TEXT_COLOR_WHITE);
       System.out.printf("--> for help with commands.%n%n");
@@ -169,6 +167,7 @@ public class UserInterface {
           try {
             GameNameRequest gameNameRequest=new GameNameRequest(command[1]);
             CreateGameRequest gameID=facade.create(gameNameRequest, data.authToken());
+
             if(data == null){
               preLoginUI();
             }
@@ -181,9 +180,11 @@ public class UserInterface {
           try {
             ArrayList<ListGamesRequest> listOfGames=facade.list(data.authToken());
             int i=0;
+
             for (ListGamesRequest game : listOfGames) {
               i++;
-              System.out.printf("%d. GameName: %s, GameID: %d, WhitePlayer: %s, BlackPlayer: %s", i, game.gameName(), game.gameID(), game.whiteUsername(), game.blackUsername());
+              gameIDs.put(i, game.gameID());
+              System.out.printf("%d. GameName: %s, WhitePlayer: %s, BlackPlayer: %s", i, game.gameName(), game.whiteUsername(), game.blackUsername());
               System.out.printf("%n");
             }
           }catch (Exception e) {
@@ -192,7 +193,7 @@ public class UserInterface {
           }
         } else if (com.equals("join")) {
           try {
-            JoinGameRequest joinGameRequest=new JoinGameRequest(command[2], Integer.parseInt(command[1]));
+            JoinGameRequest joinGameRequest=new JoinGameRequest(command[2], gameIDs.get(Integer.parseInt(command[1])));
             boolean join = facade.join(joinGameRequest, data.authToken());
             if(join == false){
               postLoginUI(data);
