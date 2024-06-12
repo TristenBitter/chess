@@ -10,6 +10,19 @@ public class WebSocketClient extends ServerFacade{
     super(port);
   }
 
+  public class Main {
+
+    public static void main(String[] args) throws Exception {
+      var ws = new WebSocketClient(8080);
+      Scanner scanner = new Scanner(System.in);
+
+      while (true){
+        ws.send(scanner.nextLine());
+      }
+    }
+  }
+
+
   public Session session;
 
   public void WSClient() throws Exception {
