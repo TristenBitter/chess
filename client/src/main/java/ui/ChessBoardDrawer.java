@@ -11,6 +11,8 @@ import java.util.Random;
 import static ui.EscapeSequences.*;
 public class ChessBoardDrawer {
 
+  public void ChessBoardDrawer(){}
+
   private static final int BOARD_SIZE_IN_SQUARES = 3;
   private static final int SQUARE_SIZE_IN_CHARS = 3;
   private static final int LINE_WIDTH_IN_CHARS = 1;
@@ -23,6 +25,26 @@ public class ChessBoardDrawer {
     // delete this later
     board.resetBoard();
 
+    PrintStream out = setUpScreen();
+
+    out.println();
+    whiteBoardDrawer(out);
+    blackBoardDrawer(out);
+
+  }
+
+  public void printWhiteBoard(){
+    PrintStream out = setUpScreen();
+    out.println();
+    whiteBoardDrawer(out);
+  }
+  public void printBlackBoard(){
+    PrintStream out = setUpScreen();
+    out.println();
+    blackBoardDrawer(out);
+  }
+
+  public static PrintStream setUpScreen(){
     var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
     out.print(ERASE_SCREEN);
     setBlack(out);
@@ -39,14 +61,7 @@ public class ChessBoardDrawer {
         out.print(EMPTY.repeat(LINE_WIDTH_IN_CHARS));
       }
     }
-
-    out.println();
-    whiteBoardDrawer(out);
-    blackBoardDrawer(out);
-
-
-
-
+    return out;
   }
 
   public static void whiteBoardDrawer(PrintStream out){
@@ -111,7 +126,7 @@ public class ChessBoardDrawer {
     }
   }
 
-  public  static void setPiece(int i, int j, PrintStream out){
+  public static void setPiece(int i, int j, PrintStream out){
     ChessPiece piece = board.getPiece(new ChessPosition(i,j));
     if(piece != null) {
       if(piece.getTeamColor().toString().equals("WHITE")) {
