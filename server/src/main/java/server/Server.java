@@ -30,8 +30,10 @@ public class Server {
 
         Spark.port(desiredPort);
 
+
         Spark.staticFiles.location("web");
 
+        Spark.webSocket("/ws", new WebSocket());
         Spark.post("/user", new Register());
         Spark.post("/game", new CreateGame());
         Spark.post("/session", new Login());

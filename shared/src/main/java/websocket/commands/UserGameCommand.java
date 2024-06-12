@@ -21,6 +21,7 @@ public class UserGameCommand {
         RESIGN
     }
 
+
     protected CommandType commandType;
 
     private final String authToken;

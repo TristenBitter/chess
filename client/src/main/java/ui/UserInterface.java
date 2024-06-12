@@ -1,5 +1,6 @@
 package ui;
 
+import chess.ChessBoard;
 import model.*;
 
 import java.util.ArrayList;
@@ -12,6 +13,8 @@ public class UserInterface {
   private static Map<Integer, Integer> gameIDs=new HashMap<>();
 
   private static ChessBoardDrawer drawer = new ChessBoardDrawer();
+
+  private static ChessBoard board = new ChessBoard();
 
   public static void main(String[] args) throws Exception {
     while (true) {
@@ -202,7 +205,7 @@ public class UserInterface {
             postLoginUI(data);
           } else {
             // call our gameMoves UI
-            postLoginUI(data);
+            gamePlayUI(data, gameIDs.get(Integer.parseInt(command[1])), command[2]);
           }
           break;
         } catch (Exception e) {
@@ -273,16 +276,16 @@ public class UserInterface {
       }
       if(command[0].equals("makeMove")){
         try {
+
          // MoveRequest move=new MoveRequest(command[1]);
           //CreateGameRequest gameID=facade.create(gameNameRequest, data.authToken());
 
-          if (data == null) {
-            preLoginUI();
-          }
+          //
+
           //System.out.printf("The GameID for your new game named %s is: %d%n", command[1], gameID.gameID());
         } catch (Exception e) {
-          System.out.println("oops, please try again. make sure to enter one name after the game");
-          postLoginUI(data);
+          System.out.println("oops, doesn't look like that's a valid move, please try again.");
+          gamePlayUI(data, gameID, color);
         }
 
       }
@@ -290,10 +293,14 @@ public class UserInterface {
         //check the possible moves of the given piece
         //this should be fun
 
+        //
+
       }
       if(command[0].equals("leave")){
         // take the player out of the game
         // leave this page
+
+
       }
       if(command[0].equals("resign")){
         //end the game
@@ -302,6 +309,9 @@ public class UserInterface {
         //leave this page
 
       }
+
+      /// handle the notification
+      // when we get a load game message print it out and update the local chess board
 
     }
 
