@@ -288,6 +288,7 @@ public class UserInterface {
       }
       if(command[0].equals("highlight")){
         //check the possible moves of the given piece
+        //this should be fun
 
       }
       if(command[0].equals("leave")){
