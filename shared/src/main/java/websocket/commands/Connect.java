@@ -8,4 +8,7 @@ public class Connect extends UserGameCommand{
     this.commandType= CommandType.CONNECT;
 
   }
+  public int getGameID(){
+    return gameID;
+  }
 }

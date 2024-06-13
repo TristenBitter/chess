@@ -33,7 +33,7 @@ public class Server {
 
         Spark.staticFiles.location("web");
 
-        Spark.webSocket("/ws", new WebSocket());
+        Spark.webSocket("/ws", new WebSocketServer());
         Spark.post("/user", new Register());
         Spark.post("/game", new CreateGame());
         Spark.post("/session", new Login());
