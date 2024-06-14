@@ -1,7 +1,11 @@
 package ui;
 
 import chess.ChessBoard;
+import com.google.gson.Gson;
 import model.*;
+import websocket.commands.Connect;
+import websocket.commands.Leave;
+import websocket.commands.Resign;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -206,7 +210,10 @@ public class UserInterface {
           } else {
             // call our gameMoves UI
             //connect
-            new WebSocketClient(8080);
+            WebSocketClient WSClient = new WebSocketClient(8080);
+            Connect connect = new Connect(data.authToken(), gameIDs.get(Integer.parseInt(command[1])));
+            WSClient.send(new Gson().toJson(connect));
+
             gamePlayUI(data, gameIDs.get(Integer.parseInt(command[1])), command[2]);
           }
           break;
@@ -296,25 +303,25 @@ public class UserInterface {
         //check the possible moves of the given piece
         //this should be fun
 
-        //
-
       }
       if(command[0].equals("leave")){
         // take the player out of the game
         // leave this page
+        WebSocketClient WSClient = new WebSocketClient(8080);
+        Leave leave = new Leave(data.authToken(), gameID);
+        WSClient.send(new Gson().toJson(leave));
 
-
+        postLoginUI(data);
       }
       if(command[0].equals("resign")){
         //end the game
-        //prevent future moves
-        // delete the game from the list of games in the database
-        //leave this page
+        WebSocketClient WSClient = new WebSocketClient(8080);
+        Resign resign = new Resign(data.authToken(), gameID);
+        WSClient.send(new Gson().toJson(resign));
+
+        postLoginUI(data);
 
       }
-
-      /// handle the notification
-      // when we get a load game message print it out and update the local chess board
 
     }
 

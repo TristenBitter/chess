@@ -20,7 +20,9 @@ import websocket.messages.Notifications;
 import javax.management.Notification;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import static chess.ChessGame.TeamColor.BLACK;
 import static chess.ChessGame.TeamColor.WHITE;
@@ -30,7 +32,7 @@ import static spark.Spark.connect;
 public class WebSocketServer{
 
 
-  private Map<Integer, Map<String, Session>> sessionData = new HashMap<>();
+  private Map<Integer, Set<Session>> sessionData = new HashMap<>();
 
   @OnWebSocketMessage
   public void onMessage(Session session, String message) {
@@ -38,8 +40,13 @@ public class WebSocketServer{
       UserGameCommand command = new Gson().fromJson(message, UserGameCommand.class);
 
       MemoryAuthDAO authDAO = new MemoryAuthDAO();
+      Connect connect = new Gson().fromJson(message, Connect.class);
+
+      sessionData.computeIfAbsent(connect.getGameID(), v->new HashSet<>());
+      sessionData.get(connect.getGameID()).add(session);
 
       // Throws a custom UnauthorizedException. Yours may work differently.
+
       String username =authDAO.getUsername(command.getAuthString());
 
       //saveSession(command.getGameID(), session);
@@ -62,20 +69,13 @@ public class WebSocketServer{
 
   private void connect(Session session, String message, String username) throws IOException, DataAccessException {
     Connect connect = new Gson().fromJson(message, Connect.class);
-    sessionData.get(connect.getGameID()).put(username, session);
     MySqlGameDAO gameDAO = new MySqlGameDAO();
     GameData gameData = gameDAO.getGame(connect.getGameID());
 
     //notify everyone but the current user that the current user connected (as observer or player) for this game
-    for(Session sesh : sessionData.get(connect.getGameID()).values()) {
-      if(!(sesh.equals(session))){
-        // inform them that the current user has joined them game
-        // get the color of the player somehow... if there is no color then write as an observer
+    for(Session s : sessionData.get(connect.getGameID())) {
+      if(!(s.equals(session))){
         String player = null;
-        //MySqlAuthDAO authDAO = new MySqlAuthDAO();
-        //gets username
-        //authDAO.getUsername(connect.getAuthString());
-
 
         String BlackUsername = gameData.blackUsername();
         String WhiteUsername = gameData.whiteUsername();
@@ -90,15 +90,15 @@ public class WebSocketServer{
           player = "Observer";
         }
         Notifications notifications = new Notifications("Player " + username + " has joined the game as the " + player);
-        sesh.getRemote().sendString(new Gson().toJson(notifications));
-        //sesh.getRemote().sendString("Player " + username + " has joined the game as the " + player );
+        s.getRemote().sendString(new Gson().toJson(notifications));
+        //s.getRemote().sendString("Player " + username + " has joined the game as the " + player );
 
       }
 
     }
-    sessionData.get(connect.getGameID()).get(session);
+    //sessionData.get(connect.getGameID()).get(session);
 
-    session.getRemote().sendString("you've joined the game, congrats!");
+    //session.getRemote().sendString("you've joined the game, congrats!");
 
     //send a LOAD_GAME message back to the client
 
@@ -121,17 +121,41 @@ public class WebSocketServer{
 
   }
 
-  private void leaveGame(Session session, String username, String message) {
+  private void leaveGame(Session session, String username, String message) throws DataAccessException, IOException {
     Leave leave = new Gson().fromJson(message, Leave.class);
+
+    MySqlGameDAO gameDAO = new MySqlGameDAO();
+    GameData gameData = gameDAO.getGame(leave.getGameID());
+
     int gameID = leave.getGameID();
     // do stuff
 
+    for(Session s : sessionData.get(gameID)) {
+      if (!(s.equals(session))) {
+        Notifications notifications=new Notifications("Player " + username + " has just left the game");
+        s.getRemote().sendString(new Gson().toJson(notifications));
+      }
+    }
   }
 
-  private void resign(Session session, String username, String message) {
+  private void resign(Session session, String username, String message) throws DataAccessException, IOException {
     Resign resign = new Gson().fromJson(message, Resign.class);
+    MySqlGameDAO gameDAO = new MySqlGameDAO();
+    GameData gameData = gameDAO.getGame(resign.getGameID());
+
     int gameID = resign.getGameID();
-    // do stuff
+    for(Session s : sessionData.get(gameID)) {
+      if (!(s.equals(session))) {
+        String player = gameData.blackUsername();
+        String BlackUsername = gameData.blackUsername();
+
+        if(BlackUsername.equals(username)){
+          player = gameData.whiteUsername();
+        }
+        Notifications notifications=new Notifications(" " + username + " has just forfeited the game, " + player + " Wins the Game!!!");
+        s.getRemote().sendString(new Gson().toJson(notifications));
+      }
+    }
 
   }
 
