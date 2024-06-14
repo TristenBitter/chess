@@ -1,18 +1,29 @@
 package handlers;
 
+import chess.ChessGame;
 import chess.ChessMove;
 import com.google.gson.Gson;
+import dataaccess.AuthDAO;
+import dataaccess.DataAccessException;
 import dataaccess.UnauthorizedException;
 import dataaccess.memory.MemoryAuthDAO;
+import dataaccess.sql.MySqlAuthDAO;
+import dataaccess.sql.MySqlGameDAO;
 import model.ErrorMessage;
+import model.GameData;
 import org.eclipse.jetty.websocket.api.annotations.*;
 import org.eclipse.jetty.websocket.api.*;
 import websocket.commands.*;
+import websocket.messages.LoadGame;
+import websocket.messages.Notifications;
 
+import javax.management.Notification;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static chess.ChessGame.TeamColor.BLACK;
+import static chess.ChessGame.TeamColor.WHITE;
 import static spark.Spark.connect;
 
 @WebSocket
@@ -37,7 +48,7 @@ public class WebSocketServer{
         case CONNECT -> connect(session, message, username);
         case MAKE_MOVE -> makeMove(session, username, message);
         case LEAVE -> leaveGame(session, username, message);
-//        case RESIGN -> resign(session, username, (ResignCommand) command);
+        case RESIGN -> resign(session, username, message);
       }
     }catch (Exception ex) {
       ex.printStackTrace();
@@ -49,10 +60,57 @@ public class WebSocketServer{
     remote.sendString(arg);
   }
 
-  private void connect(Session session, String message, String username){
+  private void connect(Session session, String message, String username) throws IOException, DataAccessException {
     Connect connect = new Gson().fromJson(message, Connect.class);
     sessionData.get(connect.getGameID()).put(username, session);
-    //sessionData.put(connect.getGameID(), session);
+    MySqlGameDAO gameDAO = new MySqlGameDAO();
+    GameData gameData = gameDAO.getGame(connect.getGameID());
+
+    //notify everyone but the current user that the current user connected (as observer or player) for this game
+    for(Session sesh : sessionData.get(connect.getGameID()).values()) {
+      if(!(sesh.equals(session))){
+        // inform them that the current user has joined them game
+        // get the color of the player somehow... if there is no color then write as an observer
+        String player = null;
+        //MySqlAuthDAO authDAO = new MySqlAuthDAO();
+        //gets username
+        //authDAO.getUsername(connect.getAuthString());
+
+
+        String BlackUsername = gameData.blackUsername();
+        String WhiteUsername = gameData.whiteUsername();
+
+        if(BlackUsername.equals(username)){
+          player = "BLACK Player";
+        }
+        if(WhiteUsername.equals(username)){
+          player = "WHITE Player";
+        }
+        else{
+          player = "Observer";
+        }
+        Notifications notifications = new Notifications("Player " + username + " has joined the game as the " + player);
+        sesh.getRemote().sendString(new Gson().toJson(notifications));
+        //sesh.getRemote().sendString("Player " + username + " has joined the game as the " + player );
+
+      }
+
+    }
+    sessionData.get(connect.getGameID()).get(session);
+
+    session.getRemote().sendString("you've joined the game, congrats!");
+
+    //send a LOAD_GAME message back to the client
+
+    LoadGame loadGame = new LoadGame(gameData.game());
+
+    session.getRemote().sendString(new Gson().toJson(loadGame));
+
+    //session.getRemote().send
+
+    //
+
+
   }
 
 
@@ -69,5 +127,15 @@ public class WebSocketServer{
     // do stuff
 
   }
+
+  private void resign(Session session, String username, String message) {
+    Resign resign = new Gson().fromJson(message, Resign.class);
+    int gameID = resign.getGameID();
+    // do stuff
+
+  }
+
+
+
 
 }

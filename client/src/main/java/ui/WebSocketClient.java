@@ -1,5 +1,7 @@
 package ui;
 
+import com.google.gson.Gson;
+
 import javax.websocket.*;
 import java.net.URI;
 import java.util.Scanner;
@@ -20,7 +22,8 @@ public class WebSocketClient extends ServerFacade{
 
     this.session.addMessageHandler(new MessageHandler.Whole<String>() {
       public void onMessage(String message) {
-        System.out.println(message);
+        String msg = new Gson().fromJson(message, String.class);
+        System.out.println(msg);
       }
     });
   }

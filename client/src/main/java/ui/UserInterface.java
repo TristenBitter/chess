@@ -205,6 +205,8 @@ public class UserInterface {
             postLoginUI(data);
           } else {
             // call our gameMoves UI
+            //connect
+            new WebSocketClient(8080);
             gamePlayUI(data, gameIDs.get(Integer.parseInt(command[1])), command[2]);
           }
           break;
@@ -213,6 +215,7 @@ public class UserInterface {
           postLoginUI(data);
         }
       } else if (com.equals("observe")) {
+
         CreateGameRequest id=new CreateGameRequest(Integer.parseInt(command[1]));
         facade.observe(id, data.authToken());
       } else if (com.equals("logout")) {
