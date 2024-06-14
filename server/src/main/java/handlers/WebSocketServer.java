@@ -11,6 +11,7 @@ import dataaccess.sql.MySqlAuthDAO;
 import dataaccess.sql.MySqlGameDAO;
 import model.ErrorMessage;
 import model.GameData;
+import model.JoinGameRequest;
 import org.eclipse.jetty.websocket.api.annotations.*;
 import org.eclipse.jetty.websocket.api.*;
 import websocket.commands.*;
@@ -119,20 +120,31 @@ public class WebSocketServer{
     ChessMove move = makeMove.getMove();
     // do stuff now
 
+
+
   }
 
   private void leaveGame(Session session, String username, String message) throws DataAccessException, IOException {
     Leave leave = new Gson().fromJson(message, Leave.class);
 
     MySqlGameDAO gameDAO = new MySqlGameDAO();
-    GameData gameData = gameDAO.getGame(leave.getGameID());
-
+    String authToken = leave.getAuthString();
     int gameID = leave.getGameID();
-    // do stuff
+    // remove the player from the game in the DB
+    GameData gameData = gameDAO.getGame(gameID);
+    String color="";
+    if(gameData.blackUsername().equals(username)){
+      color = "BLACK";
+    }
+    else if(gameData.whiteUsername().equals(username)){
+      color = "WHITE";
+    }
+    JoinGameRequest requestedGame = new JoinGameRequest(color, gameID);
+    gameDAO.joinGame(requestedGame, "null");
 
     for(Session s : sessionData.get(gameID)) {
       if (!(s.equals(session))) {
-        Notifications notifications=new Notifications("Player " + username + " has just left the game");
+        Notifications notifications=new Notifications(" " + username + " has just left the game");
         s.getRemote().sendString(new Gson().toJson(notifications));
       }
     }
@@ -142,6 +154,19 @@ public class WebSocketServer{
     Resign resign = new Gson().fromJson(message, Resign.class);
     MySqlGameDAO gameDAO = new MySqlGameDAO();
     GameData gameData = gameDAO.getGame(resign.getGameID());
+
+
+
+    // change the chess game
+    ChessGame chessGame = gameData.game();
+ cx
+    //call the setter to change the value
+
+
+    //update it in the database
+
+
+
 
     int gameID = resign.getGameID();
     for(Session s : sessionData.get(gameID)) {

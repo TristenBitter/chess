@@ -89,6 +89,10 @@ public class MySqlGameDAO implements GameDAO {
     return 200;
   }
 
+  public void updateGame(){
+    // do the update
+  }
+
   @Override
   public void addPlayerAsColor(String color,String username, GameData game ) throws DataAccessException{
     int gameID = game.gameID();
