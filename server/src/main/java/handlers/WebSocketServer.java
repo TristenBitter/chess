@@ -141,6 +141,22 @@ public class WebSocketServer{
       }
       else {
         chessGame.makeMove(move);
+        boolean isInCheck = false;
+        boolean isInCheckmate = false;
+        boolean isInStalemate = false;
+        if(chessGame.isInCheck(chessGame.getOpponentsTeamColor(chessGame.getTeamTurn()))){
+          // notify the other player that they are in check
+          isInCheck = true;
+        }
+        if(chessGame.isInCheckmate(chessGame.getOpponentsTeamColor(chessGame.getTeamTurn()))){
+          isInCheckmate = true;
+          chessGame.setGameOver();
+        }
+        if(chessGame.isInStalemate(chessGame.getOpponentsTeamColor(chessGame.getTeamTurn()))){
+          isInStalemate = true;
+          chessGame.setGameOver();
+        }
+
         GameData gameData2=gameDAO.getGame(gameID);
         gameDAO.updateGame(gameData2);
 
@@ -159,6 +175,25 @@ public class WebSocketServer{
 
             Notifications notifications = new Notifications("Player " + username + " has made a Move from " + sP + " to " + eP);
             s.getRemote().sendString(new Gson().toJson(notifications));
+
+            Notifications congratulationsNote = new Notifications("YOU WIN!!! CONGRATULATIONS!!!");
+
+            if(isInCheck) {
+              Notifications notificationInCheck=new Notifications("You are in Check");
+              s.getRemote().sendString(new Gson().toJson(notificationInCheck));
+            }
+            if(isInCheckmate) {
+              Notifications notificationInCheckmate=new Notifications("You are in Checkmate... Game Over");
+              s.getRemote().sendString(new Gson().toJson(notificationInCheckmate));
+              session.getRemote().sendString(new Gson().toJson(congratulationsNote));
+            }
+            if(isInStalemate) {
+              Notifications notificationInStalemate=new Notifications("You are in Stalemate... Game Over");
+              s.getRemote().sendString(new Gson().toJson(notificationInStalemate));
+              session.getRemote().sendString(new Gson().toJson(congratulationsNote));
+            }
+
+
           }
         }
       }
