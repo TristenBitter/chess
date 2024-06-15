@@ -18,8 +18,8 @@ public class ChessGame {
     private ChessPiece.PieceType type = ChessPiece.PieceType.PAWN;
     private TeamColor teamTurn;
     private ChessPiece piece = new ChessPiece(getTeamTurn(), type);
+
     private boolean isGameOver = false;
-   // private String winner = null;
 
     @Override
     public boolean equals(Object o) {
@@ -44,6 +44,13 @@ public class ChessGame {
 
     }
 
+    public boolean isGameOver() {
+        return isGameOver;
+    }
+
+    public void setGameOver() {
+        isGameOver=false;
+    }
     /**
      * @return Which team's turn it is
      */
@@ -66,14 +73,6 @@ public class ChessGame {
      ***********************************************************************************************/
     public void setTeamTurn(TeamColor team) {
         this.teamTurn = team;
-    }
-
-    public boolean isGameOver() {
-        return isGameOver;
-    }
-
-    public void setGameOver() {
-        isGameOver=true;
     }
 
     /**

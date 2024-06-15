@@ -19,6 +19,7 @@ import org.eclipse.jetty.websocket.api.*;
 import websocket.commands.*;
 import websocket.messages.LoadGame;
 import websocket.messages.Notifications;
+import websocket.messages.Error;
 
 import javax.management.Notification;
 import java.io.IOException;
@@ -33,7 +34,7 @@ import static spark.Spark.connect;
 
 @WebSocket
 public class WebSocketServer{
-
+  public WebSocketServer(){}
 
   private Map<Integer, Set<Session>> sessionData = new HashMap<>();
   private ChessGame chessGame;
@@ -42,19 +43,18 @@ public class WebSocketServer{
   private ChessPosition chessPosition;
 
   @OnWebSocketMessage
-  public void onMessage(Session session, String message) throws IOException {
-    try {
-      UserGameCommand command = new Gson().fromJson(message, UserGameCommand.class);
+  public void onMessage(Session session, String message) throws Exception {
+      UserGameCommand command=new Gson().fromJson(message, UserGameCommand.class);
 
-      MemoryAuthDAO authDAO = new MemoryAuthDAO();
-      Connect connect = new Gson().fromJson(message, Connect.class);
+      MySqlAuthDAO authDAO=new MySqlAuthDAO();
+      Connect connect=new Gson().fromJson(message, Connect.class);
 
-      sessionData.computeIfAbsent(connect.getGameID(), v->new HashSet<>());
+      sessionData.computeIfAbsent(connect.getGameID(), v -> new HashSet<>());
       sessionData.get(connect.getGameID()).add(session);
 
       // Throws a custom UnauthorizedException. Yours may work differently.
 
-      String username =authDAO.getUsername(command.getAuthString());
+      String username=authDAO.getUsername(command.getAuthString());
 
       //saveSession(command.getGameID(), session);
 
@@ -64,31 +64,60 @@ public class WebSocketServer{
         case LEAVE -> leaveGame(session, username, message);
         case RESIGN -> resign(session, username, message);
       }
-    }catch (Exception ex) {
-//      ex.printStackTrace();
-//      Error error = new Error("Error " + ex.getMessage());
-//      throw new IOException(error);
-      //sendMessage(session.getRemote(), "Error: " + ex.getMessage());
-    }
+
+//    }catch (Exception ex) {
+////      ex.printStackTrace();
+//      Exception throwable = ex;
+//
+//      Error error=new Error("Error: "+ throwable.getMessage());
+//      String e = new Gson().toJson(error);
+//      session.getRemote().sendString(e);
+//    }
   }
 
-  private void sendMessage(RemoteEndpoint remote, String arg) throws IOException {
+  private void sendMessage(RemoteEndpoint remote, String arg) throws Exception {
     remote.sendString(arg);
+  }
+
+  private void sessionTimeout(){
+    Set<Session> oldSessions=new HashSet<>();
+    for (Set<Session> sessions : sessionData.values()) {
+      for (Session session : sessions) {
+        if (!(session.isOpen())) {
+          oldSessions.add(session);
+        }
+      }
+    }
+    for (Session session : oldSessions) {
+      sessionData.values().remove(session);
+    }
   }
 
   private void connect(Session session, String message, String username) throws IOException, DataAccessException {
     Connect connect = new Gson().fromJson(message, Connect.class);
     MySqlGameDAO gameDAO = new MySqlGameDAO();
 
-//    if(username == null){
-//      Error error = new Error("Error connecting to game, Bad AuthToken");
-//      throw new IOException(error);
-//    }
+    if(username == null){
+
+      sessionTimeout();
+      if(session.isOpen()) {
+        Error error=new Error("Error connecting to game, Bad AuthToken");
+        String e=new Gson().toJson(error);
+        //throw new IOException(error.getMessage());
+        session.getRemote().sendString(e);
+      }
+      return;
+    }
 
 
-    if(gameDAO.getGame(connect.getGameID()) == null){
-      Error error = new Error("Error connecting to game, Bad GameID");
-      throw new IOException(error);
+    if(gameDAO.getGame(connect.getGameID()) == null) {
+      sessionTimeout();
+      if(session.isOpen()) {
+        Error error=new Error("Error connecting to game, Bad GameID");
+        String e=new Gson().toJson(error);
+        session.getRemote().sendString(e);
+      }
+      return;
     }
 
     GameData gameData = gameDAO.getGame(connect.getGameID());
@@ -102,6 +131,8 @@ public class WebSocketServer{
     //notify everyone but the current user that the current user connected (as observer or player) for this game
     for(Session s : sessionData.get(connect.getGameID())) {
       if(!(s.equals(session))){
+        sessionTimeout();
+        if (s.isOpen()){
         String player = null;
 
         String BlackUsername = gameData.blackUsername();
@@ -116,10 +147,13 @@ public class WebSocketServer{
         else{
           player = "Observer";
         }
-        Notifications notifications = new Notifications("Player " + username + " has joined the game as the " + player);
-        s.getRemote().sendString(new Gson().toJson(notifications));
-        //s.getRemote().sendString("Player " + username + " has joined the game as the " + player );
-
+          sessionTimeout();
+          if (s.isOpen()) {
+            Notifications notifications=new Notifications("Player " + username + " has joined the game as the " + player);
+            s.getRemote().sendString(new Gson().toJson(notifications));
+            //s.getRemote().sendString("Player " + username + " has joined the game as the " + player );
+          }
+        }
       }
 
     }
@@ -129,10 +163,12 @@ public class WebSocketServer{
 
     //send a LOAD_GAME message back to the client
 
+    sessionTimeout();
+    if(session.isOpen()) {
+      LoadGame loadGame=new LoadGame(gameData.game());
 
-    LoadGame loadGame = new LoadGame(gameData.game());
-
-    session.getRemote().sendString(new Gson().toJson(loadGame));
+      session.getRemote().sendString(new Gson().toJson(loadGame));
+    }
 
   }
 
@@ -144,6 +180,7 @@ public class WebSocketServer{
     // do stuff now
     try {
       if(chessGame.isGameOver()){
+        //TODO: send back to the user that they won the game
         System.out.println("The Game is over, no more moves can be made");
       }
       else {
@@ -167,37 +204,48 @@ public class WebSocketServer{
         GameData gameData2=gameDAO.getGame(gameID);
         gameDAO.updateGame(gameData2);
 
+
+
         for(Session s : sessionData.get(gameID)) {
-          // send load_game msg to all clients
-          LoadGame loadGame = new LoadGame(gameData2.game());
+          sessionTimeout();
+          if (s.isOpen()) {
+            // send load_game msg to all clients
+            LoadGame loadGame=new LoadGame(gameData2.game());
 
-          s.getRemote().sendString(new Gson().toJson(loadGame));
+            s.getRemote().sendString(new Gson().toJson(loadGame));
 
-          // send a notification to the others
-          if(!(s.equals(session))){
-            String BlackUsername = gameData2.blackUsername();
+            // send a notification to the others
+            if (!(s.equals(session))) {
+              String BlackUsername=gameData2.blackUsername();
 
-            String sP = chessMove.getStartPosition().toString();
-            String eP = chessMove.getEndPosition().toString();
+              String sP=chessMove.getStartPosition().toString();
+              String eP=chessMove.getEndPosition().toString();
 
-            Notifications notifications = new Notifications("Player " + username + " has made a Move from " + sP + " to " + eP);
-            s.getRemote().sendString(new Gson().toJson(notifications));
+              sessionTimeout();
+              if(s.isOpen()) {
+                Notifications notifications=new Notifications("Player " + username + " has made a Move from " + sP + " to " + eP);
+                s.getRemote().sendString(new Gson().toJson(notifications));
+              }
 
-            Notifications congratulationsNote = new Notifications("YOU WIN!!! CONGRATULATIONS!!!");
+              Notifications congratulationsNote=new Notifications("YOU WIN!!! CONGRATULATIONS!!!");
 
-            if(isInCheck) {
-              Notifications notificationInCheck=new Notifications("You are in Check");
-              s.getRemote().sendString(new Gson().toJson(notificationInCheck));
-            }
-            if(isInCheckmate) {
-              Notifications notificationInCheckmate=new Notifications("You are in Checkmate... Game Over");
-              s.getRemote().sendString(new Gson().toJson(notificationInCheckmate));
-              session.getRemote().sendString(new Gson().toJson(congratulationsNote));
-            }
-            if(isInStalemate) {
-              Notifications notificationInStalemate=new Notifications("You are in Stalemate... Game Over");
-              s.getRemote().sendString(new Gson().toJson(notificationInStalemate));
-              session.getRemote().sendString(new Gson().toJson(congratulationsNote));
+              sessionTimeout();
+              if(s.isOpen()) {
+                if (isInCheck) {
+                  Notifications notificationInCheck=new Notifications("You are in Check");
+                  s.getRemote().sendString(new Gson().toJson(notificationInCheck));
+                }
+                if (isInCheckmate) {
+                  Notifications notificationInCheckmate=new Notifications("You are in Checkmate... Game Over");
+                  s.getRemote().sendString(new Gson().toJson(notificationInCheckmate));
+                  session.getRemote().sendString(new Gson().toJson(congratulationsNote));
+                }
+                if (isInStalemate) {
+                  Notifications notificationInStalemate=new Notifications("You are in Stalemate... Game Over");
+                  s.getRemote().sendString(new Gson().toJson(notificationInStalemate));
+                  session.getRemote().sendString(new Gson().toJson(congratulationsNote));
+                }
+              }
             }
           }
         }
@@ -227,8 +275,11 @@ public class WebSocketServer{
 
     for(Session s : sessionData.get(gameID)) {
       if (!(s.equals(session))) {
-        Notifications notifications=new Notifications(" " + username + " has just left the game");
-        s.getRemote().sendString(new Gson().toJson(notifications));
+        sessionTimeout();
+        if (s.isOpen()) {
+          Notifications notifications=new Notifications(" " + username + " has just left the game");
+          s.getRemote().sendString(new Gson().toJson(notifications));
+        }
       }
     }
     sessionData.get(gameID).remove(session);
@@ -257,8 +308,11 @@ public class WebSocketServer{
         if(BlackUsername.equals(username)){
           player = gameData.whiteUsername();
         }
-        Notifications notifications=new Notifications(" " + username + " has just forfeited the game, " + player + " Wins the Game!!!");
-        s.getRemote().sendString(new Gson().toJson(notifications));
+        sessionTimeout();
+        if (s.isOpen()) {
+          Notifications notifications=new Notifications(" " + username + " has just forfeited the game, " + player + " Wins the Game!!!");
+          s.getRemote().sendString(new Gson().toJson(notifications));
+        }
     }
   }
 }
