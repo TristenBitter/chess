@@ -89,8 +89,19 @@ public class MySqlGameDAO implements GameDAO {
     return 200;
   }
 
-  public void updateGame(){
+  public void updateGame(GameData gameData) throws DataAccessException {
     // do the update
+    int gameID = gameData.gameID();
+    String game = new Gson().toJson(gameData.game());
+      try (var conn=DatabaseManager.getConnection()) {
+        String dataToInsert="UPDATE gameDataTable SET game=? WHERE gameID=?;";
+        var preparedStatement=conn.prepareStatement(dataToInsert);
+        preparedStatement.setString(1, game);
+        preparedStatement.setInt(2, gameID);
+        preparedStatement.executeUpdate();
+      } catch (SQLException ex) {
+        throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
+      }
   }
 
   @Override

@@ -36,7 +36,7 @@ public class WebSocketServer{
   private Map<Integer, Set<Session>> sessionData = new HashMap<>();
 
   @OnWebSocketMessage
-  public void onMessage(Session session, String message) {
+  public void onMessage(Session session, String message) throws IOException {
     try {
       UserGameCommand command = new Gson().fromJson(message, UserGameCommand.class);
 
@@ -60,7 +60,9 @@ public class WebSocketServer{
       }
     }catch (Exception ex) {
       ex.printStackTrace();
-      //sendMessage(session.getRemote(), new ErrorMessage("Error: " + ex.getMessage()));
+      Error error = new Error("Error " + ex.getMessage());
+      throw new IOException(error);
+      //sendMessage(session.getRemote(), "Error: " + ex.getMessage());
     }
   }
 
@@ -71,6 +73,17 @@ public class WebSocketServer{
   private void connect(Session session, String message, String username) throws IOException, DataAccessException {
     Connect connect = new Gson().fromJson(message, Connect.class);
     MySqlGameDAO gameDAO = new MySqlGameDAO();
+
+//    if(username == null){
+//      Error error = new Error("Error connecting to game, Bad AuthToken");
+//      throw new IOException(error);
+//    }
+
+
+    if(gameDAO.getGame(connect.getGameID()) == null){
+      Error error = new Error("Error connecting to game, Bad GameID");
+      throw new IOException(error);
+    }
     GameData gameData = gameDAO.getGame(connect.getGameID());
 
     //notify everyone but the current user that the current user connected (as observer or player) for this game
@@ -103,14 +116,10 @@ public class WebSocketServer{
 
     //send a LOAD_GAME message back to the client
 
+
     LoadGame loadGame = new LoadGame(gameData.game());
 
     session.getRemote().sendString(new Gson().toJson(loadGame));
-
-    //session.getRemote().send
-
-    //
-
 
   }
 
@@ -148,6 +157,8 @@ public class WebSocketServer{
         s.getRemote().sendString(new Gson().toJson(notifications));
       }
     }
+    sessionData.get(gameID).remove(session);
+
   }
 
   private void resign(Session session, String username, String message) throws DataAccessException, IOException {
@@ -155,22 +166,17 @@ public class WebSocketServer{
     MySqlGameDAO gameDAO = new MySqlGameDAO();
     GameData gameData = gameDAO.getGame(resign.getGameID());
 
-
-
     // change the chess game
     ChessGame chessGame = gameData.game();
- cx
     //call the setter to change the value
-
-
+    chessGame.setGameOver();
+    GameData gameData2 = gameDAO.getGame(resign.getGameID());
     //update it in the database
+    gameDAO.updateGame(gameData2);
 
-
-
-
+    //send Notification
     int gameID = resign.getGameID();
     for(Session s : sessionData.get(gameID)) {
-      if (!(s.equals(session))) {
         String player = gameData.blackUsername();
         String BlackUsername = gameData.blackUsername();
 
@@ -179,12 +185,6 @@ public class WebSocketServer{
         }
         Notifications notifications=new Notifications(" " + username + " has just forfeited the game, " + player + " Wins the Game!!!");
         s.getRemote().sendString(new Gson().toJson(notifications));
-      }
     }
-
   }
-
-
-
-
 }
