@@ -1,16 +1,21 @@
 package ui;
 
 import chess.ChessBoard;
+import chess.ChessMove;
+import chess.ChessPosition;
 import com.google.gson.Gson;
 import model.*;
 import websocket.commands.Connect;
 import websocket.commands.Leave;
+import websocket.commands.MakeMove;
 import websocket.commands.Resign;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+
+import static websocket.commands.UserGameCommand.CommandType.MAKE_MOVE;
 
 public class UserInterface {
   private static ServerFacade facade=new ServerFacade(8080);
@@ -287,10 +292,21 @@ public class UserInterface {
       if(command[0].equals("makeMove")){
         try {
 
-         // MoveRequest move=new MoveRequest(command[1]);
-          //CreateGameRequest gameID=facade.create(gameNameRequest, data.authToken());
+          // find the color player
+          // iterate through a-h and 1-8 to find the row and col
 
-          //
+          int row = 1;
+          int col = 1;
+          ChessPosition startPosition = new ChessPosition(row, col);
+          ChessPosition endPosition = new ChessPosition(row, col + 1);
+
+          // need to figure out how to know what promotion piece when that becomes a possibility
+
+          ChessMove move = new ChessMove(startPosition, endPosition, null);
+
+          WebSocketClient WSClient = new WebSocketClient(8080);
+          MakeMove makeMove = new MakeMove(data.authToken(), move,gameID);
+          WSClient.send(new Gson().toJson(makeMove));
 
           //System.out.printf("The GameID for your new game named %s is: %d%n", command[1], gameID.gameID());
         } catch (Exception e) {

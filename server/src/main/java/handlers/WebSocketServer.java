@@ -2,6 +2,8 @@ package handlers;
 
 import chess.ChessGame;
 import chess.ChessMove;
+import chess.ChessPosition;
+import chess.InvalidMoveException;
 import com.google.gson.Gson;
 import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
@@ -34,6 +36,10 @@ public class WebSocketServer{
 
 
   private Map<Integer, Set<Session>> sessionData = new HashMap<>();
+  private ChessGame chessGame;
+  private MySqlGameDAO gameDAO = new MySqlGameDAO();
+  private ChessMove chessMove;
+  private ChessPosition chessPosition;
 
   @OnWebSocketMessage
   public void onMessage(Session session, String message) throws IOException {
@@ -124,13 +130,41 @@ public class WebSocketServer{
   }
 
 
-  private void makeMove(Session session, String username, String message) {
+  private void makeMove(Session session, String username, String message) throws InvalidMoveException {
     MakeMove makeMove = new Gson().fromJson(message, MakeMove.class);
     ChessMove move = makeMove.getMove();
+    int gameID = makeMove.getGameID();
     // do stuff now
+    try {
+      if(chessGame.isGameOver()){
+        System.out.println("The Game is over, no more moves can be made");
+      }
+      else {
+        chessGame.makeMove(move);
+        GameData gameData2=gameDAO.getGame(gameID);
+        gameDAO.updateGame(gameData2);
 
+        for(Session s : sessionData.get(gameID)) {
+          // send load_game msg to all clients
+          LoadGame loadGame = new LoadGame(gameData2.game());
 
+          s.getRemote().sendString(new Gson().toJson(loadGame));
 
+          // send a notification to the others
+          if(!(s.equals(session))){
+            String BlackUsername = gameData2.blackUsername();
+
+            String sP = chessMove.getStartPosition().toString();
+            String eP = chessMove.getEndPosition().toString();
+
+            Notifications notifications = new Notifications("Player " + username + " has made a Move from " + sP + " to " + eP);
+            s.getRemote().sendString(new Gson().toJson(notifications));
+          }
+        }
+      }
+    }catch(Exception e){
+      Error error = new Error("Error " + e.getMessage());
+    }
   }
 
   private void leaveGame(Session session, String username, String message) throws DataAccessException, IOException {

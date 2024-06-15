@@ -15,7 +15,7 @@ public class ChessMove {
     private ChessPiece.PieceType promotionPiece;
 
     /***********************************************************************************************
-     *                     WE LIKE TO MOVE IT MOVE IT... YOU LIKE TO...MOVE IT!
+     *                     WE LIKE TO MOVE IT, MOVE IT... YOU LIKE TO...MOVE IT!
      ***********************************************************************************************/
     public ChessMove(ChessPosition startPosition, ChessPosition endPosition,
                      ChessPiece.PieceType promotionPiece) {
