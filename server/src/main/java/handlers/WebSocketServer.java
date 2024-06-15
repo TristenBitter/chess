@@ -65,9 +65,9 @@ public class WebSocketServer{
         case RESIGN -> resign(session, username, message);
       }
     }catch (Exception ex) {
-      ex.printStackTrace();
-      Error error = new Error("Error " + ex.getMessage());
-      throw new IOException(error);
+//      ex.printStackTrace();
+//      Error error = new Error("Error " + ex.getMessage());
+//      throw new IOException(error);
       //sendMessage(session.getRemote(), "Error: " + ex.getMessage());
     }
   }
@@ -90,7 +90,14 @@ public class WebSocketServer{
       Error error = new Error("Error connecting to game, Bad GameID");
       throw new IOException(error);
     }
+
     GameData gameData = gameDAO.getGame(connect.getGameID());
+
+//    // initialize the map if I haven't yet
+//    sessionData.computeIfAbsent(connect.getGameID(), v -> new HashSet<>());
+//
+//    // Add the current session to the session set for the game
+//    sessionData.get(connect.getGameID()).add(session);
 
     //notify everyone but the current user that the current user connected (as observer or player) for this game
     for(Session s : sessionData.get(connect.getGameID())) {
@@ -192,8 +199,6 @@ public class WebSocketServer{
               s.getRemote().sendString(new Gson().toJson(notificationInStalemate));
               session.getRemote().sendString(new Gson().toJson(congratulationsNote));
             }
-
-
           }
         }
       }
