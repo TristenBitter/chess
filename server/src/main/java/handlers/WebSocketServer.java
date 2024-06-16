@@ -47,10 +47,10 @@ public class WebSocketServer{
       UserGameCommand command=new Gson().fromJson(message, UserGameCommand.class);
 
       MySqlAuthDAO authDAO=new MySqlAuthDAO();
-      Connect connect=new Gson().fromJson(message, Connect.class);
-
-      sessionData.computeIfAbsent(connect.getGameID(), v -> new HashSet<>());
-      sessionData.get(connect.getGameID()).add(session);
+//      Connect connect=new Gson().fromJson(message, Connect.class);
+//
+//      sessionData.computeIfAbsent(connect.getGameID(), v -> new HashSet<>());
+//      sessionData.get(connect.getGameID()).add(session);
 
       // Throws a custom UnauthorizedException. Yours may work differently.
 
@@ -96,6 +96,9 @@ public class WebSocketServer{
   private void connect(Session session, String message, String username) throws IOException, DataAccessException {
     Connect connect = new Gson().fromJson(message, Connect.class);
     MySqlGameDAO gameDAO = new MySqlGameDAO();
+
+    sessionData.computeIfAbsent(connect.getGameID(), v -> new HashSet<>());
+    sessionData.get(connect.getGameID()).add(session);
 
     if(username == null){
 
