@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 
 import javax.websocket.*;
 import java.net.URI;
-import java.util.Scanner;
 
 public class WebSocketClient extends ServerFacade{
 
@@ -15,7 +14,7 @@ public class WebSocketClient extends ServerFacade{
 
   public Session session;
 
-  public void WSClient() throws Exception {
+  public void webSocketClient() throws Exception {
     URI uri = new URI("ws://localhost:8080/ws");
     WebSocketContainer container = ContainerProvider.getWebSocketContainer();
     this.session = container.connectToServer(this, uri);
@@ -32,8 +31,8 @@ public class WebSocketClient extends ServerFacade{
     this.session.getBasicRemote().sendText(msg);
   }
 
-  public void onOpen(Session session, EndpointConfig endpointConfig) {
-  }
+  //public void onOpen(Session session, EndpointConfig endpointConfig)
+
 }
 
 

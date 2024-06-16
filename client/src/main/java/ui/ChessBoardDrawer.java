@@ -11,8 +11,6 @@ import java.util.Random;
 import static ui.EscapeSequences.*;
 public class ChessBoardDrawer {
 
-  public void ChessBoardDrawer(){}
-
   private static final int BOARD_SIZE_IN_SQUARES = 3;
   private static final int SQUARE_SIZE_IN_CHARS = 3;
   private static final int LINE_WIDTH_IN_CHARS = 1;

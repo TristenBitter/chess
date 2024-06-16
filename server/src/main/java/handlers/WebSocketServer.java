@@ -28,8 +28,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static chess.ChessGame.TeamColor.BLACK;
-import static chess.ChessGame.TeamColor.WHITE;
 import static spark.Spark.connect;
 
 @WebSocket
@@ -47,11 +45,6 @@ public class WebSocketServer{
       UserGameCommand command=new Gson().fromJson(message, UserGameCommand.class);
 
       MySqlAuthDAO authDAO=new MySqlAuthDAO();
-//      Connect connect=new Gson().fromJson(message, Connect.class);
-//
-//      sessionData.computeIfAbsent(connect.getGameID(), v -> new HashSet<>());
-//      sessionData.get(connect.getGameID()).add(session);
-
       // Throws a custom UnauthorizedException. Yours may work differently.
 
       String username=authDAO.getUsername(command.getAuthString());
@@ -65,18 +58,6 @@ public class WebSocketServer{
         case RESIGN -> resign(session, username, message);
       }
 
-//    }catch (Exception ex) {
-////      ex.printStackTrace();
-//      Exception throwable = ex;
-//
-//      Error error=new Error("Error: "+ throwable.getMessage());
-//      String e = new Gson().toJson(error);
-//      session.getRemote().sendString(e);
-//    }
-  }
-
-  private void sendMessage(RemoteEndpoint remote, String arg) throws Exception {
-    remote.sendString(arg);
   }
 
   private void sessionTimeout(){
@@ -138,13 +119,13 @@ public class WebSocketServer{
         if (s.isOpen()){
         String player = null;
 
-        String BlackUsername = gameData.blackUsername();
-        String WhiteUsername = gameData.whiteUsername();
+        String blackUsername = gameData.blackUsername();
+        String whiteUsername = gameData.whiteUsername();
 
-        if(BlackUsername.equals(username)){
+        if(blackUsername.equals(username)){
           player = "BLACK Player";
         }
-        if(WhiteUsername.equals(username)){
+        if(whiteUsername.equals(username)){
           player = "WHITE Player";
         }
         else{
@@ -183,7 +164,7 @@ public class WebSocketServer{
     // do stuff now
     try {
       if(chessGame.isGameOver()){
-        //TODO: send back to the user that they won the game
+        //send back to the user that they won the game instead of this line below
         System.out.println("The Game is over, no more moves can be made");
       }
       else {
@@ -219,7 +200,6 @@ public class WebSocketServer{
 
             // send a notification to the others
             if (!(s.equals(session))) {
-              String BlackUsername=gameData2.blackUsername();
 
               String sP=chessMove.getStartPosition().toString();
               String eP=chessMove.getEndPosition().toString();
@@ -306,9 +286,9 @@ public class WebSocketServer{
     int gameID = resign.getGameID();
     for(Session s : sessionData.get(gameID)) {
         String player = gameData.blackUsername();
-        String BlackUsername = gameData.blackUsername();
+        String blackUsername = gameData.blackUsername();
 
-        if(BlackUsername.equals(username)){
+        if(blackUsername.equals(username)){
           player = gameData.whiteUsername();
         }
         sessionTimeout();

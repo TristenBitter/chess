@@ -5,11 +5,13 @@ import chess.ChessMove;
 import chess.ChessPosition;
 import com.google.gson.Gson;
 import model.*;
+import org.glassfish.grizzly.http.server.Session;
 import websocket.commands.Connect;
 import websocket.commands.Leave;
 import websocket.commands.MakeMove;
 import websocket.commands.Resign;
 
+import javax.websocket.EndpointConfig;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -215,9 +217,9 @@ public class UserInterface {
           } else {
             // call our gameMoves UI
             //connect
-            WebSocketClient WSClient = new WebSocketClient(8080);
+            WebSocketClient webSocketClient = new WebSocketClient(8080);
             Connect connect = new Connect(data.authToken(), gameIDs.get(Integer.parseInt(command[1])));
-            WSClient.send(new Gson().toJson(connect));
+            webSocketClient.send(new Gson().toJson(connect));
 
             gamePlayUI(data, gameIDs.get(Integer.parseInt(command[1])), command[2]);
           }
@@ -287,53 +289,32 @@ public class UserInterface {
           // print black chess board
           drawer.printBlackBoard();
         }
-
       }
       if(command[0].equals("makeMove")){
-        try {
-
-          // find the color player
-          // iterate through a-h and 1-8 to find the row and col
-
-          int row = 1;
-          int col = 1;
-          ChessPosition startPosition = new ChessPosition(row, col);
-          ChessPosition endPosition = new ChessPosition(row, col + 1);
-
-          // need to figure out how to know what promotion piece when that becomes a possibility
-
-          ChessMove move = new ChessMove(startPosition, endPosition, null);
-
-          WebSocketClient WSClient = new WebSocketClient(8080);
-          MakeMove makeMove = new MakeMove(data.authToken(), move,gameID);
-          WSClient.send(new Gson().toJson(makeMove));
-
-          //System.out.printf("The GameID for your new game named %s is: %d%n", command[1], gameID.gameID());
-        } catch (Exception e) {
-          System.out.println("oops, doesn't look like that's a valid move, please try again.");
-          gamePlayUI(data, gameID, color);
-        }
-
+        makeMove(data, gameID, color);
       }
       if(command[0].equals("highlight")){
+        // possibly delete later
+        WebSocketClient client = new WebSocketClient(8080);
+        client.webSocketClient();
+
         //check the possible moves of the given piece
         //this should be fun
-
       }
       if(command[0].equals("leave")){
         // take the player out of the game
         // leave this page
-        WebSocketClient WSClient = new WebSocketClient(8080);
+        WebSocketClient webSocketClient = new WebSocketClient(8080);
         Leave leave = new Leave(data.authToken(), gameID);
-        WSClient.send(new Gson().toJson(leave));
+        webSocketClient.send(new Gson().toJson(leave));
 
         postLoginUI(data);
       }
       if(command[0].equals("resign")){
         //end the game
-        WebSocketClient WSClient = new WebSocketClient(8080);
+        WebSocketClient webSocketClient = new WebSocketClient(8080);
         Resign resign = new Resign(data.authToken(), gameID);
-        WSClient.send(new Gson().toJson(resign));
+        webSocketClient.send(new Gson().toJson(resign));
 
         postLoginUI(data);
 
@@ -342,6 +323,32 @@ public class UserInterface {
     }
 
   }
+
+  public static void makeMove(AuthData data, int gameID, String color) throws Exception {
+    try {
+      // find the color player
+      // iterate through a-h and 1-8 to find the row and col
+
+      int row = 1;
+      int col = 1;
+      ChessPosition startPosition = new ChessPosition(row, col);
+      ChessPosition endPosition = new ChessPosition(row, col + 1);
+
+      // need to figure out how to know what promotion piece when that becomes a possibility
+
+      ChessMove move = new ChessMove(startPosition, endPosition, null);
+
+      WebSocketClient webSocketClient = new WebSocketClient(8080);
+      MakeMove makeMove = new MakeMove(data.authToken(), move,gameID);
+      webSocketClient.send(new Gson().toJson(makeMove));
+
+      //System.out.printf("The GameID for your new game named %s is: %d%n", command[1], gameID.gameID());
+    } catch (Exception e) {
+      System.out.println("oops, doesn't look like that's a valid move, please try again.");
+      gamePlayUI(data, gameID, color);
+    }
+  }
+
   public static String[] scanner(AuthData data, int gameID) throws Exception {
     Scanner scanner=new Scanner(System.in);
     String line=scanner.nextLine();
