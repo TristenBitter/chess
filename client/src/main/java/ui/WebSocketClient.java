@@ -19,12 +19,7 @@ public class WebSocketClient extends ServerFacade{
     WebSocketContainer container = ContainerProvider.getWebSocketContainer();
     this.session = container.connectToServer(this, uri);
 
-    this.session.addMessageHandler(new MessageHandler.Whole<String>() {
-      public void onMessage(String message) {
-        String msg = new Gson().fromJson(message, String.class);
-        System.out.println(msg);
-      }
-    });
+    // code here
   }
 
   public void send(String msg) throws Exception {
