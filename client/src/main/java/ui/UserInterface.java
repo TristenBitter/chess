@@ -320,7 +320,7 @@ public class UserInterface {
         // take the player out of the game
         // leave this page
         try {
-          WebSocketClient webSocketClient=new WebSocketClient(8080);
+          WebSocketClient webSocketClient=new WebSocketClient();
           Leave leave=new Leave(data.authToken(), gameID);
           webSocketClient.send(new Gson().toJson(leave));
 
@@ -333,7 +333,7 @@ public class UserInterface {
       if(command[0].equals("resign")){
         //end the game
         try {
-          WebSocketClient webSocketClient=new WebSocketClient(8080);
+          WebSocketClient webSocketClient=new WebSocketClient();
           Resign resign=new Resign(data.authToken(), gameID);
           webSocketClient.send(new Gson().toJson(resign));
 

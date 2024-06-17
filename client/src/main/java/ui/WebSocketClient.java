@@ -5,11 +5,7 @@ import com.google.gson.Gson;
 import javax.websocket.*;
 import java.net.URI;
 
-public class WebSocketClient extends ServerFacade{
-
-  public WebSocketClient(int port) {
-    super(port);
-  }
+public class WebSocketClient extends Endpoint {
 
 
   public Session session;
@@ -31,7 +27,7 @@ public class WebSocketClient extends ServerFacade{
     this.session.getBasicRemote().sendText(msg);
   }
 
-  //public void onOpen(Session session, EndpointConfig endpointConfig)
+  public void onOpen(Session session, EndpointConfig endpointConfig){}
 
 }
 

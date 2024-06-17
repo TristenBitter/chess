@@ -28,15 +28,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static spark.Spark.connect;
-
 @WebSocket
 public class WebSocketServer{
   public WebSocketServer(){}
 
   private Map<Integer, Set<Session>> sessionData = new HashMap<>();
-  private ChessGame chessGame = new ChessGame();
   private MySqlGameDAO gameDAO = new MySqlGameDAO();
+
 
   @OnWebSocketMessage
   public void onMessage(Session session, String message) throws Exception {
@@ -59,17 +57,19 @@ public class WebSocketServer{
   }
 
   private void sessionTimeout(){
-    Set<Session> oldSessions=new HashSet<>();
+
     for (Set<Session> sessions : sessionData.values()) {
+      Set<Session> oldSessions=new HashSet<>();
       for (Session session : sessions) {
         if (!(session.isOpen())) {
           oldSessions.add(session);
         }
       }
+      for (Session session : oldSessions) {
+        sessions.remove(session);
+      }
     }
-    for (Session session : oldSessions) {
-      sessionData.values().remove(session);
-    }
+
   }
 
   private void connect(Session session, String message, String username) throws IOException, DataAccessException {
@@ -155,10 +155,12 @@ public class WebSocketServer{
   }
 
 
-  private void makeMove(Session session, String username, String message) throws InvalidMoveException {
+  private void makeMove(Session session, String username, String message) throws InvalidMoveException, IOException, DataAccessException {
     MakeMove makeMove = new Gson().fromJson(message, MakeMove.class);
     ChessMove move = makeMove.getMove();
     int gameID = makeMove.getGameID();
+    GameData gameData = gameDAO.getGame(gameID);
+    ChessGame chessGame = gameData.game();
     // do stuff now
     try {
       if(chessGame.isGameOver()){
@@ -187,8 +189,8 @@ public class WebSocketServer{
           chessGame.setGameOver();
         }
 
-        GameData gameData2=gameDAO.getGame(gameID);
-        gameDAO.updateGame(gameData2);
+
+        gameDAO.updateGame(gameData);
 
 
 
@@ -196,7 +198,7 @@ public class WebSocketServer{
           sessionTimeout();
           if (s.isOpen()) {
             // send load_game msg to all clients
-            LoadGame loadGame=new LoadGame(gameData2.game());
+            LoadGame loadGame=new LoadGame(gameData.game());
 
             s.getRemote().sendString(new Gson().toJson(loadGame));
 
@@ -237,6 +239,7 @@ public class WebSocketServer{
       }
     }catch(Exception e){
       Error error = new Error("Error " + e.getMessage());
+      session.getRemote().sendString(new Gson().toJson(error));
     }
   }
 
@@ -289,9 +292,8 @@ public class WebSocketServer{
     ChessGame chessGame = gameData.game();
     //call the setter to change the value
     chessGame.setGameOver();
-    GameData gameData2 = gameDAO.getGame(resign.getGameID());
     //update it in the database
-    gameDAO.updateGame(gameData2);
+    gameDAO.updateGame(gameData);
 
     //send Notification
     int gameID = resign.getGameID();
