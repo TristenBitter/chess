@@ -224,9 +224,9 @@ public class UserInterface {
           } else {
             // call our gameMoves UI
             //connect
-//            WebSocketClient webSocketClient = new WebSocketClient();
-//            Connect connect = new Connect(data.authToken(), gameIDs.get(Integer.parseInt(command[1])));
-//            webSocketClient.send(new Gson().toJson(connect));
+            WebSocketClient webSocketClient = new WebSocketClient();
+            Connect connect = new Connect(data.authToken(), gameIDs.get(Integer.parseInt(command[1])));
+            webSocketClient.send(new Gson().toJson(connect));
 
             gamePlayUI(data, gameIDs.get(Integer.parseInt(command[1])), playerColor);
           }
@@ -314,8 +314,8 @@ public class UserInterface {
 
       if(command[0].equals("highlight")){
         // delete later possibly
-//        WebSocketClient client = new WebSocketClient();
-//        client.webSocketClient();
+        WebSocketClient client = new WebSocketClient();
+        client.webSocketClient();
           highlightMoveHandler(data, gameID, color);
       }
       if(command[0].equals("leave")){
@@ -462,7 +462,7 @@ public class UserInterface {
     try {
       // need to figure out how to know what promotion piece when that becomes a possibility
 
-      WebSocketClient webSocketClient = new WebSocketClient(8080);
+      WebSocketClient webSocketClient = new WebSocketClient();
       MakeMove makeMove = new MakeMove(data.authToken(), move,gameID);
       webSocketClient.send(new Gson().toJson(makeMove));
 
