@@ -8,6 +8,7 @@ import dataaccess.UnauthorizedException;
 import dataaccess.memory.MemoryAuthDAO;
 import dataaccess.sql.MySqlAuthDAO;
 import dataaccess.sql.MySqlGameDAO;
+import model.AuthData;
 import model.ErrorMessage;
 import model.GameData;
 import model.JoinGameRequest;
@@ -156,24 +157,42 @@ public class WebSocketServer{
     MakeMove makeMove = new Gson().fromJson(message, MakeMove.class);
     ChessMove move = makeMove.getMove();
     int gameID = makeMove.getGameID();
+
+    if(username == null){
+      sessionTimeout();
+      if(session.isOpen()) {
+        Error error=new Error("Error connecting to game, Bad AuthToken");
+        session.getRemote().sendString(new Gson().toJson(error));
+        return;
+      }
+    }
     GameData gameData = gameDAO.getGame(gameID);
+    MySqlAuthDAO authDAO = new MySqlAuthDAO();
     ChessGame chessGame = gameData.game();
     if(!((username.equals(gameData.blackUsername())) || (username.equals(gameData.whiteUsername())))){
       Error error = new Error("Error , you are an observer; you can't make a move");
       session.getRemote().sendString(new Gson().toJson(error));
       return;
     }
-    // find the color of the piece being moved
+    // find the username of who's turn it is
 
-    move.getStartPosition();
-    ChessPosition position = move.getStartPosition();
-    String color = chessGame.getBoard().getPiece(position).getTeamColor().toString();
+    makeMove.getAuthString();
+    String user = authDAO.getUsername( makeMove.getAuthString());
+    String player ="";
     String turn = chessGame.getTeamTurn().toString();
-//    if(!(chessGame.getTeamTurn().equals(color))){
-//      Error error = new Error("Error , it's not your turn");
-//      session.getRemote().sendString(new Gson().toJson(error));
-//      return;
-//    }
+    if(turn.equals("WHITE")){
+      player =gameData.whiteUsername();
+    }
+    else if(turn.equals("BLACK")){
+      player =gameData.blackUsername();
+    }
+    if(!(user.equals(player))){
+
+      Error error = new Error("Error , it's not your turn");
+      session.getRemote().sendString(new Gson().toJson(error));
+      return;
+    }
+
 
 
 
@@ -185,7 +204,9 @@ public class WebSocketServer{
         System.out.println("The Game is over, no more moves can be made");
         sessionTimeout();
         if (session.isOpen()) {
-          session.getRemote().sendString(new Gson().toJson(new ErrorMessage("Error making move. The game is over")));
+          Error error = new Error("Error , the Game is over");
+          session.getRemote().sendString(new Gson().toJson(error));
+          return;
         }
 
       }
