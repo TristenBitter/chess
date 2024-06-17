@@ -83,7 +83,6 @@ public class WebSocketServer{
       if(session.isOpen()) {
         Error error=new Error("Error connecting to game, Bad AuthToken");
         String e=new Gson().toJson(error);
-        //throw new IOException(error.getMessage());
         session.getRemote().sendString(e);
       }
       return;
@@ -104,7 +103,6 @@ public class WebSocketServer{
 
 //    // initialize the map if I haven't yet
 //    sessionData.computeIfAbsent(connect.getGameID(), v -> new HashSet<>());
-//
 //    // Add the current session to the session set for the game
 //    sessionData.get(connect.getGameID()).add(session);
 
@@ -131,17 +129,11 @@ public class WebSocketServer{
           if (s.isOpen()) {
             Notifications notifications=new Notifications("Player " + username + " has joined the game as the " + player);
             s.getRemote().sendString(new Gson().toJson(notifications));
-            //s.getRemote().sendString("Player " + username + " has joined the game as the " + player );
           }
         }
       }
 
     }
-    //sessionData.get(connect.getGameID()).get(session);
-
-    //session.getRemote().sendString("you've joined the game, congrats!");
-
-    //send a LOAD_GAME message back to the client
 
     sessionTimeout();
     if(session.isOpen()) {
@@ -193,11 +185,6 @@ public class WebSocketServer{
       return;
     }
 
-
-
-
-
-    // do stuff now
     try {
       if(chessGame.isGameOver()){
         //send back to the user that they won the game instead of this line below
@@ -206,7 +193,6 @@ public class WebSocketServer{
         if (session.isOpen()) {
           Error error = new Error("Error , the Game is over");
           session.getRemote().sendString(new Gson().toJson(error));
-          return;
         }
 
       }
