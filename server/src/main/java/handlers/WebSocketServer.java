@@ -147,7 +147,6 @@ public class WebSocketServer{
 
   private void makeMove(Session session, String username, String message) throws InvalidMoveException, IOException, DataAccessException {
     MakeMove makeMove = new Gson().fromJson(message, MakeMove.class);
-    ChessMove move = makeMove.getMove();
     int gameID = makeMove.getGameID();
 
     if(username == null){
@@ -184,7 +183,13 @@ public class WebSocketServer{
       session.getRemote().sendString(new Gson().toJson(error));
       return;
     }
+    makeMoveHelper(session, username, chessGame, makeMove, gameData);
 
+  }
+
+  private void makeMoveHelper(Session session, String username, ChessGame chessGame, MakeMove makeMove, GameData gameData) throws IOException {
+    int gameID = makeMove.getGameID();
+    ChessMove move = makeMove.getMove();
     try {
       if(chessGame.isGameOver()){
         //send back to the user that they won the game instead of this line below
