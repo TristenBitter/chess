@@ -37,8 +37,6 @@ public class WebSocketServer{
   private Map<Integer, Set<Session>> sessionData = new HashMap<>();
   private ChessGame chessGame = new ChessGame();
   private MySqlGameDAO gameDAO = new MySqlGameDAO();
-  private ChessMove chessMove;
-  private ChessPosition chessPosition;
 
   @OnWebSocketMessage
   public void onMessage(Session session, String message) throws Exception {
