@@ -59,28 +59,42 @@ public class MySqlGameDAO implements GameDAO {
     if(requestedGame.playerColor() == null){
       return 400;
     }
+    if(username.equals("null")){
+      if(requestedGame.playerColor().equals("WHITE")){
+        addPlayerAsColor("WHITE", username, gameData);
+      }
+      else{
+        addPlayerAsColor("BLACK", username, gameData);
+      }
+    }
     //check Users/Colors
-    if(gameData.whiteUsername() == null){
+    if(gameData.whiteUsername() == null || gameData.whiteUsername().equals("null")){
       if(requestedGame.playerColor().equals("WHITE")){
         // add the username as the white player
         addPlayerAsColor("WHITE", username, gameData);
       }
     }
     else{
-      if(requestedGame.playerColor().equals("WHITE")){
+      if(username.equals("null")){
+        return 200;
+      }
+      else if(requestedGame.playerColor().equals("WHITE")){
         //white is already taken return error code 403
         return 403;
       }
     }
 
-    if(gameData.blackUsername() == null){
+    if(gameData.blackUsername() == null || gameData.blackUsername().equals("null")){
       if(requestedGame.playerColor().equals("BLACK")){
-        // add the username as the white player
+        // add the username as the black player
         addPlayerAsColor("BLACK", username, gameData);
       }
     }
     else{
-      if(requestedGame.playerColor().equals("BLACK")){
+      if(username.equals("null")){
+        return 200;
+      }
+      else if(requestedGame.playerColor().equals("BLACK")){
         //black is already taken return error code 403
         return 403;
       }

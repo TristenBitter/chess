@@ -35,7 +35,7 @@ public class WebSocketServer{
   public WebSocketServer(){}
 
   private Map<Integer, Set<Session>> sessionData = new HashMap<>();
-  private ChessGame chessGame;
+  private ChessGame chessGame = new ChessGame();
   private MySqlGameDAO gameDAO = new MySqlGameDAO();
   private ChessMove chessMove;
   private ChessPosition chessPosition;
@@ -201,8 +201,10 @@ public class WebSocketServer{
             // send a notification to the others
             if (!(s.equals(session))) {
 
-              String sP=chessMove.getStartPosition().toString();
-              String eP=chessMove.getEndPosition().toString();
+              String sP=move.getStartPosition().toString();
+              String eP=move.getEndPosition().toString();
+
+              //TODO: what if chessMove is null?
 
               sessionTimeout();
               if(s.isOpen()) {
@@ -253,8 +255,17 @@ public class WebSocketServer{
     else if(gameData.whiteUsername().equals(username)){
       color = "WHITE";
     }
+    else {
+      System.out.println("Invalid color type");
+    }
     JoinGameRequest requestedGame = new JoinGameRequest(color, gameID);
-    gameDAO.joinGame(requestedGame, "null");
+    int result = gameDAO.joinGame(requestedGame, "null");
+    if(result != 200){
+      System.out.println("Error invalid leave request");
+    }
+
+
+
 
     for(Session s : sessionData.get(gameID)) {
       if (!(s.equals(session))) {
