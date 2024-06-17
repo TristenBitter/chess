@@ -1,11 +1,13 @@
 package ui;
 
 import chess.ChessBoard;
+import chess.ChessMove;
 import chess.ChessPiece;
 import chess.ChessPosition;
 
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Random;
 
 import static ui.EscapeSequences.*;
@@ -26,8 +28,11 @@ public class ChessBoardDrawer {
     PrintStream out = setUpScreen();
 
     out.println();
-    whiteBoardDrawer(out);
-    blackBoardDrawer(out);
+//    whiteBoardDrawer(out);
+//    blackBoardDrawer(out);
+    highlightWhiteBoard(out, 1,2);
+    highlightBlackBoard(out, 1,2);
+
 
   }
 
@@ -40,6 +45,16 @@ public class ChessBoardDrawer {
     PrintStream out = setUpScreen();
     out.println();
     blackBoardDrawer(out);
+  }
+  public void printHighlightedWhiteBoard(int row, int col){
+    PrintStream out = setUpScreen();
+    out.println();
+    highlightWhiteBoard(out,row, col);
+  }
+  public void printHighlightedBlackBoard(int row, int col){
+    PrintStream out = setUpScreen();
+    out.println();
+    highlightBlackBoard(out,row, col);
   }
 
   public static PrintStream setUpScreen(){
@@ -98,7 +113,6 @@ public class ChessBoardDrawer {
       out.printf(" %d ",i);
       for(int j = 8; j > 0; j--){
         setTileColor(i, j, out);
-
         setPiece(i, j, out);
 
       }
@@ -179,5 +193,102 @@ public class ChessBoardDrawer {
   private static void setBlack(PrintStream out) {
     out.print(SET_BG_COLOR_BLACK);
   }
+
+
+
+  private static void highlightWhiteBoard(PrintStream out, int row, int col){
+    whiteBoardHeader(out);
+
+    // print white board
+
+    for(int i = 8; i > 0; i--){
+      out.print(SET_BG_COLOR_DARK_GREY);
+      out.print(SET_TEXT_COLOR_WHITE);
+      out.printf(" %d ",i);
+      for(int j = 1; j < 9; j++){
+        highlightHandler(out,row,col,i,j);
+      }
+      out.print(SET_BG_COLOR_DARK_GREY);
+      out.print(SET_TEXT_COLOR_WHITE);
+      out.printf(" %d ",i);
+      setBlack(out);
+      out.println();
+    }
+
+    whiteBoardHeader(out);
+    setBlack(out);
+    out.println();
+  }
+
+  public static void setHighlightTileColor(int row, int col, PrintStream out){
+    if((row + col)%2 == 0){
+      out.print(SET_BG_COLOR_DARK_GREEN);
+    }
+    else {
+      out.print(SET_BG_COLOR_GREEN);
+    }
+  }
+
+  public static void setHighlightedPiece(PrintStream out, int row, int col){
+    ChessPiece piece = board.getPiece(new ChessPosition(row,col));
+    if(piece != null) {
+      out.print(SET_TEXT_COLOR_BLACK);
+      out.print(piece.toString());
+    }else{
+      out.print("   ");
+    }
+  }
+
+  public static boolean setHighlightedSpots(PrintStream out, int i, int j, int row, int col){
+    ChessPiece piece = board.getPiece(new ChessPosition(row,col));
+    if(piece != null) {
+      ArrayList<ChessMove> listOfMoves=piece.pieceMoves(board, new ChessPosition(row, col));
+      for (ChessMove move : listOfMoves) {
+        if (move.getEndPosition().equals(new ChessPosition(i, j))) {
+          setHighlightTileColor(i, j, out);
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  private static void highlightBlackBoard(PrintStream out, int row, int col){
+    blackBoardHeader(out);
+
+    // print white board
+
+    for(int i = 1; i < 9; i++){
+      out.print(SET_BG_COLOR_DARK_GREY);
+      out.print(SET_TEXT_COLOR_WHITE);
+      out.printf(" %d ",i);
+      for(int j = 8; j > 0; j--){
+        highlightHandler(out, row, col, i, j);
+      }
+      out.print(SET_BG_COLOR_DARK_GREY);
+      out.print(SET_TEXT_COLOR_WHITE);
+      out.printf(" %d ",i);
+      setBlack(out);
+      out.println();
+    }
+
+    blackBoardHeader(out);
+    setBlack(out);
+    out.println();
+  }
+
+  public static void highlightHandler(PrintStream out, int row, int col, int i, int j){
+    if(row == i && col == j) {
+      out.print(SET_BG_COLOR_YELLOW);
+      setHighlightedPiece(out,row,col);
+    }else if(setHighlightedSpots(out, i, j, row, col)){
+      setHighlightedPiece(out,i,j);
+    }
+    else{
+      setTileColor(i, j, out);
+      setPiece(i, j, out);
+    }
+  }
+
 
 }

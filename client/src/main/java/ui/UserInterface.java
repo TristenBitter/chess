@@ -174,7 +174,7 @@ public class UserInterface {
       System.out.print(EscapeSequences.SET_TEXT_COLOR_WHITE);
       System.out.printf("--> for help with commands.%n%n");
 
-      System.out.println("[LOGGED_IN]>>> ");
+      System.out.printf("[LOGGED_IN]>>> ");
       var command = scanner(data, 0);
       String com=command[0];
       if (command[0].equals("help") || command[0].equals("Help") || command[0].equals("HELP")) {
@@ -217,9 +217,9 @@ public class UserInterface {
           } else {
             // call our gameMoves UI
             //connect
-            WebSocketClient webSocketClient = new WebSocketClient(8080);
-            Connect connect = new Connect(data.authToken(), gameIDs.get(Integer.parseInt(command[1])));
-            webSocketClient.send(new Gson().toJson(connect));
+//            WebSocketClient webSocketClient = new WebSocketClient(8080);
+//            Connect connect = new Connect(data.authToken(), gameIDs.get(Integer.parseInt(command[1])));
+//            webSocketClient.send(new Gson().toJson(connect));
 
             gamePlayUI(data, gameIDs.get(Integer.parseInt(command[1])), command[2]);
           }
@@ -250,17 +250,17 @@ public class UserInterface {
       System.out.printf("--> to display the game board.%n");
 
       System.out.print("\u001b[36;100m");
-      System.out.printf("makeMove <coordinates of piece you want moved> <destination coordinates>");
+      System.out.printf("makeMove ");
       System.out.print(EscapeSequences.SET_TEXT_COLOR_WHITE);
       System.out.printf("--> to make a move on the board.%n");
 
       System.out.print("\u001b[36;100m");
-      System.out.printf("highlight <coordinates of piece>");
+      System.out.printf("highlight ");
       System.out.print(EscapeSequences.SET_TEXT_COLOR_WHITE);
       System.out.printf("--> to highlight legal moves of a certain piece.%n");
 
       System.out.print("\u001b[36;100m");
-      System.out.printf("leave");
+      System.out.printf("leave ");
       System.out.print(EscapeSequences.SET_TEXT_COLOR_WHITE);
       System.out.printf("--> to leave a game (so you or someone else can finish it later).%n");
 
@@ -274,7 +274,7 @@ public class UserInterface {
       System.out.print(EscapeSequences.SET_TEXT_COLOR_WHITE);
       System.out.printf("--> for help with these commands.%n%n");
 
-      System.out.println("[JOINED_GAME]>>> ");
+      System.out.printf("[JOINED_GAME]>>> ");
       String[] command = scanner(data, gameID);
       if (command[0].equals("help") || command[0].equals("Help") || command[0].equals("HELP")) {
         gamePlayHelp(data, gameID, color);
@@ -292,36 +292,107 @@ public class UserInterface {
       }
       if(command[0].equals("makeMove")){
         makeMove(data, gameID, color);
+
+
+
       }
       if(command[0].equals("highlight")){
-        // possibly delete later
-        WebSocketClient client = new WebSocketClient(8080);
-        client.webSocketClient();
+//        WebSocketClient client = new WebSocketClient(8080);
+//        client.webSocketClient();
+        // where would they like to see
+        System.out.printf("What piece would you like to highlight?%n ");
+        System.out.printf("[enter a coordinate, (example) >>> 2 a]  >>> ");
+        String[] coordinate = scanner(data, gameID);
 
-        //check the possible moves of the given piece
-        //this should be fun
+        try {
+          int row=Integer.parseInt(coordinate[0]);
+          int col=columChecker(coordinate, color);
+
+          // call the proper function
+          if (color.equals("WHITE")) {
+            drawer.printHighlightedWhiteBoard(row, col);
+          } else {
+            drawer.printHighlightedBlackBoard(row, col);
+          }
+        }catch(Exception e){
+          System.out.println("oops, please try again");
+        }
       }
       if(command[0].equals("leave")){
         // take the player out of the game
         // leave this page
-        WebSocketClient webSocketClient = new WebSocketClient(8080);
-        Leave leave = new Leave(data.authToken(), gameID);
-        webSocketClient.send(new Gson().toJson(leave));
+        try {
+          WebSocketClient webSocketClient=new WebSocketClient(8080);
+          Leave leave=new Leave(data.authToken(), gameID);
+          webSocketClient.send(new Gson().toJson(leave));
 
-        postLoginUI(data);
+          postLoginUI(data);
+        }catch (Exception e){
+          System.out.println("oops, something went wrong when disconnection");
+          postLoginUI(data);
+        }
       }
       if(command[0].equals("resign")){
         //end the game
-        WebSocketClient webSocketClient = new WebSocketClient(8080);
-        Resign resign = new Resign(data.authToken(), gameID);
-        webSocketClient.send(new Gson().toJson(resign));
+        try {
+          WebSocketClient webSocketClient=new WebSocketClient(8080);
+          Resign resign=new Resign(data.authToken(), gameID);
+          webSocketClient.send(new Gson().toJson(resign));
 
-        postLoginUI(data);
+          postLoginUI(data);
+        }catch (Exception e){
+          System.out.println("oops, something went wrong while resigning");
+          postLoginUI(data);
+        }
 
       }
 
     }
 
+  }
+
+  public static int columChecker(String[] coordinate, String color) {
+    int col = 1;
+    if(color.equals("WHITE")){
+      switch (coordinate[1]) {
+        case "a": col = 1;
+          break;
+        case "b": col = 2;
+          break;
+        case "c": col = 3;
+          break;
+        case "d": col = 4;
+          break;
+        case "e": col = 5;
+          break;
+        case "f": col = 6;
+          break;
+        case "g": col = 7;
+          break;
+        case "h": col = 8;
+          break;
+      }
+    }else{
+      switch (coordinate[1]) {
+        case "h": col = 1;
+          break;
+        case "g": col = 2;
+          break;
+        case "f": col = 3;
+          break;
+        case "e": col = 4;
+          break;
+        case "d": col = 5;
+          break;
+        case "c": col = 6;
+          break;
+        case "b": col = 7;
+          break;
+        case "a": col = 8;
+          break;
+      }
+    }
+    return col;
   }
 
   public static void makeMove(AuthData data, int gameID, String color) throws Exception {
@@ -360,7 +431,7 @@ public class UserInterface {
     System.out.println("Do not worry...I am here to help...");
     System.out.println("try typing one of the commands that are in blue");
     System.out.println("make sure to check for proper casing and fill in all the required information");
-    System.out.println("        Here's an example:%n[JOINED_GAME]>>> makeMove a2 a4");
+    System.out.println("        Here's an example:%n[JOINED_GAME]>>> makeMove ");
     System.out.println("now you try");
     System.out.println("/*****************************************************************************************/");
     gamePlayUI(data, gameID, color);
