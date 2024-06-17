@@ -5,6 +5,7 @@ import chess.ChessMove;
 import chess.ChessPosition;
 import com.google.gson.Gson;
 import model.*;
+import websocket.commands.Connect;
 import websocket.commands.Leave;
 import websocket.commands.MakeMove;
 import websocket.commands.Resign;
@@ -223,9 +224,9 @@ public class UserInterface {
           } else {
             // call our gameMoves UI
             //connect
-//            WebSocketClient webSocketClient = new WebSocketClient(8080);
-//            Connect connect = new Connect(data.authToken(), gameIDs.get(Integer.parseInt(command[1])));
-//            webSocketClient.send(new Gson().toJson(connect));
+            WebSocketClient webSocketClient = new WebSocketClient();
+            Connect connect = new Connect(data.authToken(), gameIDs.get(Integer.parseInt(command[1])));
+            webSocketClient.send(new Gson().toJson(connect));
 
             gamePlayUI(data, gameIDs.get(Integer.parseInt(command[1])), playerColor);
           }
@@ -312,8 +313,9 @@ public class UserInterface {
       }
 
       if(command[0].equals("highlight")){
-//        WebSocketClient client = new WebSocketClient(8080);
-//        client.webSocketClient();
+        // delete later possibly
+        WebSocketClient client = new WebSocketClient();
+        client.webSocketClient();
           highlightMoveHandler(data, gameID, color);
       }
       if(command[0].equals("leave")){
