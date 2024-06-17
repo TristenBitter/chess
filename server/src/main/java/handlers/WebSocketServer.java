@@ -164,6 +164,10 @@ public class WebSocketServer{
       if(chessGame.isGameOver()){
         //send back to the user that they won the game instead of this line below
         System.out.println("The Game is over, no more moves can be made");
+        sessionTimeout();
+        if (session.isOpen()) {
+          session.getRemote().sendString(new Gson().toJson(new ErrorMessage("Error making move. The game is over")));
+        }
       }
       else {
         chessGame.makeMove(move);
@@ -201,8 +205,6 @@ public class WebSocketServer{
 
               String sP=move.getStartPosition().toString();
               String eP=move.getEndPosition().toString();
-
-              //TODO: what if chessMove is null?
 
               sessionTimeout();
               if(s.isOpen()) {
