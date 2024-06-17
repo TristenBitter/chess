@@ -184,6 +184,7 @@ public class UserInterface {
         try {
           GameNameRequest gameNameRequest=new GameNameRequest(command[1]);
           CreateGameRequest gameID=facade.create(gameNameRequest, data.authToken());
+          board.resetBoard();
 
           if (data == null) {
             preLoginUI();
@@ -284,10 +285,10 @@ public class UserInterface {
         // print out the board for the color this player is
         if(color.equals("WHITE")){
           // print white chess board
-          drawer.printWhiteBoard();
+          drawer.printWhiteBoard(board);
         }else{
           // print black chess board
-          drawer.printBlackBoard();
+          drawer.printBlackBoard(board);
         }
       }
       if(command[0].equals("makeMove")){
@@ -310,9 +311,9 @@ public class UserInterface {
 
           // call the proper function
           if (color.equals("WHITE")) {
-            drawer.printHighlightedWhiteBoard(row, col);
+            drawer.printHighlightedWhiteBoard(board, row, col);
           } else {
-            drawer.printHighlightedBlackBoard(row, col);
+            drawer.printHighlightedBlackBoard(board, row, col);
           }
         }catch(Exception e){
           System.out.println("oops, please try again");

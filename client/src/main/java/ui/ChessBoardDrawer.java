@@ -36,22 +36,26 @@ public class ChessBoardDrawer {
 
   }
 
-  public void printWhiteBoard(){
+  public void printWhiteBoard(ChessBoard board){
+    this.board = board;
     PrintStream out = setUpScreen();
     out.println();
     whiteBoardDrawer(out);
   }
-  public void printBlackBoard(){
+  public void printBlackBoard(ChessBoard board){
+    this.board = board;
     PrintStream out = setUpScreen();
     out.println();
     blackBoardDrawer(out);
   }
-  public void printHighlightedWhiteBoard(int row, int col){
+  public void printHighlightedWhiteBoard( ChessBoard board ,int row, int col){
+    this.board = board;
     PrintStream out = setUpScreen();
     out.println();
     highlightWhiteBoard(out,row, col);
   }
-  public void printHighlightedBlackBoard(int row, int col){
+  public void printHighlightedBlackBoard(ChessBoard board, int row, int col){
+    this.board = board;
     PrintStream out = setUpScreen();
     out.println();
     highlightBlackBoard(out,row, col);
