@@ -170,6 +170,7 @@ public class WebSocketServer{
         if (session.isOpen()) {
           session.getRemote().sendString(new Gson().toJson(new ErrorMessage("Error making move. The game is over")));
         }
+
       }
       else {
         chessGame.makeMove(move);
@@ -182,11 +183,11 @@ public class WebSocketServer{
         }
         if(chessGame.isInCheckmate(chessGame.getOpponentsTeamColor(chessGame.getTeamTurn()))){
           isInCheckmate = true;
-          chessGame.setGameOver();
+          chessGame.setGameOver(true);
         }
         if(chessGame.isInStalemate(chessGame.getOpponentsTeamColor(chessGame.getTeamTurn()))){
           isInStalemate = true;
-          chessGame.setGameOver();
+          chessGame.setGameOver(true);
         }
 
 
@@ -251,6 +252,12 @@ public class WebSocketServer{
     int gameID = leave.getGameID();
     // remove the player from the game in the DB
     GameData gameData = gameDAO.getGame(gameID);
+    ChessGame chessGame = gameData.game();
+    if(chessGame.isGameOver()){
+      Error error = new Error("Error , you have already resigned; the game is over");
+      session.getRemote().sendString(new Gson().toJson(error));
+      return;
+    }
     String color="";
     if(gameData.blackUsername().equals(username)){
       color = "BLACK";
@@ -290,8 +297,16 @@ public class WebSocketServer{
 
     // change the chess game
     ChessGame chessGame = gameData.game();
+
+    //if game is already over send error and return
+    if(chessGame.isGameOver()){
+      Error error = new Error("Error , you have already resigned; the game is over");
+      session.getRemote().sendString(new Gson().toJson(error));
+      return;
+    }
+
     //call the setter to change the value
-    chessGame.setGameOver();
+    chessGame.setGameOver(true);
     //update it in the database
     gameDAO.updateGame(gameData);
 

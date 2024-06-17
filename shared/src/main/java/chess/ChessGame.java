@@ -19,7 +19,7 @@ public class ChessGame {
     private TeamColor teamTurn;
     private ChessPiece piece = new ChessPiece(getTeamTurn(), type);
 
-    private boolean isGameOver = false;
+    private boolean isGameOver;
 
     @Override
     public boolean equals(Object o) {
@@ -41,6 +41,7 @@ public class ChessGame {
     public ChessGame() {
         this.board.resetBoard();
         setTeamTurn(TeamColor.WHITE);
+        this.isGameOver = false;
 
     }
 
@@ -48,8 +49,8 @@ public class ChessGame {
         return isGameOver;
     }
 
-    public void setGameOver() {
-        isGameOver=false;
+    public void setGameOver(boolean gameOver) {
+        this.isGameOver=gameOver;
     }
     /**
      * @return Which team's turn it is
