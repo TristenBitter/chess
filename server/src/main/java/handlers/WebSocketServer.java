@@ -1,9 +1,6 @@
 package handlers;
 
-import chess.ChessGame;
-import chess.ChessMove;
-import chess.ChessPosition;
-import chess.InvalidMoveException;
+import chess.*;
 import com.google.gson.Gson;
 import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
@@ -161,6 +158,26 @@ public class WebSocketServer{
     int gameID = makeMove.getGameID();
     GameData gameData = gameDAO.getGame(gameID);
     ChessGame chessGame = gameData.game();
+    if(!((username.equals(gameData.blackUsername())) || (username.equals(gameData.whiteUsername())))){
+      Error error = new Error("Error , you are an observer; you can't make a move");
+      session.getRemote().sendString(new Gson().toJson(error));
+      return;
+    }
+    // find the color of the piece being moved
+
+    move.getStartPosition();
+    ChessPosition position = move.getStartPosition();
+    String color = chessGame.getBoard().getPiece(position).getTeamColor().toString();
+    String turn = chessGame.getTeamTurn().toString();
+//    if(!(chessGame.getTeamTurn().equals(color))){
+//      Error error = new Error("Error , it's not your turn");
+//      session.getRemote().sendString(new Gson().toJson(error));
+//      return;
+//    }
+
+
+
+
     // do stuff now
     try {
       if(chessGame.isGameOver()){
@@ -297,33 +314,39 @@ public class WebSocketServer{
 
     // change the chess game
     ChessGame chessGame = gameData.game();
+    if((username.equals(gameData.blackUsername())) || (username.equals(gameData.whiteUsername()))){
+      //if game is already over send error and return
+      if(chessGame.isGameOver()){
+        Error error = new Error("Error , you have already resigned; the game is over");
+        session.getRemote().sendString(new Gson().toJson(error));
+        return;
+      }
 
-    //if game is already over send error and return
-    if(chessGame.isGameOver()){
-      Error error = new Error("Error , you have already resigned; the game is over");
-      session.getRemote().sendString(new Gson().toJson(error));
-      return;
+      //call the setter to change the value
+      chessGame.setGameOver(true);
+      //update it in the database
+      gameDAO.updateGame(gameData);
+
+      //send Notification
+      int gameID = resign.getGameID();
+      for(Session s : sessionData.get(gameID)) {
+          String player = gameData.blackUsername();
+          String blackUsername = gameData.blackUsername();
+
+          if(blackUsername.equals(username)){
+            player = gameData.whiteUsername();
+          }
+          sessionTimeout();
+          if (s.isOpen()) {
+            Notifications notifications=new Notifications(" " + username + " has just forfeited the game, " + player + " Wins the Game!!!");
+            s.getRemote().sendString(new Gson().toJson(notifications));
+          }
+        }
     }
-
-    //call the setter to change the value
-    chessGame.setGameOver(true);
-    //update it in the database
-    gameDAO.updateGame(gameData);
-
-    //send Notification
-    int gameID = resign.getGameID();
-    for(Session s : sessionData.get(gameID)) {
-        String player = gameData.blackUsername();
-        String blackUsername = gameData.blackUsername();
-
-        if(blackUsername.equals(username)){
-          player = gameData.whiteUsername();
-        }
-        sessionTimeout();
-        if (s.isOpen()) {
-          Notifications notifications=new Notifications(" " + username + " has just forfeited the game, " + player + " Wins the Game!!!");
-          s.getRemote().sendString(new Gson().toJson(notifications));
-        }
+    else{
+      Error error = new Error("Error , you are an observer; this action is restricted");
+      session.getRemote().sendString(new Gson().toJson(error));
     }
   }
+
 }
