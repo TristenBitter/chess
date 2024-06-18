@@ -240,12 +240,14 @@ public class UserInterface {
         }
       } else if (com.equals("observe")) {
 
-        CreateGameRequest id=new CreateGameRequest(Integer.parseInt(command[1]));
-        facade.observe(id, data.authToken());
+//        CreateGameRequest id=new CreateGameRequest(Integer.parseInt(command[1]));
+//        facade.observe(id, data.authToken());
 
         webSocketClient = new WebSocketClient(this);
         Connect connect = new Connect(data.authToken(), gameIDs.get(Integer.parseInt(command[1])));
         webSocketClient.send(new Gson().toJson(connect));
+
+        gamePlayUI(data, gameIDs.get(Integer.parseInt(command[1])), playerColor);
 
         // join the game as an observer
 
