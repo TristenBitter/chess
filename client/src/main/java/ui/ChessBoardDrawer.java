@@ -17,7 +17,7 @@ public class ChessBoardDrawer {
   private static final int SQUARE_SIZE_IN_CHARS = 3;
   private static final int LINE_WIDTH_IN_CHARS = 1;
   private static final String EMPTY = "   ";
-  private static ChessBoard board = new ChessBoard();
+  private static ChessBoard board;
 
 
   public static void main(String[] args) {

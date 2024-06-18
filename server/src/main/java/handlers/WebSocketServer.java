@@ -119,7 +119,7 @@ public class WebSocketServer{
         if(blackUsername.equals(username)){
           player = "BLACK Player";
         }
-        if(whiteUsername.equals(username)){
+        else if(whiteUsername.equals(username)){
           player = "WHITE Player";
         }
         else{

@@ -16,29 +16,33 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class UserInterface {
-  private static ServerFacade facade=new ServerFacade(8080);
-  private static Map<Integer, Integer> gameIDs=new HashMap<>();
+  private  ServerFacade facade=new ServerFacade(8080);
+  private  Map<Integer, Integer> gameIDs=new HashMap<>();
 
-  private static ChessBoardDrawer drawer = new ChessBoardDrawer();
+  private ChessBoardDrawer drawer = new ChessBoardDrawer();
 
-  private static ChessBoard board = new ChessBoard();
+  private ChessBoard board;
 
-  public static void main(String[] args) throws Exception {
-    while (true) {
-      System.out.printf("Welcome to my CS240 Chess app! Type help to get started%n[LOGGED_OUT]>>> ");
-      Scanner scanner=new Scanner(System.in);
-      String line=scanner.nextLine();
-      if (line.equals("help") || line.equals("Help") || line.equals("HELP")) {
-        //Enter preLogin section of UI
-        preLoginUI();
-        break;
-      } else {
-        System.out.println("I'm sorry I didn't recognize that, please type HELP to get started%n[LOGGED_OUT]>>> ");
-      }
-    }
+  private WebSocketClient webSocketClient;
+
+  private String playerColor;
+
+  public String getPlayerColor(){
+    return playerColor;
   }
 
-  public static void preLoginHelp() throws Exception {
+  public void setBoard(ChessBoard board) {
+    this.board = board;
+  }
+  public ChessBoard getBoard() {
+    return board;
+  }
+
+  public static void main(String[] args) throws Exception {
+
+  }
+
+  public void preLoginHelp() throws Exception {
     System.out.println("/*****************************************************************************************/");
     System.out.println("I am here to help you... do not fear...");
     System.out.println("try typing one of the commands that are in blue");
@@ -49,7 +53,7 @@ public class UserInterface {
     preLoginUI();
   }
 
-  public static void preLoginUI() throws Exception {
+  public void preLoginUI() throws Exception {
     while (true) {
       System.out.printf("Please type in one of these commands%n");
 
@@ -126,7 +130,7 @@ public class UserInterface {
     }
   }
 
-  public static void postLoginHelp(AuthData data) throws Exception {
+  public void postLoginHelp(AuthData data) throws Exception {
     System.out.println("/*****************************************************************************************/");
     System.out.println("Do not worry...I am here to help you...");
     System.out.println("try typing one of the commands that are in blue");
@@ -137,7 +141,7 @@ public class UserInterface {
     postLoginUI(data);
   }
 
-  public static void postLoginPrintStatements(){
+  public void postLoginPrintStatements(){
     System.out.printf("please type in a command from the list provided below%n");
     System.out.print("\u001b[36;100m");
     System.out.printf("create <NAME> ");
@@ -170,7 +174,7 @@ public class UserInterface {
     System.out.printf("--> for help with commands.%n%n");
   }
 
-  public static void postLoginUI(AuthData data) throws Exception {
+  public void postLoginUI(AuthData data) throws Exception {
     while (true) {
       postLoginPrintStatements();
       System.out.printf("[LOGGED_IN]>>> ");
@@ -210,7 +214,7 @@ public class UserInterface {
         }
       } else if (com.equals("join")) {
         try {
-          String playerColor ="";
+
           if(command[2].equals("w") || command[2].equals("white") || command[2].equals("W") || command[2].equals("WHITE")) {
             playerColor="WHITE";
           }
@@ -224,7 +228,7 @@ public class UserInterface {
           } else {
             // call our gameMoves UI
             //connect
-            WebSocketClient webSocketClient = new WebSocketClient();
+            webSocketClient = new WebSocketClient(this);
             Connect connect = new Connect(data.authToken(), gameIDs.get(Integer.parseInt(command[1])));
             webSocketClient.send(new Gson().toJson(connect));
 
@@ -238,6 +242,10 @@ public class UserInterface {
 
         CreateGameRequest id=new CreateGameRequest(Integer.parseInt(command[1]));
         facade.observe(id, data.authToken());
+
+        webSocketClient = new WebSocketClient(this);
+        Connect connect = new Connect(data.authToken(), gameIDs.get(Integer.parseInt(command[1])));
+        webSocketClient.send(new Gson().toJson(connect));
 
         // join the game as an observer
 
@@ -253,7 +261,7 @@ public class UserInterface {
     }
   }
 
-  public static void gamePlayPrintStatements(){
+  public void gamePlayPrintStatements(){
     System.out.printf("please type in a command from the list below%n");
     System.out.print("\u001b[36;100m");
     System.out.printf("display ");
@@ -287,7 +295,7 @@ public class UserInterface {
 
   }
 
-  public static void gamePlayUI(AuthData data, int gameID, String color) throws Exception {
+  public void gamePlayUI(AuthData data, int gameID, String color) throws Exception {
     while (true) {
       gamePlayPrintStatements();
       System.out.printf("[JOINED_GAME]>>> ");
@@ -313,16 +321,12 @@ public class UserInterface {
       }
 
       if(command[0].equals("highlight")){
-        // delete later possibly
-        WebSocketClient client = new WebSocketClient();
-        client.webSocketClient();
           highlightMoveHandler(data, gameID, color);
       }
       if(command[0].equals("leave")){
         // take the player out of the game
         // leave this page
         try {
-          WebSocketClient webSocketClient=new WebSocketClient();
           Leave leave=new Leave(data.authToken(), gameID);
           webSocketClient.send(new Gson().toJson(leave));
 
@@ -335,7 +339,6 @@ public class UserInterface {
       if(command[0].equals("resign")){
         //end the game
         try {
-          WebSocketClient webSocketClient=new WebSocketClient();
           Resign resign=new Resign(data.authToken(), gameID);
           webSocketClient.send(new Gson().toJson(resign));
 
@@ -348,7 +351,7 @@ public class UserInterface {
     }
   }
 
-  public static int columChecker(String[] coordinate, String color) {
+  public int columChecker(String[] coordinate, String color) {
     int col = 0;
     if(color.equals("WHITE")){
       switch (coordinate[1]) {
@@ -394,7 +397,7 @@ public class UserInterface {
     return col;
   }
 
-  public static void highlightMoveHandler(AuthData data, int gameID, String color) throws Exception {
+  public void highlightMoveHandler(AuthData data, int gameID, String color) throws Exception {
     // where would they like to see
     System.out.printf("What piece would you like to highlight?%n ");
     System.out.printf("[enter a coordinate, (example) >>> 2 a]  >>> ");
@@ -420,7 +423,7 @@ public class UserInterface {
     }
   }
 
-  public static ChessMove getMove(AuthData data, int gameID, String color) throws Exception {
+  public ChessMove getMove(AuthData data, int gameID, String color) throws Exception {
     try {
       System.out.printf("What piece would you like to move?%n ");
       System.out.printf("[enter a coordinate, (example) >>> 2 a]  >>> ");
@@ -458,11 +461,10 @@ public class UserInterface {
     return null;
   }
 
-  public static void makeMove(AuthData data, int gameID, String color, ChessMove move) throws Exception {
+  public void makeMove(AuthData data, int gameID, String color, ChessMove move) throws Exception {
     try {
       // need to figure out how to know what promotion piece when that becomes a possibility
 
-      WebSocketClient webSocketClient = new WebSocketClient();
       MakeMove makeMove = new MakeMove(data.authToken(), move,gameID);
       webSocketClient.send(new Gson().toJson(makeMove));
 
@@ -473,13 +475,13 @@ public class UserInterface {
     }
   }
 
-  public static String[] scanner(AuthData data, int gameID) throws Exception {
+  public String[] scanner(AuthData data, int gameID) throws Exception {
     Scanner scanner=new Scanner(System.in);
     String line=scanner.nextLine();
     var command=line.split(" ");
     return command;
   }
-  public static void gamePlayHelp(AuthData data, int gameID, String color) throws Exception {
+  public void gamePlayHelp(AuthData data, int gameID, String color) throws Exception {
     System.out.println("/*****************************************************************************************/");
     System.out.println("Do not worry...I am here to help...");
     System.out.println("try typing one of the commands that are in blue");

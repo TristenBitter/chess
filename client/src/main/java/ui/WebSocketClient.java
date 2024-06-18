@@ -3,8 +3,6 @@ package ui;
 import chess.ChessBoard;
 import chess.ChessGame;
 import com.google.gson.Gson;
-import websocket.commands.Connect;
-import websocket.commands.UserGameCommand;
 import websocket.messages.Error;
 import websocket.messages.LoadGame;
 import websocket.messages.Notifications;
@@ -16,28 +14,32 @@ import java.net.URI;
 public class WebSocketClient extends Endpoint {
 
   public Session session;
+  public UserInterface userInterface;
 
-  public void webSocketClient() throws Exception {
+
+
+  public WebSocketClient(UserInterface userInterface) throws Exception {
+    this.userInterface = userInterface;
+
     URI uri = new URI("ws://localhost:8080/ws");
     WebSocketContainer container = ContainerProvider.getWebSocketContainer();
     this.session = container.connectToServer(this, uri);
 
         this.session.addMessageHandler(new MessageHandler.Whole<String>() {
+     @Override
       public void onMessage(String message) {
 
         ServerMessage command=new Gson().fromJson(message, ServerMessage.class);
 
 
-        //saveSession(command.getGameID(), session);
+         switch (command.getServerMessageType()) {
+           case ERROR -> errorMsg(session, message);
+           case LOAD_GAME -> loadGame(session, message);
+           case NOTIFICATION -> notification(session, message);
 
-        switch (command.getServerMessageType()) {
-          case ERROR -> errorMsg(session, message);
-          case LOAD_GAME -> loadGame(session, message);
-          case NOTIFICATION -> notification(session, message);
-
-        }
-        String msg = new Gson().fromJson(message, String.class);
-        System.out.println(msg);
+         }
+         String msg = new Gson().fromJson(message, String.class);
+         System.out.println(msg);
 
       }
     });
@@ -66,16 +68,18 @@ public class WebSocketClient extends Endpoint {
     ChessBoard board = game.getBoard();
     ChessBoardDrawer drawer = new ChessBoardDrawer();
     String turn = game.getTeamTurn().toString();
+    userInterface.setBoard(board);
 
-    if(turn.equals("WHITE")){
+
+
+    if(userInterface.getPlayerColor().equals("WHITE")){
       drawer.printWhiteBoard(board);
     }
-    else if(turn.equals("BLACK")){
+    else if(userInterface.getPlayerColor().equals("BLACK")){
       drawer.printBlackBoard(board);
     }
     else{
       drawer.printWhiteBoard(board);
-      drawer.printBlackBoard(board);
     }
   }
 

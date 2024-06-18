@@ -219,7 +219,7 @@ public class ServerFacade {
   public void observe(CreateGameRequest gameID, String authToken){
       // call draw board to print the board
     ChessBoardDrawer draw = new ChessBoardDrawer();
-    draw.main(null);
+
 
   }
 
